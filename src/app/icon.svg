@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="DevForge">
+  <rect width="32" height="32" rx="8" fill="#4f46e5"/>
+  <circle cx="23.5" cy="8.5" r="2.2" fill="#ffffff" opacity="0.93"/>
+  <circle cx="26.5" cy="11.8" r="1.75" fill="#ffffff" opacity="0.88"/>
+  <circle cx="22.8" cy="13.5" r="1.45" fill="#ffffff" opacity="0.82"/>
+  <path
+    fill="#ffffff"
+    d="M8 25h16v4H8v-4Zm1.5-3h13v2.25h-13V22Zm1.2-6.8h10.6l-.85-5.85H11.65l-.85 5.85Zm1.35-8.2h7.9l-.65-3.75h-6.6l-.65 3.75Z"
+  />
+  <path
+    stroke="#ffffff"
+    stroke-width="1.4"
+    stroke-linecap="round"
+    opacity="0.38"
+    d="M5 14.5c-1.1 0-1.75.65-1.75 1.9v3.2c0 1.25.65 1.9 1.75 1.9"
+  />
+  <path
+    stroke="#ffffff"
+    stroke-width="1.4"
+    stroke-linecap="round"
+    opacity="0.38"
+    d="M27 14.5c1.1 0 1.75.65 1.75 1.9v3.2c0 1.25-.65 1.9-1.75 1.9"
+  />
+</svg>

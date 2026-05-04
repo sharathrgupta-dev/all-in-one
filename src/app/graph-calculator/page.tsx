@@ -18,8 +18,6 @@ import {
   LineChart,
   Sigma,
   Grid3x3,
-  Info,
-  ExternalLink,
 } from "lucide-react";
 
 // ── Types ─────────────────────────────────────────────────────────────
@@ -54,7 +52,10 @@ interface IntersectionPoint extends Point {
   expr2: number;
 }
 
-type CalcMode = "graph" | "scientific" | "matrix" | "about";
+type CalcMode = "graph" | "scientific" | "matrix";
+
+const MATRIX_DIM_MIN = 2;
+const MATRIX_DIM_MAX = 12;
 
 // ── Math Parser ───────────────────────────────────────────────────────
 
@@ -260,7 +261,7 @@ function evaluateAt(expr: string, xVal: number): { value: number | null; error: 
   }
 }
 
-// ── Matrix algebra (2×2 / 3×3) ─────────────────────────────────────────
+// ── Matrix algebra (N×N, dynamic size) ──────────────────────────────────
 
 type Matrix = number[][];
 
@@ -304,18 +305,34 @@ function matMul(a: Matrix, b: Matrix): Matrix {
   return out;
 }
 
+/** Determinant via Gaussian elimination with partial pivoting (works for any square size). */
 function matDet(a: Matrix): number {
   const n = a.length;
-  if (n === 2) return a[0][0] * a[1][1] - a[0][1] * a[1][0];
-  if (n === 3) {
-    const [r0, r1, r2] = a;
-    return (
-      r0[0] * (r1[1] * r2[2] - r1[2] * r2[1]) -
-      r0[1] * (r1[0] * r2[2] - r1[2] * r2[0]) +
-      r0[2] * (r1[0] * r2[1] - r1[1] * r2[0])
-    );
+  if (n === 0) return 1;
+  if (n === 1) return a[0][0];
+  const M = a.map((row) => row.map((x) => x));
+  let sign = 1;
+  for (let c = 0; c < n; c++) {
+    let pivRow = c;
+    for (let r = c + 1; r < n; r++) {
+      if (Math.abs(M[r][c]) > Math.abs(M[pivRow][c])) pivRow = r;
+    }
+    if (Math.abs(M[pivRow][c]) < 1e-14) return 0;
+    if (pivRow !== c) {
+      const tmp = M[c];
+      M[c] = M[pivRow];
+      M[pivRow] = tmp;
+      sign *= -1;
+    }
+    const piv = M[c][c];
+    for (let r = c + 1; r < n; r++) {
+      const f = M[r][c] / piv;
+      for (let j = c; j < n; j++) M[r][j] -= f * M[c][j];
+    }
   }
-  throw new Error("Unsupported matrix size");
+  let prod = sign;
+  for (let i = 0; i < n; i++) prod *= M[i][i];
+  return prod;
 }
 
 function matTranspose(a: Matrix): Matrix {
@@ -591,7 +608,7 @@ export default function GraphCalculatorPage() {
   const [sciExpr, setSciExpr] = useState("sin(pi/2)+sqrt(2)");
   const [sciX, setSciX] = useState("0");
 
-  const [matrixSize, setMatrixSize] = useState<2 | 3>(2);
+  const [matrixSize, setMatrixSize] = useState(MATRIX_DIM_MIN);
   const [matrixOp, setMatrixOp] = useState<
     "add" | "sub" | "mul" | "detA" | "detB" | "invA" | "invB" | "transA" | "transB" | "scalar"
   >("add");
@@ -886,7 +903,6 @@ export default function GraphCalculatorPage() {
             { id: "graph" as const, label: "Graph", Icon: LineChart },
             { id: "scientific" as const, label: "Scientific", Icon: Sigma },
             { id: "matrix" as const, label: "Matrix", Icon: Grid3x3 },
-            { id: "about" as const, label: "About", Icon: Info },
           ]).map(({ id, label, Icon }) => (
             <button
               key={id}
@@ -1114,15 +1130,40 @@ export default function GraphCalculatorPage() {
 
       {mode === "matrix" && (
         <div className="flex-1 overflow-auto p-6 max-w-5xl mx-auto w-full space-y-6">
+          <p className="text-sm text-muted-foreground">
+            Square matrices from {MATRIX_DIM_MIN}×{MATRIX_DIM_MIN} up to{" "}
+            {MATRIX_DIM_MAX}×{MATRIX_DIM_MAX}. Determinant and inverse use partial pivoting.
+          </p>
           <div className="flex flex-wrap gap-3 items-center">
-            <label className="text-sm text-muted-foreground">Size</label>
-            <select
+            <label className="text-sm text-muted-foreground">Size (N×N)</label>
+            <input
+              type="number"
+              min={MATRIX_DIM_MIN}
+              max={MATRIX_DIM_MAX}
               value={matrixSize}
-              onChange={(e) => setMatrixSize(Number(e.target.value) as 2 | 3)}
+              onChange={(e) => {
+                const v = parseInt(e.target.value, 10);
+                if (Number.isNaN(v)) return;
+                setMatrixSize(
+                  Math.min(MATRIX_DIM_MAX, Math.max(MATRIX_DIM_MIN, v))
+                );
+              }}
+              className="w-20 px-3 py-1.5 rounded-lg border border-border bg-card font-mono text-sm tabular-nums focus:outline-none focus:ring-2 focus:ring-ring/40"
+            />
+            <select
+              aria-label="Quick size preset"
+              value={matrixSize}
+              onChange={(e) => setMatrixSize(Number(e.target.value))}
               className="px-3 py-1.5 rounded-lg border border-border bg-card text-sm focus:outline-none focus:ring-2 focus:ring-ring/40"
             >
-              <option value={2}>2 × 2</option>
-              <option value={3}>3 × 3</option>
+              {Array.from(
+                { length: MATRIX_DIM_MAX - MATRIX_DIM_MIN + 1 },
+                (_, i) => MATRIX_DIM_MIN + i
+              ).map((n) => (
+                <option key={n} value={n}>
+                  {n} × {n}
+                </option>
+              ))}
             </select>
             <label className="text-sm text-muted-foreground ml-2">Operation</label>
             <select
@@ -1151,11 +1192,13 @@ export default function GraphCalculatorPage() {
             )}
           </div>
           <div className="grid md:grid-cols-2 gap-8">
-            <div>
+            <div className="min-w-0 overflow-x-auto">
               <h3 className="text-sm font-medium mb-2 text-foreground">Matrix A</h3>
               <div
                 className="inline-grid gap-1"
-                style={{ gridTemplateColumns: `repeat(${matrixSize}, minmax(0, 4rem))` }}
+                style={{
+                  gridTemplateColumns: `repeat(${matrixSize}, minmax(2.5rem, 4rem))`,
+                }}
               >
                 {Array.from({ length: matrixSize * matrixSize }, (_, k) => {
                   const i = Math.floor(k / matrixSize);
@@ -1179,11 +1222,13 @@ export default function GraphCalculatorPage() {
                 })}
               </div>
             </div>
-            <div>
+            <div className="min-w-0 overflow-x-auto">
               <h3 className="text-sm font-medium mb-2 text-foreground">Matrix B</h3>
               <div
                 className="inline-grid gap-1"
-                style={{ gridTemplateColumns: `repeat(${matrixSize}, minmax(0, 4rem))` }}
+                style={{
+                  gridTemplateColumns: `repeat(${matrixSize}, minmax(2.5rem, 4rem))`,
+                }}
               >
                 {Array.from({ length: matrixSize * matrixSize }, (_, k) => {
                   const i = Math.floor(k / matrixSize);
@@ -1208,7 +1253,7 @@ export default function GraphCalculatorPage() {
               </div>
             </div>
           </div>
-          <div className="rounded-xl border border-border bg-card p-4">
+          <div className="rounded-xl border border-border bg-card p-4 overflow-x-auto">
             <h3 className="text-sm font-medium text-muted-foreground mb-2">Output</h3>
             {matrixComputation.kind === "error" && (
               <p className="text-destructive text-sm">{matrixComputation.message}</p>
@@ -1220,7 +1265,7 @@ export default function GraphCalculatorPage() {
               <div
                 className="inline-grid gap-1"
                 style={{
-                  gridTemplateColumns: `repeat(${matrixComputation.data[0].length}, minmax(0, 5rem))`,
+                  gridTemplateColumns: `repeat(${matrixComputation.data[0].length}, minmax(2.5rem, 5rem))`,
                 }}
               >
                 {matrixComputation.data.flatMap((row, i) =>
@@ -1236,52 +1281,6 @@ export default function GraphCalculatorPage() {
               </div>
             )}
           </div>
-        </div>
-      )}
-
-      {mode === "about" && (
-        <div className="flex-1 overflow-auto p-6 max-w-2xl mx-auto w-full space-y-5 text-sm">
-          <h2 className="text-lg font-semibold text-foreground">What this covers</h2>
-          <p className="text-muted-foreground leading-relaxed">
-            DevForge <span className="text-foreground font-medium">Math Suite</span> includes{" "}
-            <span className="text-foreground font-medium">2D graphing</span> (multiple functions, zoom/pan, value tables, intersections), a{" "}
-            <span className="text-foreground font-medium">scientific evaluator</span>, and{" "}
-            <span className="text-foreground font-medium">matrix algebra</span> for 2×2 and 3×3 matrices. All computation stays in your browser.
-          </p>
-          <h3 className="text-base font-semibold text-foreground pt-1">What full Desmos adds</h3>
-          <p className="text-muted-foreground leading-relaxed">
-            <a href="https://www.desmos.com/" className="text-accent hover:underline font-medium">
-              Desmos
-            </a>{" "}
-            offers dedicated apps for geometry constructions, 3D graphing, deeper statistics/regressions, and classroom features. Those require specialized engines and are not replicated in this lightweight tool.
-          </p>
-          <ul className="space-y-2 text-muted-foreground list-none pl-0">
-            <li>
-              <a href="https://www.desmos.com/calculator" className="inline-flex items-center gap-1.5 text-accent hover:underline">
-                <ExternalLink size={14} /> Graphing Calculator
-              </a>
-            </li>
-            <li>
-              <a href="https://www.desmos.com/scientific" className="inline-flex items-center gap-1.5 text-accent hover:underline">
-                <ExternalLink size={14} /> Scientific Calculator
-              </a>
-            </li>
-            <li>
-              <a href="https://www.desmos.com/matrix" className="inline-flex items-center gap-1.5 text-accent hover:underline">
-                <ExternalLink size={14} /> Matrix Calculator
-              </a>
-            </li>
-            <li>
-              <a href="https://www.desmos.com/geometry" className="inline-flex items-center gap-1.5 text-accent hover:underline">
-                <ExternalLink size={14} /> Geometry
-              </a>
-            </li>
-            <li>
-              <a href="https://www.desmos.com/3d" className="inline-flex items-center gap-1.5 text-accent hover:underline">
-                <ExternalLink size={14} /> 3D Graphing
-              </a>
-            </li>
-          </ul>
         </div>
       )}
 

@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Code2, Sun, Moon, Menu, X } from "lucide-react";
+import { Sun, Moon, Menu, X } from "lucide-react";
+import DevForgeMark from "@/components/DevForgeMark";
 
 export default function Header() {
   const [dark, setDark] = useState(false);
@@ -33,6 +34,7 @@ export default function Header() {
     { href: "/cron-editor", label: "Cron Editor" },
     { href: "/jwt-debugger", label: "JWT Debugger" },
     { href: "/diff-checker", label: "Diff Checker" },
+    { href: "/code-beautify", label: "Code Beautify" },
     { href: "/graph-calculator", label: "Math Suite" },
   ];
 
@@ -43,7 +45,7 @@ export default function Header() {
           href="/"
           className="flex items-center gap-2 text-foreground transition-colors hover:text-accent"
         >
-          <Code2 className="h-6 w-6 text-accent" />
+          <DevForgeMark className="h-7 w-7 shrink-0 text-accent" />
           <span className="text-lg font-bold tracking-tight">DevForge</span>
         </Link>
 

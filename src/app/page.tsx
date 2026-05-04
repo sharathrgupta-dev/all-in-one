@@ -20,6 +20,7 @@ import {
   KeyRound,
   GitCompareArrows,
   LineChart,
+  Paintbrush,
 } from "lucide-react";
 import { TOOLS, CATEGORIES, type ToolCategory } from "@/lib/tools-registry";
 import Header from "@/components/Header";
@@ -91,9 +92,16 @@ const FEATURED_WORKSPACES: {
     icon: GitCompareArrows,
   },
   {
+    href: "/code-beautify",
+    title: "Code Beautify",
+    desc: "Formatters, validators, encoders — searchable hub like CodeBeautify",
+    icon: Paintbrush,
+    badge: "Hub",
+  },
+  {
     href: "/graph-calculator",
     title: "Math Suite",
-    desc: "Graph y=f(x), scientific eval, and small-matrix algebra",
+    desc: "Graph y=f(x), scientific eval, and N×N matrix algebra",
     icon: LineChart,
     badge: "Math",
   },

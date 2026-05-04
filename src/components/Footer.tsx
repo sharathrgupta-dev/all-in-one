@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Code2, Shield } from "lucide-react";
+import { Shield } from "lucide-react";
+import DevForgeMark from "@/components/DevForgeMark";
 
 export default function Footer() {
   return (
@@ -8,7 +9,7 @@ export default function Footer() {
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <Link href="/" className="flex items-center gap-2 text-foreground">
-              <Code2 className="h-5 w-5 text-accent" />
+              <DevForgeMark className="h-6 w-6 text-accent" />
               <span className="font-bold tracking-tight">DevForge</span>
             </Link>
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">

@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 export const metadata: Metadata = {
   title: "Math Suite — Graph, Scientific & Matrix Calculator | DevForge",
   description:
-    "Free browser math workspace: 2D function plotting (zoom, pan, tables, intersections), scientific expression evaluation, and 2×2 / 3×3 matrix algebra. Client-side — Geometry and 3D graphing are not included (see Desmos for those).",
+    "Free browser math workspace: 2D function plotting (zoom, pan, tables, intersections), scientific expression evaluation, and dynamic N×N matrix algebra (determinant, inverse, multiply). Client-side.",
   keywords: [
     "graphing calculator",
     "scientific calculator online",
