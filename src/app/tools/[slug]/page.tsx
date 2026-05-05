@@ -20,6 +20,7 @@ import CustomToolOutlet from "@/components/tools/CustomToolOutlet";
 
 const CUSTOM_TOOL_SLUGS = new Set([
   // rich UI workspaces
+  "background-remover",
   "image-resizer", "image-compressor", "pdf-page-editor", "xml-suite",
   "qr-code", "age-calculator", "bmi-calculator", "compound-interest",
   "loan-emi-calculator", "contrast-checker", "gradient-generator", "currency-converter",
@@ -188,9 +189,6 @@ export default function ToolPage() {
             </div>
             <div>
               <h1 className="text-2xl font-bold">{tool.name}</h1>
-              <p className="text-muted-foreground mt-0.5">
-                {tool.description}
-              </p>
               <div className="flex items-center gap-2 mt-2">
                 <span
                   className={`text-xs px-2 py-0.5 rounded-full font-medium ${category.color}`}

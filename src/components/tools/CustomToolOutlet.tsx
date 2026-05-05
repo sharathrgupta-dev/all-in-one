@@ -15,6 +15,7 @@ import FinanceFormTools from "@/components/tools/FinanceFormTools";
 import HealthFormTools from "@/components/tools/HealthFormTools";
 import MathFormTools from "@/components/tools/MathFormTools";
 import DateTimeFormTools from "@/components/tools/DateTimeFormTools";
+import BackgroundRemoverTool from "@/components/tools/BackgroundRemoverTool";
 
 const FINANCE_SLUGS = new Set([
   "simple-interest", "gst-calculator", "discount-calculator",
@@ -45,6 +46,7 @@ export default function CustomToolOutlet({
   if (DATETIME_SLUGS.has(slug)) return <DateTimeFormTools tool={tool} />;
 
   switch (slug) {
+    case "background-remover":  return <BackgroundRemoverTool tool={tool} />;
     case "image-resizer":       return <ImageResizerTool tool={tool} />;
     case "image-compressor":    return <ImageCompressorTool tool={tool} />;
     case "pdf-page-editor":     return <PdfPageEditorTool tool={tool} />;

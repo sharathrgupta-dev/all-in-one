@@ -147,6 +147,14 @@ export const TOOLS: Tool[] = [
 
   // Browser-based files & XML suite
   {
+    slug: "background-remover",
+    name: "Background Remover",
+    shortName: "BG Remove",
+    description: "Remove image backgrounds instantly with AI — runs 100% in your browser, no uploads, no API key",
+    category: "image",
+    icon: "✂️",
+  },
+  {
     slug: "image-resizer",
     name: "Image Resizer",
     shortName: "Resize",

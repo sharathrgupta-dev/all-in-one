@@ -22,7 +22,6 @@ export default function ToolPageHero({ tool }: { tool: Tool }) {
         </div>
         <div>
           <h1 className="text-2xl font-bold">{tool.name}</h1>
-          <p className="mt-0.5 text-muted-foreground">{tool.description}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span
               className={`rounded-full px-2 py-0.5 text-xs font-medium ${category.color}`}

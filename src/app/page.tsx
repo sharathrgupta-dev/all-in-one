@@ -12,15 +12,7 @@ import {
   Shield,
   Zap,
   Globe,
-  ChevronRight,
   Sparkles,
-  Clock,
-  Send,
-  CalendarClock,
-  KeyRound,
-  GitCompareArrows,
-  LineChart,
-  Paintbrush,
   DollarSign,
   Heart,
   Sigma,
@@ -44,99 +36,62 @@ const HERO_FEATURES = [
   {
     icon: Globe,
     title: `${TOOLS.length}+ Tools`,
-    desc: "Developer utilities plus finance, health, math, and date calculators — all client-side.",
+    desc: "Developer utilities plus finance, health, math, and date calculators.",
   },
 ];
 
 const CATEGORY_ICONS: Record<ToolCategory, React.ElementType> = {
-  json: Braces,
-  encoding: Code2,
-  text: Type,
-  dev: Wrench,
-  image: Sparkles,
+  json:       Braces,
+  encoding:   Code2,
+  text:       Type,
+  dev:        Wrench,
+  image:      Sparkles,
   conversion: ArrowRightLeft,
-  finance: DollarSign,
-  health: Heart,
-  math: Sigma,
-  datetime: CalendarDays,
+  finance:    DollarSign,
+  health:     Heart,
+  math:       Sigma,
+  datetime:   CalendarDays,
 };
 
-const FEATURED_WORKSPACES: {
-  href: string;
-  title: string;
-  desc: string;
-  icon: React.ElementType;
-  badge?: string;
-}[] = [
-  {
-    href: "/epoch",
-    title: "Epoch Converter",
-    desc: "Unix timestamps, live clock, code snippets",
-    icon: Clock,
-  },
-  {
-    href: "/api-tester",
-    title: "API Tester",
-    desc: "HTTP requests, headers, auth, response timing",
-    icon: Send,
-  },
-  {
-    href: "/cron-editor",
-    title: "Cron Editor",
-    desc: "Human-readable schedules and next run times",
-    icon: CalendarClock,
-  },
-  {
-    href: "/jwt-debugger",
-    title: "JWT Debugger",
-    desc: "Decode, encode, verify HS256–HS512 signatures",
-    icon: KeyRound,
-    badge: "Auth",
-  },
-  {
-    href: "/diff-checker",
-    title: "Diff Checker",
-    desc: "Side-by-side text compare with character highlights",
-    icon: GitCompareArrows,
-  },
-  {
-    href: "/code-beautify",
-    title: "Code Beautify",
-    desc: "Formatters, validators, encoders — searchable hub like CodeBeautify",
-    icon: Paintbrush,
-    badge: "Hub",
-  },
-  {
-    href: "/graph-calculator",
-    title: "Math Suite",
-    desc: "Graph y=f(x), scientific eval, and N×N matrix algebra",
-    icon: LineChart,
-    badge: "Math",
-  },
-];
+// Tools that have dedicated workspace pages (not /tools/[slug])
+const WORKSPACE_ROUTES: Partial<Record<string, string>> = {
+  "json-formatter": "/json",
+};
+
+function toolHref(slug: string): string {
+  return WORKSPACE_ROUTES[slug] ?? `/tools/${slug}`;
+}
 
 export default function HomePage() {
-  const [search, setSearch] = useState("");
-  const [activeCategory, setActiveCategory] = useState<ToolCategory | "all">(
-    "all"
-  );
+  const [search, setSearch]                   = useState("");
+  const [activeCategory, setActiveCategory]   = useState<ToolCategory | "all">("all");
 
   const filtered = useMemo(() => {
     let tools = TOOLS;
-    if (activeCategory !== "all") {
-      tools = tools.filter((t) => t.category === activeCategory);
-    }
+    if (activeCategory !== "all") tools = tools.filter((t) => t.category === activeCategory);
     if (search.trim()) {
       const q = search.toLowerCase();
       tools = tools.filter(
         (t) =>
           t.name.toLowerCase().includes(q) ||
           t.description.toLowerCase().includes(q) ||
-          t.shortName.toLowerCase().includes(q)
+          t.shortName.toLowerCase().includes(q),
       );
     }
     return tools;
   }, [search, activeCategory]);
+
+  // Group by category only when showing all and no search active
+  const grouped = useMemo(() => {
+    if (activeCategory !== "all" || search.trim()) return null;
+    const map = new Map<ToolCategory, typeof TOOLS>();
+    for (const tool of filtered) {
+      const arr = map.get(tool.category) ?? [];
+      arr.push(tool);
+      map.set(tool.category, arr);
+    }
+    return map;
+  }, [filtered, activeCategory, search]);
 
   return (
     <>
@@ -156,8 +111,8 @@ export default function HomePage() {
               <span className="text-accent">All-in-One</span>
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-              Format JSON, encode data, diff text, generate hashes, convert
-              units — all in your browser. Fast, private, and free.
+              Format JSON, encode data, diff text, generate hashes, convert units — all in your
+              browser. Fast, private, and free.
             </p>
 
             {/* Search */}
@@ -165,7 +120,7 @@ export default function HomePage() {
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search tools... (e.g. base64, json, color)"
+                placeholder="Search tools… (e.g. base64, json, color)"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 text-base shadow-sm transition-shadow"
@@ -189,67 +144,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* JSON Tools CTA */}
-        <section className="max-w-6xl mx-auto px-4 py-12">
-          <Link
-            href="/json"
-            className="group flex items-center justify-between p-6 rounded-2xl border border-border bg-card hover:border-accent/40 hover:shadow-lg transition-all"
-          >
-            <div className="flex items-center gap-4">
-              <div className="p-3 rounded-xl bg-accent/10">
-                <Braces className="w-6 h-6 text-accent" />
-              </div>
-              <div>
-                <h2 className="text-lg font-semibold">
-                  JSON Toolkit — Format, Validate, Diff, Convert
-                </h2>
-                <p className="text-sm text-muted-foreground">
-                  All-in-one JSON workspace with tree view, error fixing, and
-                  conversions to YAML/CSV/TypeScript
-                </p>
-              </div>
-            </div>
-            <ChevronRight className="w-5 h-5 text-muted-foreground group-hover:text-accent transition-colors" />
-          </Link>
-        </section>
-
-        {/* Featured workspaces — same routes as header */}
-        <section className="max-w-6xl mx-auto px-4 pb-12">
-          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
-            Featured workspaces
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-            {FEATURED_WORKSPACES.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="group flex flex-col p-5 rounded-xl border border-border bg-card hover:border-accent/40 hover:shadow-md transition-all"
-              >
-                <div className="flex items-start justify-between gap-2 mb-2">
-                  <div className="p-2 rounded-lg bg-accent/10">
-                    <item.icon className="w-5 h-5 text-accent" />
-                  </div>
-                  {item.badge && (
-                    <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-muted text-muted-foreground">
-                      {item.badge}
-                    </span>
-                  )}
-                </div>
-                <h3 className="text-base font-semibold group-hover:text-accent transition-colors">
-                  {item.title}
-                </h3>
-                <p className="text-sm text-muted-foreground mt-1 flex-1">{item.desc}</p>
-                <span className="text-xs text-accent mt-3 inline-flex items-center gap-1 font-medium">
-                  Open <ChevronRight className="w-3.5 h-3.5" />
-                </span>
-              </Link>
-            ))}
-          </div>
-        </section>
-
-        {/* Tools Grid */}
-        <section className="max-w-6xl mx-auto px-4 pb-20">
-          {/* Category filters */}
+        {/* Tools section */}
+        <section className="max-w-6xl mx-auto px-4 py-12 pb-20">
+          {/* Category filter pills */}
           <div className="flex flex-wrap gap-2 mb-8">
             <button
               onClick={() => setActiveCategory("all")}
@@ -262,7 +159,7 @@ export default function HomePage() {
               All ({TOOLS.length})
             </button>
             {(Object.keys(CATEGORIES) as ToolCategory[]).map((cat) => {
-              const Icon = CATEGORY_ICONS[cat];
+              const Icon  = CATEGORY_ICONS[cat];
               const count = TOOLS.filter((t) => t.category === cat).length;
               return (
                 <button
@@ -281,39 +178,42 @@ export default function HomePage() {
             })}
           </div>
 
-          {/* Grid */}
           {filtered.length === 0 ? (
             <div className="text-center py-20 text-muted-foreground">
               <p className="text-lg">No tools match your search.</p>
               <p className="text-sm mt-1">Try a different keyword.</p>
             </div>
+          ) : grouped ? (
+            /* Grouped by category when showing all */
+            <div className="space-y-12">
+              {(Object.keys(CATEGORIES) as ToolCategory[])
+                .filter((cat) => grouped.has(cat))
+                .map((cat) => {
+                  const tools = grouped.get(cat)!;
+                  const Icon  = CATEGORY_ICONS[cat];
+                  return (
+                    <div key={cat}>
+                      <div className="flex items-center gap-2 mb-4">
+                        <div className={`flex h-7 w-7 items-center justify-center rounded-lg ${CATEGORIES[cat].color}`}>
+                          <Icon className="h-3.5 w-3.5" />
+                        </div>
+                        <h2 className="text-base font-semibold">{CATEGORIES[cat].label}</h2>
+                        <span className="text-xs text-muted-foreground">({tools.length})</span>
+                      </div>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        {tools.map((tool) => (
+                          <ToolCard key={tool.slug} tool={tool} />
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+            </div>
           ) : (
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {filtered.map((tool, i) => (
-                <Link
-                  key={tool.slug}
-                  href={
-                    tool.slug === "json-formatter"
-                      ? "/json"
-                      : `/tools/${tool.slug}`
-                  }
-                  className="group flex items-start gap-4 p-4 rounded-xl border border-border bg-card hover:border-accent/40 hover:shadow-md transition-all animate-fade-in"
-                  style={{ animationDelay: `${i * 20}ms` }}
-                >
-                  <div
-                    className={`shrink-0 w-10 h-10 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${CATEGORIES[tool.category].color}`}
-                  >
-                    {tool.icon}
-                  </div>
-                  <div className="min-w-0">
-                    <h3 className="text-sm font-semibold truncate group-hover:text-accent transition-colors">
-                      {tool.name}
-                    </h3>
-                    <p className="text-xs text-muted-foreground mt-0.5 line-clamp-2">
-                      {tool.description}
-                    </p>
-                  </div>
-                </Link>
+            /* Flat grid for filtered/searched results */
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {filtered.map((tool) => (
+                <ToolCard key={tool.slug} tool={tool} />
               ))}
             </div>
           )}
@@ -321,5 +221,28 @@ export default function HomePage() {
       </main>
       <Footer />
     </>
+  );
+}
+
+function ToolCard({ tool }: { tool: (typeof TOOLS)[number] }) {
+  return (
+    <Link
+      href={toolHref(tool.slug)}
+      className="group flex items-center gap-3 p-4 rounded-xl border border-border bg-card hover:border-accent/40 hover:shadow-md transition-all"
+    >
+      <div
+        className={`shrink-0 w-9 h-9 rounded-lg flex items-center justify-center text-xs font-bold font-mono ${CATEGORIES[tool.category].color}`}
+      >
+        {tool.icon}
+      </div>
+      <div className="min-w-0 flex-1">
+        <p className="text-sm font-semibold truncate group-hover:text-accent transition-colors">
+          {tool.name}
+        </p>
+        <p className="text-xs text-muted-foreground mt-0.5 line-clamp-1">
+          {tool.description}
+        </p>
+      </div>
+    </Link>
   );
 }
