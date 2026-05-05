@@ -16,6 +16,12 @@ import HealthFormTools from "@/components/tools/HealthFormTools";
 import MathFormTools from "@/components/tools/MathFormTools";
 import DateTimeFormTools from "@/components/tools/DateTimeFormTools";
 import BackgroundRemoverTool from "@/components/tools/BackgroundRemoverTool";
+import HtmlPreviewTool from "@/components/tools/HtmlPreviewTool";
+import Base64ImageTool from "@/components/tools/Base64ImageTool";
+import StringInspectorTool from "@/components/tools/StringInspectorTool";
+import MarkdownPreviewTool from "@/components/tools/MarkdownPreviewTool";
+import RegexTesterTool from "@/components/tools/RegexTesterTool";
+import UuidGeneratorTool from "@/components/tools/UuidGeneratorTool";
 
 const FINANCE_SLUGS = new Set([
   "simple-interest", "gst-calculator", "discount-calculator",
@@ -59,6 +65,12 @@ export default function CustomToolOutlet({
     case "contrast-checker":    return <ContrastCheckerTool tool={tool} />;
     case "gradient-generator":  return <GradientGeneratorTool tool={tool} />;
     case "currency-converter":  return <CurrencyConverterTool tool={tool} />;
+    case "html-preview":        return <HtmlPreviewTool tool={tool} />;
+    case "base64-image":        return <Base64ImageTool tool={tool} />;
+    case "string-inspector":    return <StringInspectorTool tool={tool} />;
+    case "markdown-preview":    return <MarkdownPreviewTool tool={tool} />;
+    case "regex-tester":        return <RegexTesterTool tool={tool} />;
+    case "uuid-generator":      return <UuidGeneratorTool tool={tool} />;
     default:                    return null;
   }
 }

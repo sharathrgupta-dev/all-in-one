@@ -50,6 +50,7 @@ export const TOOLS: Tool[] = [
   { slug: "xml-to-json", name: "XML → JSON", shortName: "XML → JSON", description: "Convert XML to JSON format", category: "json", icon: "X→" },
 
   // Encoding Tools
+  { slug: "base64-image", name: "Base64 Image", shortName: "B64 Img", description: "Encode images to Base64 data URIs or decode a Base64 string back to a viewable image", category: "encoding", icon: "🖼" },
   { slug: "base64-encode", name: "Base64 Encode", shortName: "Text → B64", description: "Encode text to Base64 with full UTF-8 support", category: "encoding", icon: "B64" },
   { slug: "base64-decode", name: "Base64 Decode", shortName: "B64 → Text", description: "Decode Base64 strings back to plain text", category: "encoding", icon: "←B64" },
   { slug: "url-encode", name: "URL Encode", shortName: "Text → URL", description: "URL-encode text with percent-encoding", category: "encoding", icon: "%" },
@@ -64,10 +65,12 @@ export const TOOLS: Tool[] = [
   { slug: "morse-code", name: "Morse Code", shortName: "Morse", description: "Convert text to Morse code and back", category: "encoding", icon: "·−" },
 
   // Text Tools
+  { slug: "string-inspector", name: "String Inspector", shortName: "Inspect", description: "Deep-inspect any string — length, bytes, Unicode codepoints, char frequency, entropy", category: "text", icon: "🔬" },
+  { slug: "markdown-preview", name: "Markdown Preview", shortName: "MD Live", description: "Live side-by-side Markdown editor and rendered HTML preview with GFM support", category: "text", icon: "MD" },
+  { slug: "regex-tester", name: "Regex Tester", shortName: "Regex", description: "Test regular expressions with live match highlighting, group capture view, and substitution", category: "text", icon: "/.*/", },
   { slug: "case-converter", name: "Case Converter", shortName: "Cases", description: "Convert text to camelCase, PascalCase, snake_case, kebab-case, and more", category: "text", icon: "Aa" },
   { slug: "text-diff", name: "Text Diff", shortName: "Text Diff", description: "Compare two texts and highlight differences", category: "text", icon: "±" },
   { slug: "word-counter", name: "Word Counter", shortName: "Words", description: "Count words, characters, sentences with reading time", category: "text", icon: "#" },
-  { slug: "regex-tester", name: "Regex Tester", shortName: "Regex", description: "Test regular expressions with match highlighting", category: "text", icon: "/.*/" },
   { slug: "slug-generator", name: "Slug Generator", shortName: "Slug", description: "Generate URL-friendly slugs from text", category: "text", icon: "—" },
   { slug: "lorem-ipsum", name: "Lorem Ipsum", shortName: "Lorem", description: "Generate placeholder text in paragraphs, sentences, or words", category: "text", icon: "Lrm" },
   { slug: "line-sorter", name: "Line Sorter", shortName: "Sort", description: "Sort, reverse, deduplicate, or shuffle lines", category: "text", icon: "↕" },
@@ -82,7 +85,9 @@ export const TOOLS: Tool[] = [
   // Dev Tools
   { slug: "aes-encrypt-decrypt", name: "AES-256-GCM Encryptor", shortName: "AES", description: "Encrypt and decrypt text with AES-256-GCM — password-based, client-side only", category: "dev", icon: "🔐" },
   { slug: "hash-generator", name: "Hash Generator", shortName: "Hash", description: "Generate SHA-1, SHA-256, SHA-384, SHA-512 hashes", category: "dev", icon: "##" },
-  { slug: "uuid-generator", name: "UUID Generator", shortName: "UUID", description: "Generate random UUID v4 values", category: "dev", icon: "ID" },
+  { slug: "uuid-generator", name: "UUID / ULID / Nano ID", shortName: "UUID", description: "Generate UUID v4, ULID, or Nano ID values with one click", category: "dev", icon: "ID" },
+  { slug: "html-to-jsx", name: "HTML → JSX", shortName: "HTML→JSX", description: "Convert HTML to React JSX — class→className, self-closing void elements, camelCase events", category: "dev", icon: "⚛" },
+  { slug: "html-preview", name: "HTML Preview", shortName: "Preview", description: "Live-render HTML in a sandboxed iframe with optional JavaScript execution", category: "dev", icon: "🖥" },
   { slug: "color-converter", name: "Color Converter", shortName: "Color", description: "Convert HEX, RGB, HSL colors with preview", category: "dev", icon: "🎨" },
   { slug: "unix-timestamp", name: "Unix Timestamp", shortName: "Time", description: "Convert Unix timestamps to dates and back", category: "dev", icon: "⏱" },
   { slug: "cron-parser", name: "Cron Parser", shortName: "Cron", description: "Parse cron expressions with plain-English description", category: "dev", icon: "⏰" },

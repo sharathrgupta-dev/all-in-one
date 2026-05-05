@@ -24,6 +24,9 @@ const CUSTOM_TOOL_SLUGS = new Set([
   "image-resizer", "image-compressor", "pdf-page-editor", "xml-suite",
   "qr-code", "age-calculator", "bmi-calculator", "compound-interest",
   "loan-emi-calculator", "contrast-checker", "gradient-generator", "currency-converter",
+  // dev tools with rich UI
+  "html-preview", "base64-image", "string-inspector", "markdown-preview",
+  "regex-tester", "uuid-generator",
   // finance form tools
   "simple-interest", "gst-calculator", "discount-calculator",
   "tip-calculator", "roi-calculator", "profit-loss-calculator",
@@ -1073,6 +1076,8 @@ async function runTool(
       return engines.textDiff(input, input2 || "");
     case "toml-to-json":
       return engines.tomlToJson(input);
+    case "html-to-jsx":
+      return engines.htmlToJsx(input);
 
     default:
       return { output: "", error: `Tool "${slug}" is not yet implemented.` };
