@@ -21,6 +21,10 @@ import {
   GitCompareArrows,
   LineChart,
   Paintbrush,
+  DollarSign,
+  Heart,
+  Sigma,
+  CalendarDays,
 } from "lucide-react";
 import { TOOLS, CATEGORIES, type ToolCategory } from "@/lib/tools-registry";
 import Header from "@/components/Header";
@@ -40,7 +44,7 @@ const HERO_FEATURES = [
   {
     icon: Globe,
     title: `${TOOLS.length}+ Tools`,
-    desc: "Encoding, JSON, Text, Dev, and Conversion tools.",
+    desc: "Developer utilities plus finance, health, math, and date calculators — all client-side.",
   },
 ];
 
@@ -51,6 +55,10 @@ const CATEGORY_ICONS: Record<ToolCategory, React.ElementType> = {
   dev: Wrench,
   image: Sparkles,
   conversion: ArrowRightLeft,
+  finance: DollarSign,
+  health: Heart,
+  math: Sigma,
+  datetime: CalendarDays,
 };
 
 const FEATURED_WORKSPACES: {

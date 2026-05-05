@@ -15,7 +15,11 @@ export type ToolCategory =
   | "text"
   | "dev"
   | "image"
-  | "conversion";
+  | "conversion"
+  | "finance"
+  | "health"
+  | "math"
+  | "datetime";
 
 export const CATEGORIES: Record<
   ToolCategory,
@@ -27,6 +31,10 @@ export const CATEGORIES: Record<
   dev: { label: "Dev", color: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
   image: { label: "Image", color: "bg-rose-500/10 text-rose-600 dark:text-rose-400" },
   conversion: { label: "Conversion", color: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400" },
+  finance: { label: "Finance", color: "bg-green-500/10 text-green-700 dark:text-green-400" },
+  health: { label: "Health", color: "bg-red-500/10 text-red-600 dark:text-red-400" },
+  math: { label: "Math", color: "bg-indigo-500/10 text-indigo-600 dark:text-indigo-400" },
+  datetime: { label: "Date & time", color: "bg-sky-500/10 text-sky-600 dark:text-sky-400" },
 };
 
 export const TOOLS: Tool[] = [
@@ -101,6 +109,41 @@ export const TOOLS: Tool[] = [
   { slug: "duration-converter", name: "Duration Converter", shortName: "Duration", description: "Convert seconds to HH:MM:SS and breakdown", category: "conversion", icon: "⏳" },
   { slug: "percentage-calc", name: "Percentage Calculator", shortName: "%", description: "Calculate percentages — X% of Y, % change", category: "conversion", icon: "%" },
   { slug: "aspect-ratio", name: "Aspect Ratio Calculator", shortName: "Ratio", description: "Calculate aspect ratio from dimensions", category: "conversion", icon: "⊞" },
+  { slug: "world-clock", name: "World Clock", shortName: "Clock", description: "Current time across major cities (same grid as timezone tool)", category: "datetime", icon: "🌍", inputLabel: "Optional ISO date/time (blank = now)", outputLabel: "Times" },
+
+  // Finance (Tool Stack–style)
+  { slug: "simple-interest", name: "Simple Interest", shortName: "SI", description: "principal=… rate=… time=… (% per year, years)", category: "finance", icon: "💵", inputLabel: "Values (key=value lines)", outputLabel: "Result" },
+  { slug: "gst-calculator", name: "GST / VAT Calculator", shortName: "GST", description: "amount + rate; exclusive adds tax or inclusive extracts tax", category: "finance", icon: "🧾", inputLabel: "amount=… rate=…", outputLabel: "Breakdown" },
+  { slug: "discount-calculator", name: "Discount Calculator", shortName: "−%", description: "price=… discount=… (% off)", category: "finance", icon: "🏷", inputLabel: "Values", outputLabel: "Sale price" },
+  { slug: "tip-calculator", name: "Tip Calculator", shortName: "Tip", description: "bill=… tip=… split=…", category: "finance", icon: "🍽", inputLabel: "Values", outputLabel: "Totals" },
+  { slug: "roi-calculator", name: "ROI Calculator", shortName: "ROI", description: "cost & gain, or cost & profit", category: "finance", icon: "📈", inputLabel: "Values", outputLabel: "ROI %" },
+  { slug: "profit-loss-calculator", name: "Profit & Loss", shortName: "P&L", description: "revenue=… cost=… → margin & markup", category: "finance", icon: "📊", inputLabel: "Values", outputLabel: "Analysis" },
+  { slug: "compound-interest", name: "Compound Interest", shortName: "Compound", description: "Future value with compounding frequency — interactive form", category: "finance", icon: "📉" },
+  { slug: "loan-emi-calculator", name: "Loan EMI Calculator", shortName: "EMI", description: "Monthly EMI, total interest, amortization-style summary", category: "finance", icon: "🏦" },
+
+  // Health & fitness
+  { slug: "bmi-calculator", name: "BMI Calculator", shortName: "BMI", description: "Body mass index from height & weight with WHO-style bands", category: "health", icon: "⚖" },
+  { slug: "bmr-calculator", name: "BMR Calculator", shortName: "BMR", description: "Basal metabolic rate (Mifflin–St Jeor); key=value lines", category: "health", icon: "🔥", inputLabel: "weight, height, age, sex", outputLabel: "BMR" },
+  { slug: "calorie-calculator", name: "Calorie Calculator (TDEE)", shortName: "kcal", description: "TDEE from BMR × activity level", category: "health", icon: "🥗", inputLabel: "See placeholder", outputLabel: "TDEE" },
+  { slug: "water-intake-calculator", name: "Water Intake", shortName: "H₂O", description: "Rough daily fluid estimate from weight (+ exercise)", category: "health", icon: "💧", inputLabel: "weight=… exercise=…", outputLabel: "Estimate" },
+  { slug: "body-fat-calculator", name: "Body Fat Estimator", shortName: "BF%", description: "Deurenberg formula from BMI, age, sex — estimate only", category: "health", icon: "❤", inputLabel: "weight, height, age, sex", outputLabel: "Estimate %" },
+
+  // Math solvers
+  { slug: "quadratic-solver", name: "Quadratic Solver", shortName: "x²", description: "Roots of ax²+bx+c=0 (real or complex)", category: "math", icon: "∆", inputLabel: "a= b= c=", outputLabel: "Roots" },
+  { slug: "pythagorean-theorem", name: "Pythagorean Theorem", shortName: "△", description: "Find missing side (two of a, b, c)", category: "math", icon: "📐", inputLabel: "Two sides", outputLabel: "Third side" },
+  { slug: "gcd-lcm-calculator", name: "GCD & LCM", shortName: "GCD", description: "Greatest common divisor & least common multiple", category: "math", icon: "🔢", inputLabel: "a= b= or two integers", outputLabel: "GCD / LCM" },
+
+  // Date & time utilities
+  { slug: "age-calculator", name: "Age Calculator", shortName: "Age", description: "Exact age from birth date — calendar UI", category: "datetime", icon: "🎂" },
+  { slug: "days-between-dates", name: "Days Between Dates", shortName: "Days", description: "from=YYYY-MM-DD to=YYYY-MM-DD", category: "datetime", icon: "📅", inputLabel: "Date range", outputLabel: "Days" },
+  { slug: "countdown-calculator", name: "Countdown", shortName: "⏳", description: "Time remaining until a target date", category: "datetime", icon: "⏳", inputLabel: "target=YYYY-MM-DD", outputLabel: "Remaining" },
+  { slug: "week-number-calculator", name: "ISO Week Number", shortName: "Wk", description: "ISO week & year for any date", category: "datetime", icon: "📆", inputLabel: "date=YYYY-MM-DD", outputLabel: "Week" },
+  { slug: "due-date-calculator", name: "Due Date (pregnancy)", shortName: "EDD", description: "EDD from LMP (+280 days, Naegele)", category: "datetime", icon: "🍼", inputLabel: "lmp=YYYY-MM-DD", outputLabel: "EDD" },
+
+  // Dev / design extras (Tool Stack overlap)
+  { slug: "contrast-checker", name: "Contrast Checker (WCAG)", shortName: "AA", description: "Foreground & background — WCAG contrast ratio", category: "dev", icon: "👁" },
+  { slug: "gradient-generator", name: "CSS Gradient Generator", shortName: "CSS ∇", description: "Linear gradient preview + CSS snippet", category: "dev", icon: "🌈" },
+  { slug: "currency-converter", name: "Currency Converter", shortName: "FX", description: "Live rates via Frankfurter (ECB) — amount & currency pair", category: "conversion", icon: "💱" },
 
   // Browser-based files & XML suite
   {
@@ -110,6 +153,14 @@ export const TOOLS: Tool[] = [
     description: "Resize JPG, PNG, or WebP in the browser — set width & height, optional aspect lock, download result",
     category: "image",
     icon: "🖼",
+  },
+  {
+    slug: "image-compressor",
+    name: "Image Compressor",
+    shortName: "Compress",
+    description: "Reduce file size with quality control — JPEG / WebP, same dimensions (browser-side)",
+    category: "image",
+    icon: "🗜",
   },
   {
     slug: "pdf-page-editor",

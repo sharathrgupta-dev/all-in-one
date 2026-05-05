@@ -1424,6 +1424,451 @@ export function convertTimezone(input: string): Result {
     .join("\n");
 }
 
+// ── Finance / health / math / datetime (calculator-style tools; key=value lines) ──
+
+function parseCalcKV(input: string): Record<string, string> {
+  const r: Record<string, string> = {};
+  for (const raw of input.split("\n")) {
+    const line = raw.trim();
+    if (!line || line.startsWith("#")) continue;
+    const m = line.match(/^([a-zA-Z_][a-zA-Z0-9_]*)\s*[=:]\s*(.+)$/);
+    if (m) r[m[1].toLowerCase()] = m[2].trim();
+  }
+  return r;
+}
+
+function kvNum(kv: Record<string, string>, ...keys: string[]): number | undefined {
+  for (const k of keys) {
+    const v = kv[k];
+    if (v !== undefined && v !== "") {
+      const n = parseFloat(v.replace(/,/g, ""));
+      if (Number.isFinite(n)) return n;
+    }
+  }
+  return undefined;
+}
+
+function gcdTwo(a: number, b: number): number {
+  let x = Math.abs(Math.round(a));
+  let y = Math.abs(Math.round(b));
+  while (y) {
+    const t = y;
+    y = x % y;
+    x = t;
+  }
+  return x || 1;
+}
+
+function mifflinBmr(weightKg: number, heightCm: number, age: number, female: boolean): number {
+  const base = 10 * weightKg + 6.25 * heightCm - 5 * age;
+  return female ? base - 161 : base + 5;
+}
+
+export function calcSimpleInterest(input: string): Result {
+  const kv = parseCalcKV(input);
+  const p = kvNum(kv, "p", "principal");
+  const r = kvNum(kv, "r", "rate");
+  const t = kvNum(kv, "t", "time", "years");
+  if (p === undefined || r === undefined || t === undefined) {
+    return {
+      output: "",
+      error:
+        "Example:\nprincipal=1000\nrate=5\ntime=2\n(rate = % per year, time = years)",
+    };
+  }
+  const si = (p * r * t) / 100;
+  const total = p + si;
+  return [
+    `Principal:    ${p}`,
+    `Rate:         ${r}% / year`,
+    `Time:         ${t} years`,
+    `Interest:     ${si.toFixed(2)}`,
+    `Total owed:   ${total.toFixed(2)}`,
+  ].join("\n");
+}
+
+export function calcGst(input: string, basis: "exclusive" | "inclusive"): Result {
+  const kv = parseCalcKV(input);
+  const amount = kvNum(kv, "amount", "amt", "a");
+  const rate = kvNum(kv, "rate", "gst", "g");
+  if (amount === undefined || rate === undefined) {
+    return { output: "", error: "amount=1000\nrate=18" };
+  }
+  if (basis === "exclusive") {
+    const gstAmt = (amount * rate) / 100;
+    const gross = amount + gstAmt;
+    return [
+      `Net (before GST): ${amount.toFixed(2)}`,
+      `GST (${rate}%):   ${gstAmt.toFixed(2)}`,
+      `Gross total:      ${gross.toFixed(2)}`,
+    ].join("\n");
+  }
+  const net = (amount * 100) / (100 + rate);
+  const gstAmt = amount - net;
+  return [
+    `Gross (incl. GST): ${amount.toFixed(2)}`,
+    `Net (taxable):     ${net.toFixed(2)}`,
+    `GST (${rate}%):    ${gstAmt.toFixed(2)}`,
+  ].join("\n");
+}
+
+export function calcDiscount(input: string): Result {
+  const kv = parseCalcKV(input);
+  const price = kvNum(kv, "price", "list", "mrp");
+  const d = kvNum(kv, "discount", "d", "off");
+  if (price === undefined || d === undefined) {
+    return { output: "", error: "price=100\ndiscount=15   (% off list price)" };
+  }
+  const saved = (price * d) / 100;
+  const sale = price - saved;
+  return [
+    `List price:       ${price.toFixed(2)}`,
+    `Discount (${d}%): ${saved.toFixed(2)}`,
+    `Sale price:       ${sale.toFixed(2)}`,
+  ].join("\n");
+}
+
+export function calcTip(input: string): Result {
+  const kv = parseCalcKV(input);
+  const bill = kvNum(kv, "bill", "amount");
+  const tipPct = kvNum(kv, "tip", "percent");
+  const split = kvNum(kv, "split", "people", "p") ?? 1;
+  if (bill === undefined || tipPct === undefined) {
+    return { output: "", error: "bill=50\ntip=18\nsplit=4   (split optional, default 1)" };
+  }
+  const tipAmt = (bill * tipPct) / 100;
+  const total = bill + tipAmt;
+  const per = total / Math.max(1, Math.round(split));
+  const lines = [
+    `Bill:            ${bill.toFixed(2)}`,
+    `Tip (${tipPct}%): ${tipAmt.toFixed(2)}`,
+    `Total:           ${total.toFixed(2)}`,
+  ];
+  if (split > 1) lines.push(`Per person (${Math.round(split)}): ${per.toFixed(2)}`);
+  return lines.join("\n");
+}
+
+export function calcRoi(input: string): Result {
+  const kv = parseCalcKV(input);
+  const cost = kvNum(kv, "cost", "invested");
+  const gain = kvNum(kv, "gain", "value", "current");
+  const profitOnly = kvNum(kv, "profit");
+  if (cost !== undefined && profitOnly !== undefined) {
+    const roi = (profitOnly / cost) * 100;
+    return [
+      `Investment / cost: ${cost}`,
+      `Profit:            ${profitOnly}`,
+      `ROI:               ${roi.toFixed(2)}%`,
+    ].join("\n");
+  }
+  if (cost === undefined || gain === undefined) {
+    return {
+      output: "",
+      error: "cost=100\ngain=120   (final value)\nor cost=100 profit=20",
+    };
+  }
+  const profit = gain - cost;
+  const roi = (profit / cost) * 100;
+  return [
+    `Cost:      ${cost}`,
+    `Returned:  ${gain}`,
+    `Profit:    ${profit.toFixed(2)}`,
+    `ROI:       ${roi.toFixed(2)}%`,
+  ].join("\n");
+}
+
+export function calcProfitLoss(input: string): Result {
+  const kv = parseCalcKV(input);
+  const revenue = kvNum(kv, "revenue", "sales");
+  const cost = kvNum(kv, "cost", "cogs");
+  if (revenue === undefined || cost === undefined) {
+    return { output: "", error: "revenue=120\ncost=80" };
+  }
+  const profit = revenue - cost;
+  const margin = revenue !== 0 ? (profit / revenue) * 100 : 0;
+  const markup = cost !== 0 ? (profit / cost) * 100 : 0;
+  return [
+    `Revenue:       ${revenue.toFixed(2)}`,
+    `Cost:          ${cost.toFixed(2)}`,
+    `Profit / loss: ${profit.toFixed(2)}`,
+    `Margin (rev):  ${margin.toFixed(2)}%`,
+    `Markup (cost): ${markup.toFixed(2)}%`,
+  ].join("\n");
+}
+
+export function calcBmr(input: string): Result {
+  const kv = parseCalcKV(input);
+  const w = kvNum(kv, "weight", "w");
+  const h = kvNum(kv, "height");
+  const age = kvNum(kv, "age", "a");
+  const female = /^f/i.test(kv.sex || kv.gender || "m");
+  if (w === undefined || h === undefined || age === undefined) {
+    return {
+      output: "",
+      error: "weight=70 (kg)\nheight=175 (cm)\nage=30\nsex=m or f   (Mifflin–St Jeor)",
+    };
+  }
+  const bmr = mifflinBmr(w, h, age, female);
+  return [
+    `BMR: ~${bmr.toFixed(0)} kcal/day`,
+    `(${female ? "female" : "male"}, Mifflin–St Jeor)`,
+    "",
+    "TDEE multipliers (× BMR): sedentary 1.2 · light 1.375 · moderate 1.55 · active 1.725 · very 1.9",
+  ].join("\n");
+}
+
+export function calcCalorieCalculator(input: string): Result {
+  const kv = parseCalcKV(input);
+  const w = kvNum(kv, "weight", "w");
+  const h = kvNum(kv, "height");
+  const age = kvNum(kv, "age", "a");
+  const female = /^f/i.test(kv.sex || kv.gender || "m");
+  const level = (kv.activity || kv.level || "moderate").toLowerCase();
+  const map: Record<string, number> = {
+    sedentary: 1.2,
+    light: 1.375,
+    moderate: 1.55,
+    active: 1.725,
+    very: 1.9,
+    extra: 1.9,
+  };
+  const mult = map[level] ?? 1.55;
+  if (w === undefined || h === undefined || age === undefined) {
+    return {
+      output: "",
+      error:
+        "weight=70\nheight=175\nage=30\nsex=m\nactivity=moderate\n(activity: sedentary|light|moderate|active|very)",
+    };
+  }
+  const bmr = mifflinBmr(w, h, age, female);
+  const tdee = bmr * mult;
+  return [
+    `BMR:              ~${bmr.toFixed(0)} kcal/day`,
+    `Activity level: ${level} (×${mult})`,
+    `TDEE (estimate): ~${tdee.toFixed(0)} kcal/day`,
+    "",
+    "Estimates only — not medical advice.",
+  ].join("\n");
+}
+
+export function calcWaterIntake(input: string): Result {
+  const kv = parseCalcKV(input);
+  const w = kvNum(kv, "weight", "w");
+  const exerciseMin = kvNum(kv, "exercise", "workout") ?? 0;
+  if (w === undefined) {
+    return { output: "", error: "weight=70 (kg)\nexercise=30 (optional minutes/day)" };
+  }
+  let ml = w * 35;
+  ml += (exerciseMin / 30) * 250;
+  return [
+    `Estimated fluids: ~${Math.round(ml)} ml (~${(ml / 1000).toFixed(1)} L/day)`,
+    `(rule-of-thumb from weight${exerciseMin ? ` + ${exerciseMin} min activity` : ""})`,
+    "",
+    "Rough guideline — not medical advice.",
+  ].join("\n");
+}
+
+export function calcBodyFatEstimate(input: string): Result {
+  const kv = parseCalcKV(input);
+  const w = kvNum(kv, "weight");
+  const hCm = kvNum(kv, "height");
+  const age = kvNum(kv, "age");
+  const female = /^f/i.test(kv.sex || kv.gender || "m");
+  if (w === undefined || hCm === undefined || age === undefined) {
+    return {
+      output: "",
+      error: "weight=70 (kg)\nheight=175 (cm)\nage=30\nsex=m\n(Deurenberg formula from BMI)",
+    };
+  }
+  const hm = hCm / 100;
+  const bmi = w / (hm * hm);
+  const s = female ? 0 : 1;
+  const bf = 1.2 * bmi + 0.23 * age - 10.8 * s - 5.4;
+  return [
+    `BMI:              ${bmi.toFixed(1)}`,
+    `Body fat (est.): ${bf.toFixed(1)}%`,
+    "(Deurenberg et al. approximation — not diagnostic)",
+  ].join("\n");
+}
+
+export function calcDaysBetween(input: string): Result {
+  const kv = parseCalcKV(input);
+  let d1 = kv.from || kv.start || kv.a;
+  let d2 = kv.to || kv.end || kv.b;
+  if (!d1 || !d2) {
+    const iso = input.match(/\d{4}-\d{2}-\d{2}/g);
+    if (iso && iso.length >= 2) {
+      d1 = iso[0];
+      d2 = iso[1];
+    }
+  }
+  if (!d1 || !d2) {
+    return {
+      output: "",
+      error: "from=2024-06-01\nto=2025-01-15\n(or paste two YYYY-MM-DD dates)",
+    };
+  }
+  const a = new Date(`${d1}T12:00:00`);
+  const b = new Date(`${d2}T12:00:00`);
+  if (Number.isNaN(a.getTime()) || Number.isNaN(b.getTime())) {
+    return { output: "", error: "Could not parse dates — use YYYY-MM-DD" };
+  }
+  const days = Math.round(Math.abs(b.getTime() - a.getTime()) / 86400000);
+  return [`A: ${d1}`, `B: ${d2}`, `Difference: ${days} calendar day(s)`].join("\n");
+}
+
+export function calcCountdown(input: string): Result {
+  const kv = parseCalcKV(input);
+  const targetRaw =
+    kv.target || kv.date || kv.to || input.trim().split("\n").filter(Boolean)[0];
+  if (!targetRaw) {
+    return { output: "", error: "target=2026-12-31\n(or ISO date on first line)" };
+  }
+  const hasTime = /T\d/.test(targetRaw);
+  const target = new Date(hasTime ? targetRaw : `${targetRaw}T23:59:59`);
+  if (Number.isNaN(target.getTime())) return { output: "", error: "Invalid target date" };
+  const now = Date.now();
+  const ms = target.getTime() - now;
+  if (ms <= 0) return [`Target ${targetRaw} is in the past.`].join("\n");
+  const sec = Math.floor(ms / 1000);
+  const days = Math.floor(sec / 86400);
+  const hrs = Math.floor((sec % 86400) / 3600);
+  const min = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+  return [
+    `Target: ${target.toLocaleString()}`,
+    `Remaining: ${days}d ${hrs}h ${min}m ${s}s`,
+    `(${sec.toLocaleString()} seconds)`,
+  ].join("\n");
+}
+
+export function isoWeekMetadata(d: Date): { week: number; isoYear: number } {
+  const date = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
+  const day = date.getUTCDay() || 7;
+  date.setUTCDate(date.getUTCDate() + 4 - day);
+  const isoYear = date.getUTCFullYear();
+  const yearStart = new Date(Date.UTC(isoYear, 0, 1));
+  const week = Math.ceil(((date.getTime() - yearStart.getTime()) / 86400000 + 1) / 7);
+  return { week, isoYear };
+}
+
+export function calcWeekNumber(input: string): Result {
+  const kv = parseCalcKV(input);
+  const raw = kv.date || kv.d || input.trim().split("\n")[0];
+  if (!raw) return { output: "", error: "date=2026-05-04\n(or YYYY-MM-DD on first line)" };
+  const d = new Date(`${raw.trim()}T12:00:00`);
+  if (Number.isNaN(d.getTime())) return { output: "", error: "Invalid date" };
+  const { week, isoYear } = isoWeekMetadata(d);
+  return [
+    `Date:      ${raw}`,
+    `ISO week:  ${week}`,
+    `ISO year:  ${isoYear}`,
+    `Weekday:   ${d.toLocaleDateString(undefined, { weekday: "long" })}`,
+  ].join("\n");
+}
+
+export function calcDueDateFromLmp(input: string): Result {
+  const kv = parseCalcKV(input);
+  const lmp = kv.lmp || kv.date || input.trim().split("\n")[0];
+  if (!lmp) return { output: "", error: "lmp=2026-01-15\n(Naegele rule: +280 days)" };
+  const start = new Date(`${lmp}T12:00:00`);
+  if (Number.isNaN(start.getTime())) return { output: "", error: "Invalid LMP date (YYYY-MM-DD)" };
+  const due = new Date(start);
+  due.setDate(due.getDate() + 280);
+  return [
+    `LMP:           ${lmp}`,
+    `EDD (~40 wk): ${due.toISOString().slice(0, 10)}`,
+    "",
+    "Estimate only — always follow clinical guidance.",
+  ].join("\n");
+}
+
+export function solveQuadraticEquation(input: string): Result {
+  const kv = parseCalcKV(input);
+  let a = kvNum(kv, "a");
+  let b = kvNum(kv, "b");
+  let c = kvNum(kv, "c");
+  if (a === undefined || b === undefined || c === undefined) {
+    return { output: "", error: "a=1\nb=-5\nc=6   → roots of ax²+bx+c=0" };
+  }
+  if (Math.abs(a) < 1e-12) {
+    if (Math.abs(b) < 1e-12) return { output: "", error: "Not a valid equation (a and b both ~0)" };
+    const x = -c / b;
+    return [`Linear: ${b}x + ${c} = 0`, `x = ${x}`].join("\n");
+  }
+  const disc = b * b - 4 * a * c;
+  if (disc < 0) {
+    const real = -b / (2 * a);
+    const imag = Math.sqrt(-disc) / (2 * a);
+    return [
+      `Discriminant: ${disc.toFixed(6)} (complex roots)`,
+      `x₁ = ${real.toFixed(6)} + ${imag.toFixed(6)}i`,
+      `x₂ = ${real.toFixed(6)} - ${imag.toFixed(6)}i`,
+    ].join("\n");
+  }
+  const s = Math.sqrt(disc);
+  const x1 = (-b + s) / (2 * a);
+  const x2 = (-b - s) / (2 * a);
+  return [
+    `Equation: (${a})x² + (${b})x + (${c}) = 0`,
+    `Discriminant: ${disc}`,
+    disc === 0 ? `Double root: x = ${x1}` : `x₁ = ${x1}\nx₂ = ${x2}`,
+  ].join("\n");
+}
+
+export function solvePythagorean(input: string): Result {
+  const kv = parseCalcKV(input);
+  let a = kvNum(kv, "a");
+  let b = kvNum(kv, "b");
+  let c = kvNum(kv, "c");
+  const count = [a, b, c].filter((x) => x !== undefined).length;
+  if (count !== 2) {
+    return {
+      output: "",
+      error: "Provide exactly two sides (cm/units):\na=3\nb=4\n(leaves c blank)\nor a=3 c=5 (find b)",
+    };
+  }
+  const sq = (x: number) => x * x;
+  if (c === undefined && a !== undefined && b !== undefined) {
+    const h = Math.sqrt(sq(a) + sq(b));
+    return [`Legs a=${a}, b=${b}`, `Hypotenuse c = ${h.toFixed(6)}`].join("\n");
+  }
+  if (a === undefined && b !== undefined && c !== undefined) {
+    if (c <= b) return { output: "", error: "Hypotenuse must be greater than leg b" };
+    const leg = Math.sqrt(sq(c) - sq(b));
+    return [`Leg b=${b}, hypotenuse c=${c}`, `Other leg a = ${leg.toFixed(6)}`].join("\n");
+  }
+  if (b === undefined && a !== undefined && c !== undefined) {
+    if (c <= a) return { output: "", error: "Hypotenuse must be greater than leg a" };
+    const leg = Math.sqrt(sq(c) - sq(a));
+    return [`Leg a=${a}, hypotenuse c=${c}`, `Other leg b = ${leg.toFixed(6)}`].join("\n");
+  }
+  return { output: "", error: "Specify exactly one unknown among a, b, c" };
+}
+
+export function calcGcdLcmPair(input: string): Result {
+  const kv = parseCalcKV(input);
+  let x = kvNum(kv, "a", "x", "m");
+  let y = kvNum(kv, "b", "y", "n");
+  if (x === undefined || y === undefined) {
+    const nums = input
+      .trim()
+      .split(/[\s,]+/)
+      .map((s) => parseFloat(s))
+      .filter((n) => Number.isFinite(n));
+    if (nums.length >= 2) {
+      x = nums[0];
+      y = nums[1];
+    }
+  }
+  if (x === undefined || y === undefined) {
+    return { output: "", error: "a=12\nb=18\n(or two integers on one line)" };
+  }
+  const g = gcdTwo(x, y);
+  const l = Math.abs(Math.round(x) * Math.round(y)) / g;
+  return [`GCD(${x}, ${y}) = ${g}`, `LCM(${x}, ${y}) = ${l}`].join("\n");
+}
+
 // ============================================================
 // JSON CONVERSION
 // ============================================================

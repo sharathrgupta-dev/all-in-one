@@ -16,14 +16,21 @@ import { getToolBySlug, CATEGORIES } from "@/lib/tools-registry";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import * as engines from "@/lib/tool-engines";
-import ImageResizerTool from "@/components/tools/ImageResizerTool";
-import PdfPageEditorTool from "@/components/tools/PdfPageEditorTool";
-import XmlSuiteTool from "@/components/tools/XmlSuiteTool";
+import CustomToolOutlet from "@/components/tools/CustomToolOutlet";
 
 const CUSTOM_TOOL_SLUGS = new Set([
   "image-resizer",
+  "image-compressor",
   "pdf-page-editor",
   "xml-suite",
+  "qr-code",
+  "age-calculator",
+  "bmi-calculator",
+  "compound-interest",
+  "loan-emi-calculator",
+  "contrast-checker",
+  "gradient-generator",
+  "currency-converter",
 ]);
 
 function CopyBtn({ text }: { text: string }) {
@@ -148,18 +155,10 @@ export default function ToolPage() {
   }
 
   if (isCustomTool) {
-    const workspace =
-      slug === "image-resizer" ? (
-        <ImageResizerTool tool={tool} />
-      ) : slug === "pdf-page-editor" ? (
-        <PdfPageEditorTool tool={tool} />
-      ) : (
-        <XmlSuiteTool tool={tool} />
-      );
     return (
       <>
         <Header />
-        {workspace}
+        <CustomToolOutlet slug={slug} tool={tool} />
         <Footer />
       </>
     );
@@ -371,6 +370,8 @@ function needsNoInput(slug: string): boolean {
     "uuid-generator",
     "lorem-ipsum",
     "password-generator",
+    "timezone-converter",
+    "world-clock",
   ].includes(slug);
 }
 
@@ -766,6 +767,20 @@ function renderOptions(
         </div>
       );
     }
+    case "gst-calculator":
+      return (
+        <div className="mb-4">
+          <label className="text-sm font-medium mr-2">GST basis:</label>
+          <select
+            value={(options.gstBasis as string) || "exclusive"}
+            onChange={(e) => setOption("gstBasis", e.target.value)}
+            className={selectClass}
+          >
+            <option value="exclusive">Add GST to net amount</option>
+            <option value="inclusive">Extract GST from gross</option>
+          </select>
+        </div>
+      );
     default:
       return null;
   }
@@ -957,7 +972,47 @@ async function runTool(
       return { output: "", error: "Enter dimensions as WxH (e.g. 1920x1080)" };
     }
     case "timezone-converter":
+    case "world-clock":
       return engines.convertTimezone(input);
+
+    // Finance & calculators (Tool Stack parity)
+    case "simple-interest":
+      return engines.calcSimpleInterest(input);
+    case "gst-calculator":
+      return engines.calcGst(
+        input,
+        (options.gstBasis as string) === "inclusive" ? "inclusive" : "exclusive"
+      );
+    case "discount-calculator":
+      return engines.calcDiscount(input);
+    case "tip-calculator":
+      return engines.calcTip(input);
+    case "roi-calculator":
+      return engines.calcRoi(input);
+    case "profit-loss-calculator":
+      return engines.calcProfitLoss(input);
+    case "bmr-calculator":
+      return engines.calcBmr(input);
+    case "calorie-calculator":
+      return engines.calcCalorieCalculator(input);
+    case "water-intake-calculator":
+      return engines.calcWaterIntake(input);
+    case "body-fat-calculator":
+      return engines.calcBodyFatEstimate(input);
+    case "days-between-dates":
+      return engines.calcDaysBetween(input);
+    case "countdown-calculator":
+      return engines.calcCountdown(input);
+    case "week-number-calculator":
+      return engines.calcWeekNumber(input);
+    case "due-date-calculator":
+      return engines.calcDueDateFromLmp(input);
+    case "quadratic-solver":
+      return engines.solveQuadraticEquation(input);
+    case "pythagorean-theorem":
+      return engines.solvePythagorean(input);
+    case "gcd-lcm-calculator":
+      return engines.calcGcdLcmPair(input);
 
     // JSON conversion tools
     case "json-to-yaml":
