@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "JSON Tools — Format, Validate, Transform & Diff | DevForge",
+  title: "JSON Tools — Format, Validate, Transform & Diff | DevBench",
   description:
     "Format and minify JSON, tree view, diff, YAML/CSV/TOML export, schema validation, encrypt, NDJSON, table mode — full JSON workspace in the browser.",
   keywords: [

@@ -279,8 +279,8 @@ const SAMPLE_PAYLOAD = JSON.stringify(
     name: "John Doe",
     iat: Math.floor(Date.now() / 1000),
     exp: Math.floor(Date.now() / 1000) + 3600,
-    iss: "devforge.dev",
-    aud: "devforge-users",
+    iss: "devbench.co.in",
+    aud: "devbench-users",
   },
   null,
   2

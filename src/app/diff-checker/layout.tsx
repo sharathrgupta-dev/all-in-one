@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Diff Checker — Compare Text Online | DevForge",
+  title: "Diff Checker — Compare Text Online | DevBench",
   description:
     "Compare two texts side-by-side or unified. Find additions and deletions with line and character highlighting. Ignore whitespace, regex search — private, client-side diff tool.",
   keywords: [

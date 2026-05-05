@@ -15,10 +15,10 @@ export default function AboutPage() {
           <ArrowLeft className="h-4 w-4" />
           Back to home
         </Link>
-        <h1 className="text-3xl font-bold tracking-tight">About DevForge</h1>
+        <h1 className="text-3xl font-bold tracking-tight">About DevBench</h1>
         <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            DevForge is an all-in-one developer toolkit that runs entirely in
+            DevBench is an all-in-one developer toolkit that runs entirely in
             your browser. Format JSON, encode data, compare text, debug JWTs,
             test HTTP APIs, edit cron expressions, beautify code, and use
             dozens of smaller converters — without signing up and without

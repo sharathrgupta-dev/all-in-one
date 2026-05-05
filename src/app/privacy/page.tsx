@@ -19,7 +19,7 @@ export default function PrivacyPage() {
         <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
           <p>
             <strong className="text-foreground">Tools and inputs.</strong> Core
-            DevForge utilities process your input locally in the browser. We do
+            DevBench utilities process your input locally in the browser. We do
             not operate a backend that stores your pasted JSON, tokens, or API
             bodies for those tools.
           </p>
@@ -35,7 +35,7 @@ export default function PrivacyPage() {
             <strong className="text-foreground">Hosting & logs.</strong> If you
             deploy this app on a host (e.g. Vercel), the provider may collect
             standard access logs (URLs, IPs, timestamps). That is independent of
-            DevForge&apos;s tool logic.
+            DevBench&apos;s tool logic.
           </p>
           <p>
             Questions?{" "}

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "API Tester — HTTP Client Online | DevForge",
+  title: "API Tester — HTTP Client Online | DevBench",
   description:
     "Send GET, POST, PUT, PATCH, DELETE requests with headers, auth, and body. View formatted responses and export code snippets — uses a safe proxy.",
   keywords: ["API tester", "HTTP client online", "REST client", "test API"],

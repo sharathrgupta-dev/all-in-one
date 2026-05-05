@@ -73,7 +73,7 @@ export default function ContactPage() {
       msg,
     ].join("\n");
 
-    const subject = `[DevForge] ${subjectPreset}: ${sub}`;
+    const subject = `[DevBench] ${subjectPreset}: ${sub}`;
     const url     = `mailto:${SITE_CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
     window.location.href = url;

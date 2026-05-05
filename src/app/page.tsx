@@ -106,13 +106,13 @@ export default function HomePage() {
               <span>{TOOLS.length} free tools — no signup required</span>
             </div>
             <h1 className="text-4xl sm:text-6xl font-bold tracking-tight mb-4">
-              Developer Toolkit
+              Your Developer
               <br />
-              <span className="text-accent">All-in-One</span>
+              <span className="text-accent">Workbench</span>
             </h1>
             <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-10">
-              Format JSON, encode data, diff text, generate hashes, convert units — all in your
-              browser. Fast, private, and free.
+              Format JSON, encode Base64, test regex, debug JWT, diff text, generate UUIDs — all in
+              your browser. Fast, private, and completely free.
             </p>
 
             {/* Search */}

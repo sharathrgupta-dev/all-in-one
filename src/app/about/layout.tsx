@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About — DevForge",
+  title: "About — DevBench",
   description:
-    "DevForge is a client-side developer toolkit: JSON, encoding, diff, JWT, API testing, math suite, and more.",
+    "DevBench is a client-side developer toolkit: JSON, encoding, diff, JWT, API testing, math suite, and more.",
 };
 
 export default function AboutLayout({

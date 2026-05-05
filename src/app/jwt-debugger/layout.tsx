@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "JWT Debugger — Decode, Encode & Verify Tokens | DevForge",
+  title: "JWT Debugger — Decode, Encode & Verify Tokens | DevBench",
   description:
     "Free online JWT decoder and encoder. Inspect headers and payloads, verify HMAC signatures (HS256/384/512), see claim breakdown and expiry — runs entirely in your browser.",
   keywords: [

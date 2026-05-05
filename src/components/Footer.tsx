@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Shield } from "lucide-react";
-import DevForgeMark from "@/components/DevForgeMark";
+import DevBenchMark from "@/components/DevBenchMark";
 
 export default function Footer() {
   return (
@@ -9,8 +9,8 @@ export default function Footer() {
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <Link href="/" className="flex items-center gap-2 text-foreground">
-              <DevForgeMark className="h-6 w-6 text-accent" />
-              <span className="font-bold tracking-tight">DevForge</span>
+              <DevBenchMark className="h-6 w-6 text-accent" />
+              <span className="font-bold tracking-tight">DevBench</span>
             </Link>
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
               <Shield className="h-3.5 w-3.5" />
@@ -42,7 +42,7 @@ export default function Footer() {
 
         <div className="mt-6 border-t border-border pt-6 text-center">
           <p className="text-xs text-muted-foreground">
-            &copy; 2026 DevForge. All rights reserved.
+            &copy; {new Date().getFullYear()} DevBench. All rights reserved.
           </p>
         </div>
       </div>

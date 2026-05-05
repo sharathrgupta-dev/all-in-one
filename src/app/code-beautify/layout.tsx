@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Code Beautify — Formatters, Validators, Converters | DevForge",
+  title: "Code Beautify — Formatters, Validators, Converters | DevBench",
   description:
     "Online beautifiers for HTML, CSS, JavaScript, TypeScript, TSX, JSON, Markdown, YAML, GraphQL, XML, SQL (Prettier / sql-formatter), plus Python indent cleanup — all client-side.",
   keywords: [

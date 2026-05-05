@@ -64,7 +64,7 @@ const STANDALONE_HUB: HubLink[] = [
   },
 ];
 
-/** Inspired by [CodeBeautify](https://codebeautify.org/) popular tiles — mapped to DevForge routes. */
+/** Inspired by [CodeBeautify](https://codebeautify.org/) popular tiles — mapped to DevBench routes. */
 const POPULAR: HubLink[] = [
   { href: "/json", label: "JSON Beautifier" },
   { href: "/tools/xml-to-json", label: "XML Viewer → JSON" },
@@ -273,7 +273,7 @@ export default function CodeBeautifyPage() {
             </p>
             <p className="mx-auto mb-6 flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <Sparkles className="h-3.5 w-3.5 text-accent" />
-              Everything runs in your browser on DevForge — no uploads.
+              Everything runs in your browser on DevBench — no uploads.
             </p>
           </div>
 
@@ -414,7 +414,7 @@ export default function CodeBeautifyPage() {
               </a>
               . Want filters on every tool?{" "}
               <Link href="/" className="font-semibold text-accent hover:underline">
-                DevForge home
+                DevBench home
               </Link>{" "}
               lists all {TOOLS.length}+ tools with category chips.
             </p>

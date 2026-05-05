@@ -9,16 +9,23 @@ export async function generateMetadata({
   const { slug } = await params;
   const tool = getToolBySlug(slug);
   if (!tool) {
-    return { title: "Tool | DevForge" };
+    return { title: "Tool | DevBench" };
   }
-  const title = `${tool.name} — Free Online Tool | DevForge`;
+  const title = `${tool.name} — Free Online Tool | DevBench`;
   const description =
     tool.description +
-    " Runs in your browser — no signup, client-side processing.";
+    " Runs entirely in your browser — no signup, no uploads, client-side only.";
   return {
     title,
     description,
-    keywords: [tool.shortName, tool.name, "online tool", "developer tools"],
+    keywords: [tool.shortName, tool.name, "online tool", "free developer tools", "devbench"],
+    openGraph: {
+      title,
+      description,
+      url: `https://devbench.co.in/tools/${tool.slug}`,
+      siteName: "DevBench",
+    },
+    alternates: { canonical: `https://devbench.co.in/tools/${tool.slug}` },
   };
 }
 

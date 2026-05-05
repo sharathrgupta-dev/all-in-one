@@ -1856,7 +1856,7 @@ export default function JsonToolkitPage() {
             <FileJson size={22} className="text-accent" />
             <h1 className="text-lg font-semibold text-foreground tracking-tight">JSON Toolkit</h1>
           </a>
-          <span className="text-xs text-muted-foreground hidden sm:inline">DevForge</span>
+          <span className="text-xs text-muted-foreground hidden sm:inline">DevBench</span>
         </div>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer select-none">

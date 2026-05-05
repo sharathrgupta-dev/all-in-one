@@ -13,22 +13,71 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DevForge — All-in-One Developer Toolkit",
+  metadataBase: new URL("https://devbench.co.in"),
+  title: {
+    default: "DevBench — Free Online Developer Tools",
+    template: "%s | DevBench",
+  },
   description:
-    "100+ free browser-based tools for developers. JSON formatter, validator, diff, converters, encoders, and more. No signup, no uploads — everything runs client-side.",
+    "100+ free browser-based developer tools. Format JSON, encode Base64, test regex, debug JWT, compare text, generate UUID, convert YAML, and more. No signup — everything runs in your browser.",
   keywords: [
-    "JSON formatter",
+    "developer tools online",
+    "free developer tools",
+    "JSON formatter online",
     "JSON validator",
-    "developer tools",
-    "JWT decoder",
-    "diff checker",
-    "graphing calculator",
-    "converter",
-    "encoder",
-    "base64",
-    "YAML",
-    "CSV",
+    "Base64 encoder decoder",
+    "regex tester online",
+    "JWT debugger",
+    "text diff checker",
+    "UUID generator",
+    "ULID generator",
+    "YAML to JSON converter",
+    "JSON to CSV",
+    "URL encoder decoder",
+    "SHA256 hash generator",
+    "markdown preview",
+    "cron expression parser",
+    "Unix timestamp converter",
+    "password generator",
+    "color converter HEX RGB HSL",
+    "HTML to JSX converter",
+    "developer toolkit",
+    "online coding tools",
+    "devbench",
   ],
+  authors: [{ name: "DevBench", url: "https://devbench.co.in" }],
+  creator: "DevBench",
+  publisher: "DevBench",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://devbench.co.in",
+    siteName: "DevBench",
+    title: "DevBench — Free Online Developer Tools",
+    description:
+      "100+ free browser-based developer tools — JSON, Base64, Regex, JWT, Diff, UUID, YAML, CSV, and more. No signup, runs entirely in your browser.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DevBench — Free Online Developer Tools",
+    description:
+      "100+ free browser-based developer tools — JSON, Base64, Regex, JWT, Diff, UUID, YAML, CSV. No signup required.",
+    site: "@devbench",
+    creator: "@devbench",
+  },
+  alternates: {
+    canonical: "https://devbench.co.in",
+  },
 };
 
 export default function RootLayout({

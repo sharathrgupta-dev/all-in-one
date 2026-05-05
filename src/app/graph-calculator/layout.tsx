@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Math Suite — Graph, Scientific & Matrix Calculator | DevForge",
+  title: "Math Suite — Graph, Scientific & Matrix Calculator | DevBench",
   description:
     "Free browser math workspace: 2D function plotting (zoom, pan, tables, intersections), scientific expression evaluation, and dynamic N×N matrix algebra (determinant, inverse, multiply). Client-side.",
   keywords: [

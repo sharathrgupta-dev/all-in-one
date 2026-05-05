@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sun, Moon, Menu, X } from "lucide-react";
-import DevForgeMark from "@/components/DevForgeMark";
+import DevBenchMark from "@/components/DevBenchMark";
 
 export default function Header() {
   const [dark, setDark] = useState(false);
@@ -46,8 +46,8 @@ export default function Header() {
           href="/"
           className="flex items-center gap-2 text-foreground transition-colors hover:text-accent"
         >
-          <DevForgeMark className="h-7 w-7 shrink-0 text-accent" />
-          <span className="text-lg font-bold tracking-tight">DevForge</span>
+          <DevBenchMark className="h-7 w-7 shrink-0 text-accent" />
+          <span className="text-lg font-bold tracking-tight">DevBench</span>
         </Link>
 
         <nav className="hidden items-center gap-1 md:flex">

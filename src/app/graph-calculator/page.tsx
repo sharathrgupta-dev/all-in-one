@@ -885,7 +885,7 @@ export default function GraphCalculatorPage() {
                 <p className="text-[11px] text-muted-foreground truncate">Inspired by Desmos · client-side</p>
               </div>
             </a>
-            <span className="text-xs text-muted-foreground hidden lg:inline shrink-0">DevForge</span>
+            <span className="text-xs text-muted-foreground hidden lg:inline shrink-0">DevBench</span>
           </div>
           {mode === "graph" && (
             <div className="flex items-center gap-1.5 shrink-0">

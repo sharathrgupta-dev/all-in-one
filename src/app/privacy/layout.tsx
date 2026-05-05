@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Privacy — DevForge",
+  title: "Privacy — DevBench",
   description:
-    "How DevForge handles data: client-side tools, no account required, and what minimal telemetry might mean in the future.",
+    "How DevBench handles data: client-side tools, no account required, and what minimal telemetry might mean in the future.",
 };
 
 export default function PrivacyLayout({
