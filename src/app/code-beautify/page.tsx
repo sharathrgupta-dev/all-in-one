@@ -421,6 +421,44 @@ export default function CodeBeautifyPage() {
           </div>
         </section>
       </main>
+
+      <section className="max-w-5xl mx-auto px-4 pb-10 w-full border-t border-border pt-8 mt-2 space-y-3">
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          Online code formatter — Prettier in the browser
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          The DevBench <strong>Code Beautify</strong> workspace runs{" "}
+          <strong>Prettier</strong> entirely in your browser to format HTML, CSS,
+          JavaScript, TypeScript, TSX, JSON, Markdown, YAML, and GraphQL. For
+          SQL it uses the <strong>sql-formatter</strong> library. No code is
+          sent to a server — paste your messy code, click format, and get
+          clean, consistently-indented output in seconds.
+        </p>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">Supported languages</h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <li><strong>HTML</strong> — attribute-per-line option, void element handling</li>
+          <li><strong>CSS / SCSS</strong> — property ordering, selector normalisation</li>
+          <li><strong>JavaScript / TypeScript / TSX / JSX</strong> — via Prettier&apos;s babel and typescript parsers</li>
+          <li><strong>JSON</strong> — consistent indentation, trailing comma removal</li>
+          <li><strong>Markdown</strong> — consistent heading levels, list formatting</li>
+          <li><strong>YAML</strong> — normalised indentation and quoting</li>
+          <li><strong>GraphQL</strong> — schema and operation formatting</li>
+          <li><strong>SQL</strong> — keyword casing, clause alignment (PostgreSQL, MySQL, SQLite)</li>
+          <li><strong>Python</strong> — indent normalisation (4-space PEP 8 style)</li>
+        </ul>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          Why use a code formatter?
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Consistent formatting removes style debates from code reviews, makes
+          diffs cleaner (one logical change = one diff hunk), and makes AI- or
+          tool-generated code immediately readable. Prettier enforces an opinionated
+          style so teams don&apos;t have to maintain manual style guides.
+        </p>
+      </section>
+
       <Footer />
     </>
   );

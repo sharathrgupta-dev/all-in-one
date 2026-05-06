@@ -1856,6 +1856,60 @@ export default function ApiTesterPage() {
           ))}
         </div>
       </main>
+
+      <section className="max-w-5xl mx-auto px-4 pb-10 w-full border-t border-border pt-8 mt-2 space-y-3">
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          Browser-based HTTP client — test APIs without installing tools
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          The DevBench <strong>API Tester</strong> lets you send HTTP requests
+          (GET, POST, PUT, PATCH, DELETE) directly from your browser without
+          installing Postman, Insomnia, or any other client. Add headers, set a
+          request body, configure authentication, and inspect formatted JSON or
+          text responses — all in one workspace.
+        </p>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">Features</h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <li>GET, POST, PUT, PATCH, DELETE, HEAD, OPTIONS methods</li>
+          <li>Custom request headers (Authorization, Content-Type, Accept, etc.)</li>
+          <li>JSON, form-data, and plain text request bodies</li>
+          <li>Bearer token and Basic Auth helpers</li>
+          <li>Response body displayed with syntax highlighting and copy button</li>
+          <li>Response status code, headers, and timing shown</li>
+          <li>Export the request as a cURL command or JavaScript fetch snippet</li>
+        </ul>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          REST API vs GraphQL vs gRPC
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          This tool is designed for <strong>REST APIs</strong> — the most
+          common style, where resources are accessed via URL paths and HTTP
+          methods. For GraphQL APIs, send a POST request with a{" "}
+          <code className="font-mono text-xs">Content-Type: application/json</code>{" "}
+          header and a body containing a{" "}
+          <code className="font-mono text-xs">query</code> field. gRPC uses
+          binary Protobuf encoding and requires a dedicated client.
+        </p>
+
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Also useful:{" "}
+          <a href="/tools/curl-to-fetch" className="text-accent hover:underline">
+            cURL → Fetch converter
+          </a>
+          {", "}
+          <a href="/tools/url-parser" className="text-accent hover:underline">
+            URL Parser
+          </a>
+          {", "}
+          <a href="/tools/json-formatter" className="text-accent hover:underline">
+            JSON Formatter
+          </a>
+          .
+        </p>
+      </section>
+
       <Footer />
     </>
   );
