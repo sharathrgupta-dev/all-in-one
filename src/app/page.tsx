@@ -220,6 +220,45 @@ export default function HomePage() {
         </section>
       </main>
       <Footer />
+
+      {/* JSON-LD structured data */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                "@id": "https://devbench.co.in/#website",
+                url: "https://devbench.co.in",
+                name: "DevBench",
+                description:
+                  "100+ free browser-based developer tools — JSON, Base64, Regex, JWT, Diff, UUID, and more.",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: {
+                    "@type": "EntryPoint",
+                    urlTemplate: "https://devbench.co.in/?q={search_term_string}",
+                  },
+                  "query-input": "required name=search_term_string",
+                },
+              },
+              {
+                "@type": "Organization",
+                "@id": "https://devbench.co.in/#organization",
+                name: "DevBench",
+                url: "https://devbench.co.in",
+                contactPoint: {
+                  "@type": "ContactPoint",
+                  contactType: "customer support",
+                  url: "https://devbench.co.in/contact",
+                },
+              },
+            ],
+          }).replace(/</g, "\\u003c"),
+        }}
+      />
     </>
   );
 }

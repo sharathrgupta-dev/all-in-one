@@ -29,10 +29,74 @@ export async function generateMetadata({
   };
 }
 
-export default function ToolSlugLayout({
+export default async function ToolSlugLayout({
   children,
+  params,
 }: {
   children: React.ReactNode;
+  params: Promise<{ slug: string }>;
 }) {
-  return children;
+  const { slug } = await params;
+  const tool = getToolBySlug(slug);
+
+  const jsonLd = tool
+    ? {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "WebApplication",
+            "@id": `https://devbench.co.in/tools/${slug}/#webapp`,
+            name: tool.name,
+            url: `https://devbench.co.in/tools/${slug}`,
+            description:
+              tool.description +
+              " Runs entirely in your browser — no signup, no uploads.",
+            applicationCategory: "DeveloperApplication",
+            operatingSystem: "Any",
+            browserRequirements: "Requires a modern web browser with JavaScript enabled.",
+            offers: {
+              "@type": "Offer",
+              price: "0",
+              priceCurrency: "USD",
+            },
+            provider: {
+              "@type": "Organization",
+              name: "DevBench",
+              url: "https://devbench.co.in",
+            },
+          },
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: "Home",
+                item: "https://devbench.co.in",
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: tool.name,
+                item: `https://devbench.co.in/tools/${slug}`,
+              },
+            ],
+          },
+        ],
+      }
+    : null;
+
+  return (
+    <>
+      {jsonLd && (
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
+          }}
+        />
+      )}
+      {children}
+    </>
+  );
 }
