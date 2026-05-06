@@ -572,6 +572,38 @@ export default function EpochConverterPage() {
           </div>
         </Section>
       </main>
+
+      <section className="max-w-5xl mx-auto px-4 pb-10 w-full border-t border-border pt-8 mt-2 space-y-3">
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">What is the Unix epoch?</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          The <strong>Unix epoch</strong> is a fixed reference point in time —
+          00:00:00 UTC on 1 January 1970. A <strong>Unix timestamp</strong> is
+          simply the number of seconds (or milliseconds) elapsed since that
+          moment. Because it is a single integer with no timezone ambiguity,
+          epoch time is the universal standard for storing and comparing
+          timestamps in databases, APIs, log files, and JWT tokens.
+        </p>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">Seconds vs milliseconds</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Unix timestamps traditionally use seconds (10-digit integer as of
+          2025). JavaScript's{" "}
+          <code className="font-mono text-xs">Date.now()</code> returns
+          milliseconds (13 digits). Many APIs — Stripe, Twilio, AWS — use
+          seconds; browser APIs use milliseconds. Always verify the unit before
+          passing a timestamp to an external service.
+        </p>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">The Year 2038 problem</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          On 19 January 2038 at 03:14:07 UTC, a signed 32-bit integer storing a
+          Unix timestamp will overflow to a large negative number. Systems that
+          store timestamps as 32-bit signed integers will misinterpret future
+          dates as 1901. Modern 64-bit systems are not affected — a 64-bit
+          timestamp will not overflow for approximately 292 billion years.
+        </p>
+      </section>
+
       <Footer />
     </>
   );

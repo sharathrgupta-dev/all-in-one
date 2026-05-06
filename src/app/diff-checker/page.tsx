@@ -770,6 +770,50 @@ export default function DiffCheckerPage() {
           </div>
         )}
       </main>
+
+      <section className="max-w-5xl mx-auto px-4 pb-10 w-full border-t border-border pt-8 mt-2 space-y-3">
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">About this diff checker</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          This <strong>online diff checker</strong> compares two texts
+          side-by-side or in a unified view and highlights every addition,
+          deletion, and unchanged line. It uses the Myers diff algorithm — the
+          same algorithm used by Git — to find the minimum edit distance between
+          the two inputs. Your text never leaves your browser.
+        </p>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">Side-by-side vs unified diff</h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <li>
+            <strong>Side-by-side</strong> — the two versions are shown in
+            parallel columns. Easier to read when the files have many changes
+            spread across different sections.
+          </li>
+          <li>
+            <strong>Unified diff</strong> — changes are shown inline with{" "}
+            <code className="font-mono text-xs">+</code> and{" "}
+            <code className="font-mono text-xs">-</code> prefixes. The standard
+            format used by Git patches and{" "}
+            <code className="font-mono text-xs">diff -u</code> on the command
+            line.
+          </li>
+        </ul>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">Common use cases</h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <li>Comparing config files before and after a deployment</li>
+          <li>Reviewing what a code generator or AI changed in a file</li>
+          <li>Checking that a "find and replace" only modified the intended lines</li>
+          <li>Comparing two versions of a legal document or contract</li>
+          <li>
+            For JSON-specific diffing with structure awareness, use the{" "}
+            <a href="/tools/json-diff" className="text-accent hover:underline">
+              JSON Diff
+            </a>{" "}
+            tool.
+          </li>
+        </ul>
+      </section>
+
       <Footer />
     </>
   );

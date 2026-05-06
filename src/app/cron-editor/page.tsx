@@ -544,6 +544,42 @@ export default function CronEditorPage() {
           ))}
         </div>
       </main>
+
+      <section className="max-w-5xl mx-auto px-4 pb-10 w-full border-t border-border pt-8 mt-2 space-y-3">
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">How to read a cron expression</h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          A standard <strong>cron expression</strong> has five space-separated
+          fields:{" "}
+          <code className="font-mono text-xs">minute hour day-of-month month day-of-week</code>.
+          Each field accepts a number, a wildcard{" "}
+          <code className="font-mono text-xs">*</code> (every), a range{" "}
+          <code className="font-mono text-xs">1-5</code>, a list{" "}
+          <code className="font-mono text-xs">1,3,5</code>, or a step{" "}
+          <code className="font-mono text-xs">*/15</code> (every 15 units).
+        </p>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">Quick reference</h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground font-mono">
+          <li><span className="text-accent">* * * * *</span> — every minute</li>
+          <li><span className="text-accent">0 * * * *</span> — top of every hour</li>
+          <li><span className="text-accent">0 9 * * 1-5</span> — 9 AM every weekday</li>
+          <li><span className="text-accent">0 0 * * 0</span> — midnight every Sunday</li>
+          <li><span className="text-accent">*/15 * * * *</span> — every 15 minutes</li>
+          <li><span className="text-accent">0 0 1 * *</span> — midnight on the 1st of each month</li>
+          <li><span className="text-accent">0 2 * * *</span> — 2 AM daily (good for backups)</li>
+        </ul>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">Where cron expressions are used</h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <li>Linux/Unix crontab — system task scheduling</li>
+          <li>GitHub Actions <code className="font-mono text-xs">schedule</code> trigger (uses 5-field POSIX cron)</li>
+          <li>AWS EventBridge / CloudWatch Events (supports 6-field cron with year)</li>
+          <li>Kubernetes CronJobs for recurring batch workloads</li>
+          <li>Vercel and Netlify scheduled serverless functions</li>
+          <li>Node.js <code className="font-mono text-xs">node-cron</code> and <code className="font-mono text-xs">cron</code> packages</li>
+        </ul>
+      </section>
+
       <Footer />
     </>
   );

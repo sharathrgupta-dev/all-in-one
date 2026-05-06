@@ -485,6 +485,463 @@ function UrlEncodeContent() {
   );
 }
 
+function UrlDecodeContent() {
+  return (
+    <Section>
+      <h2 className={h2}>What is URL decoding?</h2>
+      <p className={prose}>
+        <strong>URL decoding</strong> reverses percent-encoding — it converts
+        sequences like <code className="font-mono text-xs">%20</code> back to a
+        space, <code className="font-mono text-xs">%3A</code> back to{" "}
+        <code className="font-mono text-xs">:</code>, and{" "}
+        <code className="font-mono text-xs">%2F</code> back to{" "}
+        <code className="font-mono text-xs">/</code>. It also handles the{" "}
+        <code className="font-mono text-xs">+</code> sign used in{" "}
+        <code className="font-mono text-xs">application/x-www-form-urlencoded</code>{" "}
+        payloads as a space character.
+      </p>
+
+      <h2 className={h2}>When do you need to decode URLs?</h2>
+      <ul className={ul}>
+        <li>Reading query parameters from a URL copied out of a browser address bar</li>
+        <li>Decoding redirect URLs that have been double-encoded</li>
+        <li>Inspecting OAuth callback URLs and state parameters</li>
+        <li>
+          Decoding <code className="font-mono text-xs">Location</code> header values from HTTP
+          301/302 responses
+        </li>
+        <li>Parsing webhook payloads encoded as form data</li>
+      </ul>
+
+      <p className={prose}>
+        Also useful:{" "}
+        <Link href="/tools/url-encode" className="text-accent hover:underline">
+          URL Encode
+        </Link>
+        {", "}
+        <Link href="/tools/base64-decode" className="text-accent hover:underline">
+          Base64 Decode
+        </Link>
+        {", "}
+        <Link href="/tools/url-parser" className="text-accent hover:underline">
+          URL Parser
+        </Link>
+        .
+      </p>
+    </Section>
+  );
+}
+
+function TextDiffContent() {
+  return (
+    <Section>
+      <h2 className={h2}>What is a text diff?</h2>
+      <p className={prose}>
+        A <strong>text diff</strong> shows exactly what changed between two
+        versions of a text. Lines added are highlighted in green, deleted lines
+        in red, and unchanged context lines are shown in between. This is the
+        same underlying technique used by Git to show commit changes and by code
+        review tools like GitHub Pull Requests.
+      </p>
+
+      <h2 className={h2}>Diff algorithms: how it works</h2>
+      <p className={prose}>
+        This tool uses the{" "}
+        <strong>Myers diff algorithm</strong> — the same algorithm used by Git.
+        It finds the shortest edit script (minimum number of insertions and
+        deletions) to transform text A into text B. For JSON comparison, use the{" "}
+        <Link href="/tools/json-diff" className="text-accent hover:underline">
+          JSON Diff
+        </Link>{" "}
+        tool which understands JSON structure rather than treating it as plain
+        text.
+      </p>
+
+      <h2 className={h2}>Common use cases</h2>
+      <ul className={ul}>
+        <li>Comparing two versions of a configuration file or template</li>
+        <li>Reviewing changes to a document before committing</li>
+        <li>Checking what a code generator changed between runs</li>
+        <li>Verifying that a "find and replace" only changed the intended lines</li>
+        <li>Comparing API responses to spot regressions</li>
+      </ul>
+    </Section>
+  );
+}
+
+function WordCounterContent() {
+  return (
+    <Section>
+      <h2 className={h2}>What does this word counter measure?</h2>
+      <p className={prose}>
+        This <strong>online word counter</strong> gives you a complete text
+        analysis in one click: word count, character count (with and without
+        spaces), sentence count, paragraph count, and estimated reading time
+        based on an average reading speed of 200 words per minute.
+      </p>
+
+      <h2 className={h2}>Word count vs character count</h2>
+      <ul className={ul}>
+        <li>
+          <strong>Word count</strong> — useful for blog posts, essays, reports.
+          Most social media platforms and publishing guidelines specify word
+          limits.
+        </li>
+        <li>
+          <strong>Character count (with spaces)</strong> — used by Twitter/X
+          (280 chars), SMS (160 chars), and meta description limits (≈155
+          chars).
+        </li>
+        <li>
+          <strong>Character count (without spaces)</strong> — relevant for
+          database column sizing, file format constraints, and some CMS systems.
+        </li>
+      </ul>
+
+      <h2 className={h2}>Reading time estimation</h2>
+      <p className={prose}>
+        The average adult reads prose at 200–250 words per minute. Technical
+        content with code snippets is typically read at 100–150 wpm. This tool
+        calculates reading time at 200 wpm — a conservative estimate suitable
+        for general content.
+      </p>
+    </Section>
+  );
+}
+
+function CaseConverterContent() {
+  return (
+    <Section>
+      <h2 className={h2}>Text case formats explained</h2>
+      <p className={prose}>
+        Different programming languages and style guides use different naming
+        conventions. This <strong>case converter</strong> transforms any text
+        between eight common formats instantly.
+      </p>
+
+      <ul className={ul}>
+        <li>
+          <strong>camelCase</strong> — first word lowercase, subsequent words
+          capitalised with no separators. Standard in JavaScript, Java, Swift
+          (variable names).
+        </li>
+        <li>
+          <strong>PascalCase</strong> — every word capitalised, no separators.
+          Used for class names in most languages and React component names.
+        </li>
+        <li>
+          <strong>snake_case</strong> — all lowercase, words separated by
+          underscores. Standard in Python, Ruby, and SQL column names.
+        </li>
+        <li>
+          <strong>kebab-case</strong> — all lowercase, words separated by
+          hyphens. Used in CSS class names, HTML attributes, and URL slugs.
+        </li>
+        <li>
+          <strong>SCREAMING_SNAKE_CASE</strong> — all uppercase with
+          underscores. Used for constants and environment variable names.
+        </li>
+        <li>
+          <strong>Title Case</strong> — first letter of each word capitalised.
+          Used in headings, titles, and proper nouns.
+        </li>
+        <li>
+          <strong>Sentence case</strong> — only the first letter of the first
+          word capitalised. Standard for UI labels and prose.
+        </li>
+      </ul>
+    </Section>
+  );
+}
+
+function ColorConverterContent() {
+  return (
+    <Section>
+      <h2 className={h2}>HEX, RGB, and HSL color formats</h2>
+      <p className={prose}>
+        CSS supports multiple color representations, each useful in different
+        contexts. This <strong>color converter</strong> translates between HEX,
+        RGB, and HSL with a live color preview so you can verify the result
+        visually.
+      </p>
+
+      <ul className={ul}>
+        <li>
+          <strong>HEX</strong> (e.g. <code className="font-mono text-xs">#4f46e5</code>) —
+          the most compact format, widely used in design tools and CSS. Each
+          pair of hex digits encodes one channel (red, green, blue) from 0–255.
+        </li>
+        <li>
+          <strong>RGB</strong> (e.g.{" "}
+          <code className="font-mono text-xs">rgb(79, 70, 229)</code>) — directly
+          represents the red, green, and blue light intensities from 0 to 255.
+          Intuitive for programmatic colour manipulation.
+        </li>
+        <li>
+          <strong>HSL</strong> (e.g.{" "}
+          <code className="font-mono text-xs">hsl(243, 75%, 59%)</code>) — Hue
+          (0–360°), Saturation (0–100%), Lightness (0–100%). Much easier to
+          adjust colours by feel: increase lightness to tint, decrease to shade,
+          rotate hue to change the colour family.
+        </li>
+      </ul>
+
+      <h2 className={h2}>When to use each format</h2>
+      <p className={prose}>
+        Use HEX for design handoff and static stylesheets. Use RGB when you need
+        to manipulate colour values in JavaScript. Use HSL when building dynamic
+        colour systems (dark mode, tints, shades) — the lightness axis maps
+        directly to human perception of brightness, making it much easier to
+        generate accessible colour palettes programmatically.
+      </p>
+    </Section>
+  );
+}
+
+function UnixTimestampContent() {
+  return (
+    <Section>
+      <h2 className={h2}>What is a Unix timestamp?</h2>
+      <p className={prose}>
+        A <strong>Unix timestamp</strong> (also called epoch time or POSIX time)
+        is the number of seconds that have elapsed since 00:00:00 UTC on
+        Thursday, 1 January 1970 — the "Unix epoch". It is a single integer
+        that uniquely represents any moment in time regardless of timezone,
+        making it the standard way to store and compare dates in databases, APIs,
+        and log files.
+      </p>
+
+      <h2 className={h2}>Seconds vs milliseconds</h2>
+      <p className={prose}>
+        Different systems use different precision. Unix/POSIX timestamps are in
+        seconds (10-digit number as of 2025). JavaScript's{" "}
+        <code className="font-mono text-xs">Date.now()</code> returns
+        milliseconds (13 digits). Always check which unit an API expects —
+        passing milliseconds where seconds are expected gives a date 1000× in
+        the future.
+      </p>
+
+      <h2 className={h2}>Common timestamp values</h2>
+      <ul className={ul}>
+        <li>
+          <code className="font-mono text-xs">0</code> — Unix epoch: 1970-01-01
+          00:00:00 UTC
+        </li>
+        <li>
+          <code className="font-mono text-xs">1000000000</code> — 2001-09-09
+          01:46:40 UTC (1 billion seconds)
+        </li>
+        <li>
+          <code className="font-mono text-xs">2147483647</code> — 2038-01-19
+          03:14:07 UTC (max value for 32-bit signed int — the "Year 2038
+          problem")
+        </li>
+        <li>
+          <code className="font-mono text-xs">4102444800</code> — 2100-01-01
+          00:00:00 UTC (common sentinel for "no expiry" in JWT{" "}
+          <code className="font-mono text-xs">exp</code> claims)
+        </li>
+      </ul>
+
+      <p className={prose}>
+        Also useful:{" "}
+        <Link href="/epoch" className="text-accent hover:underline">
+          Epoch Converter workspace
+        </Link>
+        {", "}
+        <Link href="/jwt-debugger" className="text-accent hover:underline">
+          JWT Debugger
+        </Link>
+        .
+      </p>
+    </Section>
+  );
+}
+
+function CronParserContent() {
+  return (
+    <Section>
+      <h2 className={h2}>What is a cron expression?</h2>
+      <p className={prose}>
+        A <strong>cron expression</strong> is a five-field (or six-field, with
+        seconds) string that defines a recurring schedule. Cron originated in
+        Unix systems and is now used everywhere — GitHub Actions, AWS EventBridge,
+        Kubernetes CronJobs, Vercel scheduled functions, and most CI/CD platforms.
+      </p>
+
+      <h2 className={h2}>Cron field order</h2>
+      <ul className={ul}>
+        <li>
+          Field 1: <strong>Minute</strong> — 0–59
+        </li>
+        <li>
+          Field 2: <strong>Hour</strong> — 0–23
+        </li>
+        <li>
+          Field 3: <strong>Day of month</strong> — 1–31
+        </li>
+        <li>
+          Field 4: <strong>Month</strong> — 1–12 (or JAN–DEC)
+        </li>
+        <li>
+          Field 5: <strong>Day of week</strong> — 0–7 (0 and 7 are both Sunday;
+          or SUN–SAT)
+        </li>
+      </ul>
+
+      <h2 className={h2}>Common cron patterns</h2>
+      <ul className={ul}>
+        <li>
+          <code className="font-mono text-xs">* * * * *</code> — every minute
+        </li>
+        <li>
+          <code className="font-mono text-xs">0 * * * *</code> — at the start
+          of every hour
+        </li>
+        <li>
+          <code className="font-mono text-xs">0 9 * * 1-5</code> — 9:00 AM
+          every weekday
+        </li>
+        <li>
+          <code className="font-mono text-xs">0 0 * * 0</code> — midnight every
+          Sunday
+        </li>
+        <li>
+          <code className="font-mono text-xs">*/15 * * * *</code> — every 15
+          minutes
+        </li>
+        <li>
+          <code className="font-mono text-xs">0 0 1 * *</code> — midnight on
+          the first of every month
+        </li>
+      </ul>
+
+      <p className={prose}>
+        Also useful:{" "}
+        <Link href="/cron-editor" className="text-accent hover:underline">
+          Cron Editor workspace
+        </Link>
+        {" "}for a visual schedule builder with next-run preview.
+      </p>
+    </Section>
+  );
+}
+
+function HtmlToJsxContent() {
+  return (
+    <Section>
+      <h2 className={h2}>HTML to JSX conversion — what changes?</h2>
+      <p className={prose}>
+        React JSX is almost identical to HTML but has several important
+        differences that cause syntax errors if you paste raw HTML into a
+        component. This tool automatically handles all the necessary
+        transformations.
+      </p>
+
+      <ul className={ul}>
+        <li>
+          <code className="font-mono text-xs">class</code> →{" "}
+          <code className="font-mono text-xs">className</code> (
+          <code className="font-mono text-xs">class</code> is a reserved word in
+          JavaScript)
+        </li>
+        <li>
+          <code className="font-mono text-xs">for</code> →{" "}
+          <code className="font-mono text-xs">htmlFor</code> (same reason —
+          reserved word)
+        </li>
+        <li>
+          Void elements self-closed:{" "}
+          <code className="font-mono text-xs">&lt;br&gt;</code> →{" "}
+          <code className="font-mono text-xs">&lt;br /&gt;</code>,{" "}
+          <code className="font-mono text-xs">&lt;input&gt;</code> →{" "}
+          <code className="font-mono text-xs">&lt;input /&gt;</code>
+        </li>
+        <li>
+          Inline style strings converted to objects:{" "}
+          <code className="font-mono text-xs">style=&quot;color: red&quot;</code>{" "}
+          → <code className="font-mono text-xs">style={`{{ color: "red" }}`}</code>
+        </li>
+        <li>
+          Event attributes camelCased:{" "}
+          <code className="font-mono text-xs">onclick</code> →{" "}
+          <code className="font-mono text-xs">onClick</code>
+        </li>
+        <li>
+          HTML comments converted to JSX comment syntax{" "}
+          <code className="font-mono text-xs">{`{/* */}`}</code>
+        </li>
+      </ul>
+
+      <p className={prose}>
+        Also useful:{" "}
+        <Link href="/tools/html-entity-encode" className="text-accent hover:underline">
+          HTML Entity Encode
+        </Link>
+        {", "}
+        <Link href="/tools/html-preview" className="text-accent hover:underline">
+          HTML Preview
+        </Link>
+        .
+      </p>
+    </Section>
+  );
+}
+
+function MarkdownToHtmlContent() {
+  return (
+    <Section>
+      <h2 className={h2}>Markdown to HTML conversion</h2>
+      <p className={prose}>
+        This tool converts <strong>Markdown</strong> syntax to clean HTML using
+        GitHub Flavored Markdown (GFM) — the same dialect used by GitHub README
+        files, issues, and pull request descriptions. GFM extends standard
+        CommonMark with tables, task lists, strikethrough, and fenced code
+        blocks with syntax highlighting hints.
+      </p>
+
+      <h2 className={h2}>GFM extensions over standard Markdown</h2>
+      <ul className={ul}>
+        <li>
+          <strong>Tables</strong> — pipe-separated columns with alignment
+          markers in the header separator row
+        </li>
+        <li>
+          <strong>Task lists</strong> —{" "}
+          <code className="font-mono text-xs">- [x] done</code> and{" "}
+          <code className="font-mono text-xs">- [ ] todo</code> render as
+          checkboxes
+        </li>
+        <li>
+          <strong>Strikethrough</strong> —{" "}
+          <code className="font-mono text-xs">~~text~~</code> renders as{" "}
+          <s>text</s>
+        </li>
+        <li>
+          <strong>Fenced code blocks</strong> — triple backticks with optional
+          language identifier for syntax highlighting
+        </li>
+        <li>
+          <strong>Autolinks</strong> — bare URLs are automatically converted to
+          clickable links
+        </li>
+      </ul>
+
+      <p className={prose}>
+        Also useful:{" "}
+        <Link href="/tools/markdown-preview" className="text-accent hover:underline">
+          Markdown Preview
+        </Link>
+        {" "}for a live side-by-side editor,{" "}
+        <Link href="/tools/html-to-markdown" className="text-accent hover:underline">
+          HTML → Markdown
+        </Link>
+        {" "}to reverse the conversion.
+      </p>
+    </Section>
+  );
+}
+
 const CONTENT_MAP: Record<string, React.FC> = {
   "json-formatter": JsonFormatterContent,
   "base64-encode": Base64EncodeContent,
@@ -494,6 +951,15 @@ const CONTENT_MAP: Record<string, React.FC> = {
   "hash-generator": HashGeneratorContent,
   "password-generator": PasswordGeneratorContent,
   "url-encode": UrlEncodeContent,
+  "url-decode": UrlDecodeContent,
+  "text-diff": TextDiffContent,
+  "word-counter": WordCounterContent,
+  "case-converter": CaseConverterContent,
+  "color-converter": ColorConverterContent,
+  "unix-timestamp": UnixTimestampContent,
+  "cron-parser": CronParserContent,
+  "html-to-jsx": HtmlToJsxContent,
+  "markdown-to-html": MarkdownToHtmlContent,
 };
 
 export default function ToolSeoContent({ slug }: { slug: string }) {
