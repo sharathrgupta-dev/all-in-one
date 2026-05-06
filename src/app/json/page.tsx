@@ -1992,6 +1992,7 @@ export default function JsonToolkitPage() {
             value={searchTerm}
             onChange={(e) => { setSearchTerm(e.target.value); setCurrentMatchIndex(0); }}
             placeholder="Search..."
+            aria-label="Search text"
             className="px-2.5 py-1 text-sm rounded-md border border-border bg-background font-mono focus:outline-none focus:ring-1 focus:ring-ring/40 w-40"
             autoFocus
           />
@@ -2001,14 +2002,14 @@ export default function JsonToolkitPage() {
           <button
             onClick={() => setCurrentMatchIndex((i) => (i - 1 + searchMatches.length) % Math.max(searchMatches.length, 1))}
             className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
-            title="Previous"
+            aria-label="Previous match"
           >
             <ChevronLeft size={14} />
           </button>
           <button
             onClick={() => setCurrentMatchIndex((i) => (i + 1) % Math.max(searchMatches.length, 1))}
             className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
-            title="Next"
+            aria-label="Next match"
           >
             <ChevronRight size={14} />
           </button>
@@ -2019,6 +2020,7 @@ export default function JsonToolkitPage() {
             value={replaceTerm}
             onChange={(e) => setReplaceTerm(e.target.value)}
             placeholder="Replace..."
+            aria-label="Replace text"
             className="px-2.5 py-1 text-sm rounded-md border border-border bg-background font-mono focus:outline-none focus:ring-1 focus:ring-ring/40 w-40"
           />
           <ToolButton onClick={handleSearchReplace} icon={<Replace size={13} />} label="Replace" />
@@ -2027,18 +2029,20 @@ export default function JsonToolkitPage() {
           <button
             onClick={() => setSearchCaseSensitive(!searchCaseSensitive)}
             className={`px-2 py-1 text-xs rounded border transition-colors ${searchCaseSensitive ? "border-accent text-accent bg-accent-light" : "border-border text-muted-foreground hover:text-foreground"}`}
-            title="Case sensitive"
+            aria-label="Toggle case sensitive"
+            aria-pressed={searchCaseSensitive}
           >
             Aa
           </button>
           <button
             onClick={() => setSearchRegex(!searchRegex)}
             className={`px-2 py-1 text-xs rounded border transition-colors font-mono ${searchRegex ? "border-accent text-accent bg-accent-light" : "border-border text-muted-foreground hover:text-foreground"}`}
-            title="Regex"
+            aria-label="Toggle regex"
+            aria-pressed={searchRegex}
           >
             .*
           </button>
-          <button onClick={() => setShowSearch(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
+          <button aria-label="Close search" onClick={() => setShowSearch(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
         </div>
       )}
 
@@ -2049,7 +2053,7 @@ export default function JsonToolkitPage() {
             <ShieldCheck size={14} className="text-muted-foreground" />
             <span className="text-xs font-medium">JSON Schema Validation</span>
             <ToolButton onClick={handleSchemaValidate} icon={<Check size={14} />} label="Validate" />
-            <button onClick={() => setShowSchemaPanel(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
+            <button aria-label="Close schema panel" onClick={() => setShowSchemaPanel(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
           </div>
           <textarea
             value={schemaText}
@@ -2094,7 +2098,7 @@ export default function JsonToolkitPage() {
           <ToolButton onClick={handleEncrypt} icon={<Lock size={14} />} label="Encrypt" />
           <ToolButton onClick={handleDecrypt} icon={<Unlock size={14} />} label="Decrypt" />
           <span className="text-xs text-muted-foreground">AES-256-GCM - client-side only</span>
-          <button onClick={() => setShowEncrypt(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
+          <button aria-label="Close encrypt panel" onClick={() => setShowEncrypt(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
         </div>
       )}
 
@@ -2115,7 +2119,7 @@ export default function JsonToolkitPage() {
               <option value="base64">Base64</option>
             </select>
             <ToolButton onClick={handleImportConvert} icon={<ArrowRightLeft size={14} />} label="Convert to JSON" />
-            <button onClick={() => setShowImport(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
+            <button aria-label="Close import panel" onClick={() => setShowImport(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
           </div>
           <textarea
             value={importText}
@@ -2142,7 +2146,7 @@ export default function JsonToolkitPage() {
               ))}
             </ul>
           </div>
-          <button onClick={() => setFixResult(null)} className="ml-auto text-muted-foreground hover:text-foreground">
+          <button aria-label="Dismiss fix result" onClick={() => setFixResult(null)} className="ml-auto text-muted-foreground hover:text-foreground">
             <X size={14} />
           </button>
         </div>
@@ -2715,7 +2719,7 @@ export default function JsonToolkitPage() {
                 )}
               </div>
             </div>
-            <button onClick={() => setShowErrorPanel(false)} className="text-muted-foreground hover:text-foreground">
+            <button aria-label="Dismiss error" onClick={() => setShowErrorPanel(false)} className="text-muted-foreground hover:text-foreground">
               <X size={14} />
             </button>
           </div>
