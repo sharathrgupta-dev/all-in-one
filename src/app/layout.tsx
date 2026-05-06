@@ -79,6 +79,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://devbench.co.in",
   },
+  verification: {
+    google: "IgIfgAzxEG7NcxiC8hTObe1nFIY-WNqIAjS2mBi0h8o",
+  },
   other: {
     "google-adsense-account": "ca-pub-6450653669194686",
   },
