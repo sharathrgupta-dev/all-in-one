@@ -79,6 +79,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://devbench.co.in",
   },
+  other: {
+    "google-adsense-account": "ca-pub-6450653669194686",
+  },
 };
 
 export default function RootLayout({
