@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { getToolBySlug } from "@/lib/tools-registry";
+import Link from "next/link";
+import { getToolBySlug, getToolsByCategory, CATEGORIES } from "@/lib/tools-registry";
 
 export async function generateMetadata({
   params,
@@ -86,6 +87,13 @@ export default async function ToolSlugLayout({
       }
     : null;
 
+  const relatedTools = tool
+    ? getToolsByCategory(tool.category)
+        .filter((t) => t.slug !== slug)
+        .slice(0, 6)
+    : [];
+  const categoryMeta = tool ? CATEGORIES[tool.category] : null;
+
   return (
     <>
       {jsonLd && (
@@ -97,6 +105,26 @@ export default async function ToolSlugLayout({
         />
       )}
       {children}
+      {relatedTools.length > 0 && categoryMeta && (
+        <aside className="max-w-6xl mx-auto px-4 pb-10 w-full">
+          <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">
+            More {categoryMeta.label} tools
+          </h2>
+          <ul className="flex flex-wrap gap-2">
+            {relatedTools.map((t) => (
+              <li key={t.slug}>
+                <Link
+                  href={`/tools/${t.slug}`}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-sm hover:bg-muted transition-colors"
+                >
+                  <span className="font-mono text-xs opacity-70">{t.icon}</span>
+                  {t.shortName}
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </aside>
+      )}
     </>
   );
 }

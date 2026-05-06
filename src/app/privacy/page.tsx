@@ -33,7 +33,7 @@ export default function PrivacyPage() {
             <a
               href="https://adssettings.google.com"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="text-accent hover:underline"
             >
               adssettings.google.com
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
             <a
               href="https://www.aboutads.info/choices"
               target="_blank"
-              rel="noopener noreferrer"
+              rel="nofollow noopener noreferrer"
               className="text-accent hover:underline"
             >
               aboutads.info

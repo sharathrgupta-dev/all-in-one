@@ -33,6 +33,9 @@ export default function ToolPageHero({ tool }: { tool: Tool }) {
               Runs in browser
             </span>
           </div>
+          <p className="mt-3 text-sm text-muted-foreground max-w-prose">
+            {tool.description}
+          </p>
         </div>
       </div>
     </div>
