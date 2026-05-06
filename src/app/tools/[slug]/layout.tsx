@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getToolBySlug, getToolsByCategory, CATEGORIES } from "@/lib/tools-registry";
+import ToolSeoContent from "@/components/tools/ToolSeoContent";
 
 export async function generateMetadata({
   params,
@@ -105,6 +106,7 @@ export default async function ToolSlugLayout({
         />
       )}
       {children}
+      <ToolSeoContent slug={slug} />
       {relatedTools.length > 0 && categoryMeta && (
         <aside className="max-w-6xl mx-auto px-4 pb-10 w-full">
           <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-3">

@@ -957,6 +957,105 @@ export default function JWTDebuggerPage() {
           </div>
         )}
       </main>
+
+      {/* SEO content — server-rendered, crawlable */}
+      <section className="max-w-6xl mx-auto px-4 pb-10 w-full border-t border-border pt-8 mt-2 space-y-3">
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          What is a JWT?
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          A <strong>JSON Web Token</strong> (JWT) is a compact, URL-safe token
+          format defined in{" "}
+          <a
+            href="https://www.rfc-editor.org/rfc/rfc7519"
+            target="_blank"
+            rel="nofollow noopener noreferrer"
+            className="text-accent hover:underline"
+          >
+            RFC 7519
+          </a>
+          . It consists of three Base64url-encoded sections separated by dots:{" "}
+          <strong>header</strong>, <strong>payload</strong>, and{" "}
+          <strong>signature</strong>. JWTs are most commonly used as bearer
+          tokens in HTTP Authorization headers to authenticate API requests
+          without server-side session storage.
+        </p>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          JWT structure: header, payload, signature
+        </h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <li>
+            <strong>Header</strong> — a JSON object declaring the token type (
+            <code className="font-mono text-xs">typ: &quot;JWT&quot;</code>) and
+            signing algorithm (e.g.{" "}
+            <code className="font-mono text-xs">alg: &quot;HS256&quot;</code>
+            ).
+          </li>
+          <li>
+            <strong>Payload</strong> — the claims: registered claims like{" "}
+            <code className="font-mono text-xs">iss</code> (issuer),{" "}
+            <code className="font-mono text-xs">sub</code> (subject),{" "}
+            <code className="font-mono text-xs">exp</code> (expiry), and{" "}
+            <code className="font-mono text-xs">iat</code> (issued-at), plus any
+            custom application data.
+          </li>
+          <li>
+            <strong>Signature</strong> — a cryptographic MAC or digital
+            signature over the header and payload. Verifying this signature
+            proves the token was not tampered with and was issued by the expected
+            party.
+          </li>
+        </ul>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          Supported signing algorithms
+        </h2>
+        <ul className="list-disc list-inside space-y-1 text-sm text-muted-foreground">
+          <li>
+            <strong>HS256 / HS384 / HS512</strong> — HMAC with SHA-2. Uses a
+            shared secret key known by both issuer and verifier. Fast and simple;
+            cannot verify without knowing the secret.
+          </li>
+          <li>
+            <strong>RS256 / RS384 / RS512</strong> — RSA with SHA-2. Signed
+            with a private key; anyone with the public key can verify. Common in
+            OAuth 2.0 / OIDC identity providers.
+          </li>
+          <li>
+            <strong>ES256 / ES384 / ES512</strong> — ECDSA. Smaller signatures
+            and keys than RSA at equivalent security levels.
+          </li>
+        </ul>
+
+        <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
+          Security warning: JWTs are not encrypted by default
+        </h2>
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          The header and payload of a standard JWT are only Base64url-encoded —
+          anyone who obtains the token can read its contents. Never put
+          sensitive data (passwords, PII, secrets) in a JWT payload unless you
+          are using JWE (JSON Web Encryption). Signing proves integrity and
+          authenticity; it does not provide confidentiality.
+        </p>
+
+        <p className="text-sm text-muted-foreground leading-relaxed">
+          Also useful:{" "}
+          <a href="/tools/base64-decode" className="text-accent hover:underline">
+            Base64 Decode
+          </a>
+          {", "}
+          <a href="/tools/hash-generator" className="text-accent hover:underline">
+            Hash Generator
+          </a>
+          {", "}
+          <a href="/tools/aes-encrypt-decrypt" className="text-accent hover:underline">
+            AES Encryptor
+          </a>
+          .
+        </p>
+      </section>
+
       <Footer />
     </>
   );
