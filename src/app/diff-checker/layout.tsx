@@ -1,9 +1,13 @@
 import type { Metadata } from "next";
+import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
+
+const title = "Text Diff Checker — Compare Two Texts Online";
+const description =
+  "Compare two texts side-by-side or unified. Find additions and deletions with line and character highlighting. Ignore whitespace, regex search — private, client-side diff tool.";
 
 export const metadata: Metadata = {
-  title: "Diff Checker — Compare Text Online | DevBench",
-  description:
-    "Compare two texts side-by-side or unified. Find additions and deletions with line and character highlighting. Ignore whitespace, regex search — private, client-side diff tool.",
+  title,
+  description,
   keywords: [
     "diff checker",
     "text compare",
@@ -12,7 +16,8 @@ export const metadata: Metadata = {
     "difference finder",
     "diffchecker alternative",
   ],
-  alternates: { canonical: "https://devbench.co.in/diff-checker" },
+  alternates: { canonical: `${SITE_URL}/diff-checker` },
+  ...socialMetadata({ title, description, canonicalPath: "/diff-checker" }),
 };
 
 export default function DiffCheckerLayout({

@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
+import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
+
+const title = "Math Suite — Graph, Scientific & Matrix Calculator";
+const description =
+  "Free browser math workspace: 2D function plotting (zoom, pan, tables, intersections), scientific expression evaluation, and dynamic N×N matrix algebra (determinant, inverse, multiply). Client-side.";
 
 export const metadata: Metadata = {
-  title: "Math Suite — Graph, Scientific & Matrix Calculator | DevBench",
-  description:
-    "Free browser math workspace: 2D function plotting (zoom, pan, tables, intersections), scientific expression evaluation, and dynamic N×N matrix algebra (determinant, inverse, multiply). Client-side.",
+  title,
+  description,
   keywords: [
     "graphing calculator",
     "scientific calculator online",
@@ -13,7 +17,8 @@ export const metadata: Metadata = {
     "free graph calculator",
     "Desmos alternative",
   ],
-  alternates: { canonical: "https://devbench.co.in/graph-calculator" },
+  alternates: { canonical: `${SITE_URL}/graph-calculator` },
+  ...socialMetadata({ title, description, canonicalPath: "/graph-calculator" }),
 };
 
 export default function GraphCalculatorLayout({

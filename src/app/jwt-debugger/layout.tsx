@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import { TOOL_FAQS } from "@/lib/tool-faqs";
 import ToolFaqSection from "@/components/tools/ToolFaqSection";
+import JsonLd from "@/components/JsonLd";
+import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
+
+const JWT_TITLE = "JWT Debugger — Decode, Encode & Verify Tokens";
+const JWT_DESC =
+  "Free online JWT decoder and encoder. Inspect headers and payloads, verify HMAC signatures (HS256/384/512), see claim breakdown and expiry — runs entirely in your browser.";
 
 export const metadata: Metadata = {
-  title: "JWT Debugger — Decode, Encode & Verify Tokens | DevBench",
-  description:
-    "Free online JWT decoder and encoder. Inspect headers and payloads, verify HMAC signatures (HS256/384/512), see claim breakdown and expiry — runs entirely in your browser.",
+  title: JWT_TITLE,
+  description: JWT_DESC,
   keywords: [
     "JWT decoder",
     "JWT encoder",
@@ -14,23 +19,47 @@ export const metadata: Metadata = {
     "jwt.io alternative",
     "decode JWT online",
   ],
-  alternates: { canonical: "https://devbench.co.in/jwt-debugger" },
+  alternates: { canonical: `${SITE_URL}/jwt-debugger` },
+  ...socialMetadata({
+    title: JWT_TITLE,
+    description: JWT_DESC,
+    canonicalPath: "/jwt-debugger",
+    ogImageUrl: `${SITE_URL}/jwt-debugger/opengraph-image`,
+    ogImageAlt: `${JWT_TITLE} | DevBench`,
+  }),
 };
 
-const faqs = TOOL_FAQS["jwt-debugger"] ?? [];
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "JWT Debugger",
+  url: `${SITE_URL}/jwt-debugger`,
+  description: JWT_DESC,
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Web",
+  browserRequirements: "Requires JavaScript",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  provider: {
+    "@type": "Organization",
+    name: "DevBench",
+    url: SITE_URL,
+  },
+};
 
-const jsonLd =
-  faqs.length > 0
-    ? {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: faqs.map((faq) => ({
-          "@type": "Question",
-          name: faq.q,
-          acceptedAnswer: { "@type": "Answer", text: faq.a },
-        })),
-      }
-    : null;
+const jwtFaqs = TOOL_FAQS["jwt-debugger"] ?? [];
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: jwtFaqs.map((faq) => ({
+    "@type": "Question",
+    name: faq.q,
+    acceptedAnswer: { "@type": "Answer", text: faq.a },
+  })),
+};
 
 export default function JwtDebuggerLayout({
   children,
@@ -39,14 +68,8 @@ export default function JwtDebuggerLayout({
 }) {
   return (
     <>
-      {jsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
-      )}
+      <JsonLd data={webAppSchema} />
+      <JsonLd data={faqSchema} />
       {children}
       <ToolFaqSection slug="jwt-debugger" />
     </>

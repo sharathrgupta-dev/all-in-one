@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
+import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
+
+const title = "YAML Formatter, Validator & Converter";
+const description =
+  "Format and validate YAML with line-level error highlighting. Convert YAML to JSON and JSON to YAML instantly. Supports YAML 1.2, multi-document streams, and anchors.";
 
 export const metadata: Metadata = {
-  title: "YAML Formatter, Validator & Converter | DevBench",
-  description:
-    "Format and validate YAML with line-level error highlighting. Convert YAML to JSON and JSON to YAML instantly. Supports YAML 1.2, multi-document streams, and anchors.",
+  title,
+  description,
   keywords: ["yaml formatter", "yaml validator", "yaml to json", "json to yaml", "online yaml editor", "yaml checker", "yaml lint"],
-  alternates: { canonical: "https://devbench.co.in/yaml" },
+  alternates: { canonical: `${SITE_URL}/yaml` },
+  ...socialMetadata({ title, description, canonicalPath: "/yaml" }),
 };
 
 export default function YamlLayout({ children }: { children: React.ReactNode }) {

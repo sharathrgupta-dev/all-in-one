@@ -7,6 +7,8 @@ import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import ToolFaqSection from "@/components/tools/ToolFaqSection";
 import TrackToolVisit from "@/components/TrackToolVisit";
 import Footer from "@/components/Footer";
+import JsonLd from "@/components/JsonLd";
+import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
 
 export async function generateMetadata({
   params,
@@ -16,23 +18,26 @@ export async function generateMetadata({
   const { slug } = await params;
   const tool = getToolBySlug(slug);
   if (!tool) {
-    return { title: "Tool | DevBench" };
+    return { title: "Tool" };
   }
   const extra = TOOL_PAGE_CONTENT[slug];
-  const title = extra?.title ?? `${tool.name} — Free Online Tool | DevBench`;
+  const title = extra?.title ?? `${tool.name} — Free Online Tool`;
   const description = extra?.metaDescription ??
     `${tool.description} Runs entirely in your browser — no signup, no uploads, client-side only.`;
+  const canonicalPath = `/tools/${tool.slug}`;
+  const ogImageUrl = `${SITE_URL}/tools/${tool.slug}/opengraph-image`;
   return {
     title,
     description,
     keywords: [tool.shortName, tool.name, "online tool", "free developer tools", "devbench"],
-    openGraph: {
+    alternates: { canonical: `${SITE_URL}${canonicalPath}` },
+    ...socialMetadata({
       title,
       description,
-      url: `https://devbench.co.in/tools/${tool.slug}`,
-      siteName: "DevBench",
-    },
-    alternates: { canonical: `https://devbench.co.in/tools/${tool.slug}` },
+      canonicalPath,
+      ogImageUrl,
+      ogImageAlt: `${title} | DevBench`,
+    }),
   };
 }
 
@@ -46,22 +51,24 @@ export default async function ToolSlugLayout({
   const { slug } = await params;
   const tool = getToolBySlug(slug);
   const faqs = TOOL_FAQS[slug] ?? [];
+  const extra = tool ? TOOL_PAGE_CONTENT[slug] : undefined;
 
   const graph: object[] = [];
 
   if (tool) {
+    const appDescription =
+      extra?.metaDescription ??
+      `${tool.description} Runs entirely in your browser — no signup, no uploads.`;
     graph.push(
       {
         "@type": "WebApplication",
-        "@id": `https://devbench.co.in/tools/${slug}/#webapp`,
+        "@id": `${SITE_URL}/tools/${slug}/#webapp`,
         name: tool.name,
-        url: `https://devbench.co.in/tools/${slug}`,
-        description:
-          tool.description +
-          " Runs entirely in your browser — no signup, no uploads.",
+        url: `${SITE_URL}/tools/${slug}`,
+        description: appDescription,
         applicationCategory: "DeveloperApplication",
-        operatingSystem: "Any",
-        browserRequirements: "Requires a modern web browser with JavaScript enabled.",
+        operatingSystem: "Web",
+        browserRequirements: "Requires JavaScript",
         offers: {
           "@type": "Offer",
           price: "0",
@@ -70,14 +77,14 @@ export default async function ToolSlugLayout({
         provider: {
           "@type": "Organization",
           name: "DevBench",
-          url: "https://devbench.co.in",
+          url: SITE_URL,
         },
       },
       {
         "@type": "BreadcrumbList",
         itemListElement: [
-          { "@type": "ListItem", position: 1, name: "Home", item: "https://devbench.co.in" },
-          { "@type": "ListItem", position: 2, name: tool.name, item: `https://devbench.co.in/tools/${slug}` },
+          { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+          { "@type": "ListItem", position: 2, name: tool.name, item: `${SITE_URL}/tools/${slug}` },
         ],
       }
     );
@@ -111,14 +118,7 @@ export default async function ToolSlugLayout({
   return (
     <>
       <TrackToolVisit slug={slug} />
-      {jsonLd && (
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{
-            __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c"),
-          }}
-        />
-      )}
+      {jsonLd && <JsonLd data={jsonLd} />}
       {children}
       <ToolSeoContent slug={slug} />
       <ToolFaqSection slug={slug} />

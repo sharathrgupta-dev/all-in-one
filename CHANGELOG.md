@@ -2,10 +2,15 @@
 
 > Auto-generated from git log. Run `npm run changelog` to refresh.
 
+## 2026-05-08
+
+### Added
+- enhance tool metadata across various layouts with dynamic content, integrate structured data for SEO improvements, and update FAQ sections for better user engagement (`453e9b5`)
+
 ## 2026-05-07
 
 ### Added
-- implement manual theme toggle in layout and update Header component to sync theme state with localStorage (`3497e37`)
+- implement manual theme toggle in layout and update Header component to sync theme state with localStorage (`b57b406`)
 - enhance theme management in Header component and update layout styles for improved dark mode support (`01cf65f`)
 - implement dynamic import for CommandPalette to optimize initial bundle size and update styling for improved accessibility (`66a62a2`)
 - update package.json with browserslist configuration, enhance layout preconnect hints for optimized loading, and refine styling in various components for improved accessibility and user experience (`8c02893`)

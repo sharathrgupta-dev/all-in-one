@@ -4,19 +4,23 @@ import { ArrowRight, Clock, Tag } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { BLOG_POSTS } from "@/lib/blog";
+import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
+
+const BLOG_TITLE = "DevBench Blog — Developer Guides & Tutorials";
+const BLOG_DESC =
+  "In-depth guides for developers: JWT, UUID, regex, JSON, URL encoding, and more. Written by the team behind DevBench's free browser-based developer tools.";
 
 export const metadata: Metadata = {
-  title: "Blog — Developer Guides & Tutorials | DevBench",
-  description:
-    "In-depth guides for developers: JWT, UUID, regex, JSON, URL encoding, and more. Written by the team behind DevBench's free browser-based developer tools.",
-  alternates: { canonical: "https://devbench.co.in/blog" },
-  openGraph: {
-    title: "DevBench Blog — Developer Guides & Tutorials",
-    description:
-      "In-depth guides for developers: JWT, UUID, regex, JSON, URL encoding, and more.",
-    url: "https://devbench.co.in/blog",
-    siteName: "DevBench",
-  },
+  title: BLOG_TITLE,
+  description: BLOG_DESC,
+  keywords:
+    "developer guides, jwt tutorial, base64 explained, regex cheat sheet, json syntax errors, uuid vs ulid, url encoding javascript, web development tips, devbench blog",
+  alternates: { canonical: `${SITE_URL}/blog` },
+  ...socialMetadata({
+    title: BLOG_TITLE,
+    description: BLOG_DESC,
+    canonicalPath: "/blog",
+  }),
 };
 
 const TAG_COLORS: Record<string, string> = {

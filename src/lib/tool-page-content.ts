@@ -9,7 +9,7 @@ export interface ToolPageContent {
 
 export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   "base64-encode": {
-    title: "Base64 Encoder — Free Online Tool | DevBench",
+    title: "Base64 Encoder — Free Online Tool",
     metaDescription:
       "Free online Base64 encoder. Convert text or files to Base64 with full UTF-8 support. Decode Base64 back to text instantly. No signup. Runs 100% in your browser.",
     openingParagraph:
@@ -17,7 +17,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "base64-decode": {
-    title: "Base64 Decoder — Free Online Tool | DevBench",
+    title: "Base64 Decoder — Free Online Tool",
     metaDescription:
       "Decode Base64 strings back to plain text or binary instantly. Full UTF-8 support, URL-safe Base64URL input accepted. No signup. Runs 100% in your browser.",
     openingParagraph:
@@ -25,7 +25,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "regex-tester": {
-    title: "Regex Tester — Online Regular Expression Tool | DevBench",
+    title: "Regex Tester — Test Regular Expressions Online",
     metaDescription:
       "Test regex online with live match highlighting, group captures, and substitution preview. JavaScript RegExp with all flags. No signup, 100% in your browser.",
     openingParagraph:
@@ -33,7 +33,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "uuid-generator": {
-    title: "UUID Generator — Free UUID / ULID / Nano ID | DevBench",
+    title: "UUID / ULID / Nano ID Generator — Free Online Tool",
     metaDescription:
       "Generate UUID v4, ULID, and Nano ID online instantly. Bulk generation, multiple formats, copy to clipboard. No signup. Runs 100% in your browser.",
     openingParagraph:
@@ -41,7 +41,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "hash-generator": {
-    title: "Hash Generator — MD5, SHA-1, SHA-256 Online | DevBench",
+    title: "Hash Generator — MD5, SHA-1, SHA-256 Online",
     metaDescription:
       "Generate MD5, SHA-1, SHA-256, and SHA-512 hashes online. Hash any text or file instantly, compare hashes, client-side only. No signup. Runs 100% in your browser.",
     openingParagraph:
@@ -49,7 +49,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "password-generator": {
-    title: "Password Generator — Strong Random Passwords | DevBench",
+    title: "Secure Password Generator — Free Online Tool",
     metaDescription:
       "Generate strong, random passwords with custom length, character sets, and entropy. Copy instantly. No signup. Runs 100% in your browser — passwords are never sent anywhere.",
     openingParagraph:
@@ -57,7 +57,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "url-encode": {
-    title: "URL Encoder — Percent-Encode URLs Online | DevBench",
+    title: "URL Encoder — Percent-Encode URLs Online",
     metaDescription:
       "Percent-encode URLs and query strings online. Encode special characters, decode percent-encoded strings, and parse URL components. No signup, 100% in your browser.",
     openingParagraph:
@@ -65,7 +65,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "string-inspector": {
-    title: "String Inspector — Analyse Text Online | DevBench",
+    title: "String Inspector — Analyse Text Online",
     metaDescription:
       "Inspect any string: character count, byte length, Unicode points, line count, entropy, and invisible characters. No signup. Runs 100% in your browser.",
     openingParagraph:
@@ -73,7 +73,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "json-formatter": {
-    title: "JSON Formatter & Validator — Free Online Tool | DevBench",
+    title: "JSON Formatter & Validator — Free Online Tool",
     metaDescription:
       "Format, validate, and minify JSON online instantly. Syntax errors highlighted with line/column. Tree view, YAML/CSV conversion. No signup, 100% in your browser.",
     openingParagraph:
@@ -81,7 +81,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "url-decode": {
-    title: "URL Decoder — Percent-Decode Online | DevBench",
+    title: "URL Decoder — Percent-Decode Online",
     metaDescription:
       "Decode percent-encoded URLs and query strings online instantly. Handles %20, %26, UTF-8 multi-byte sequences, and form-encoded + signs. No signup, 100% in your browser.",
     openingParagraph:
@@ -89,7 +89,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "text-diff": {
-    title: "Text Diff Checker — Compare Text Online | DevBench",
+    title: "Text Diff Checker — Compare Text Online",
     metaDescription:
       "Compare two text blocks side by side online. Added and deleted lines highlighted instantly using the Myers diff algorithm. No signup, 100% in your browser.",
     openingParagraph:
@@ -97,23 +97,23 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "html-to-jsx": {
-    title: "HTML to JSX Converter — Free Online Tool | DevBench",
+    title: "HTML to JSX Converter — Free Online Tool",
     metaDescription:
       "Convert HTML to JSX online instantly. Handles class→className, for→htmlFor, inline styles, self-closing tags, and event attributes. No signup, 100% in your browser.",
     openingParagraph:
       "HTML to JSX converts raw HTML to React-compatible JSX automatically — renaming class to className, for to htmlFor, converting inline style strings to objects, self-closing void elements, camelCasing event attributes, and wrapping HTML comments in JSX syntax. Paste HTML from a Figma export, email template, or any web page and copy the ready-to-use JSX output directly into your React component.",
   },
 
-  "aes-encrypt": {
-    title: "AES-256 Encrypt & Decrypt — Free Online Tool | DevBench",
+  "aes-encrypt-decrypt": {
+    title: "AES-256 Encrypt & Decrypt — Free Online Tool",
     metaDescription:
       "Encrypt and decrypt text with AES-256-GCM in your browser. PBKDF2 key derivation, authenticated encryption. No signup, no server — 100% client-side.",
     openingParagraph:
       "AES Encrypt encrypts and decrypts text using AES-256-GCM — the same algorithm used by TLS 1.3 and Signal — entirely in your browser via the Web Crypto API. Enter your plaintext and a password, and the tool derives a 256-bit key using PBKDF2 with 310,000 iterations and a random salt. GCM mode provides authenticated encryption, so any tampering with the ciphertext is detected on decryption. Nothing is ever sent to a server.",
   },
 
-  "qr-code-generator": {
-    title: "QR Code Generator — Free Online Tool | DevBench",
+  "qr-code": {
+    title: "QR Code Generator — Free Online Tool",
     metaDescription:
       "Generate QR codes from any text or URL online. Choose error correction level, size, and download as PNG or SVG. No signup, 100% in your browser.",
     openingParagraph:
@@ -121,7 +121,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "curl-to-fetch": {
-    title: "cURL to JavaScript Fetch Converter | DevBench",
+    title: "cURL to JavaScript Fetch Converter",
     metaDescription:
       "Convert cURL commands to JavaScript fetch() calls online. Handles headers, body, auth, and common flags. No signup, 100% in your browser.",
     openingParagraph:
@@ -129,7 +129,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "url-parser": {
-    title: "URL Parser — Break Down URL Components Online | DevBench",
+    title: "URL Parser — Break Down URL Components Online",
     metaDescription:
       "Parse any URL into scheme, host, port, path, query parameters, and fragment. Decoded key-value table for query strings. No signup, 100% in your browser.",
     openingParagraph:
@@ -137,7 +137,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "base-converter": {
-    title: "Number Base Converter — Decimal, Hex, Binary, Octal | DevBench",
+    title: "Number Base Converter — Decimal, Hex, Binary, Octal",
     metaDescription:
       "Convert numbers between decimal, hexadecimal, binary, and octal instantly. Two-way conversion, copy to clipboard. No signup, 100% in your browser.",
     openingParagraph:
@@ -145,7 +145,7 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
   },
 
   "markdown-preview": {
-    title: "Markdown Preview Editor — Live GFM Renderer | DevBench",
+    title: "Markdown Preview Editor — Live GFM Renderer",
     metaDescription:
       "Live side-by-side Markdown editor with GitHub Flavored Markdown rendering. Tables, task lists, code blocks, strikethrough. Copy HTML output. No signup.",
     openingParagraph:

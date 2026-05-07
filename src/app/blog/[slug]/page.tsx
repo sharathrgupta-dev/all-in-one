@@ -18,10 +18,10 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const post = getBlogPost(slug);
-  if (!post) return { title: "Post Not Found | DevBench" };
+  if (!post) return { title: "Post Not Found" };
 
   return {
-    title: `${post.title} | DevBench`,
+    title: post.title,
     description: post.excerpt,
     keywords: post.tags,
     alternates: { canonical: `https://devbench.co.in/blog/${slug}` },
@@ -33,6 +33,13 @@ export async function generateMetadata({
       type: "article",
       publishedTime: post.date,
       tags: post.tags,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: post.title,
+      description: post.excerpt,
+      site: "@devbench",
+      creator: "@devbench",
     },
   };
 }

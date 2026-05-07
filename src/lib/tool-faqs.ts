@@ -27,6 +27,25 @@ export const TOOL_FAQS: Record<string, Faq[]> = {
     },
   ],
 
+  json: [
+    {
+      q: "What is a JSON formatter?",
+      a: "A JSON formatter takes compact, unindented JSON and adds whitespace, line breaks, and indentation to make it human-readable. It is the opposite of a JSON minifier, which removes all whitespace to reduce file size.",
+    },
+    {
+      q: "Is my JSON data safe to paste here?",
+      a: "Yes. All processing happens in your browser using JavaScript. Your JSON is never sent to a server, stored, or logged. The DevBench JSON toolkit is 100% client-side.",
+    },
+    {
+      q: "What is the difference between format and minify?",
+      a: "Format (beautify) adds indentation and newlines — ideal for debugging and reading. Minify removes all whitespace — ideal for production API responses and config files where smaller payload size matters.",
+    },
+    {
+      q: 'What causes "unexpected token" errors in JSON?',
+      a: "The most common causes are: trailing commas after the last property or array item, single quotes instead of double quotes, unquoted object keys, JavaScript-style comments (JSON does not support // or /* */), and undefined or NaN values which are not valid JSON.",
+    },
+  ],
+
   "base64-encode": [
     {
       q: "What is Base64 encoding?",
@@ -47,6 +66,21 @@ export const TOOL_FAQS: Record<string, Faq[]> = {
     {
       q: "What is the difference between Base64 and Base64URL?",
       a: "Base64URL is a URL-safe variant that replaces + with - and / with _ and omits the = padding character. It is used in JWTs, OAuth tokens, and anywhere the standard + and / characters would need percent-encoding in a URL.",
+    },
+  ],
+
+  "base64-decode": [
+    {
+      q: "Is Base64 a form of encryption?",
+      a: "No. Base64 is an encoding scheme, not encryption. Anyone with the encoded string can decode it instantly without a key. For actual encryption, use the AES-256-GCM Encryptor tool on DevBench.",
+    },
+    {
+      q: "Why does Base64 output end with == or =?",
+      a: "Base64 encodes groups of 3 bytes into 4 characters. When the input length is not divisible by 3, one or two padding characters (=) are added to complete the final group to a multiple of 4.",
+    },
+    {
+      q: "What is the difference between Base64 and Base64URL?",
+      a: "Standard Base64 uses + and / characters which have special meaning in URLs. Base64URL replaces + with -, / with _, and removes padding (=). It is safe to use in URLs, query strings, and JWT tokens without percent-encoding.",
     },
   ],
 
@@ -76,23 +110,23 @@ export const TOOL_FAQS: Record<string, Faq[]> = {
   "jwt-debugger": [
     {
       q: "What is a JWT (JSON Web Token)?",
-      a: "A JWT is a compact, URL-safe token that encodes a JSON payload and is digitally signed. It consists of three Base64URL-encoded parts separated by dots: the header (algorithm and token type), the payload (claims like user ID and expiry), and the signature. JWTs are widely used for authentication and information exchange in REST APIs.",
+      a: "A JSON Web Token (JWT) is a compact, URL-safe token format defined in RFC 7519. It consists of three Base64url-encoded sections: header, payload, and signature. JWTs are most commonly used as bearer tokens in HTTP Authorization headers.",
     },
     {
       q: "Is it safe to paste my JWT here?",
-      a: "Yes. The JWT debugger runs entirely in your browser — no token is sent to any server, stored, or logged. The decoding and signature verification happen locally using JavaScript's SubtleCrypto API. Check the browser's Network tab to confirm no requests are made when you paste a token.",
+      a: "Yes. The DevBench JWT Debugger runs entirely in your browser using JavaScript. Your token is never sent to a server, stored, or logged.",
     },
     {
       q: "What is the difference between HS256 and RS256?",
-      a: "HS256 (HMAC-SHA256) uses a shared secret key — the same key signs and verifies the token. RS256 (RSA-SHA256) uses a private/public key pair — the server signs with the private key and clients verify with the public key. RS256 is preferred for distributed systems because the public key can be shared without exposing signing capability.",
+      a: "HS256 uses a shared symmetric secret key known by both issuer and verifier. RS256 uses an RSA key pair: the token is signed with a private key and anyone with the public key can verify it. RS256 is more common in OAuth 2.0 and OpenID Connect identity providers.",
     },
     {
       q: "What does 'signature verification failed' mean?",
-      a: "It means the token's signature does not match the expected value for the given header and payload. Common causes: wrong secret key, the token was tampered with, or the algorithm in the header doesn't match the key type. Never trust a JWT whose signature you cannot verify.",
+      a: "It means the secret or public key you entered does not match the key used to sign the token. The token may have been signed with a different secret, or the token has been tampered with.",
     },
     {
-      q: "What is the 'exp' claim and what happens when a JWT expires?",
-      a: "The exp (expiration time) claim is a Unix timestamp after which the token must be rejected. When a JWT expires, the server should return 401 Unauthorized, and the client should request a new token using a refresh token or re-authenticate. The iat (issued at) and nbf (not before) claims are related timestamp claims.",
+      q: "What is the exp claim and what happens when a JWT expires?",
+      a: "The exp (expiration time) claim is a Unix timestamp after which the token must not be accepted. When a JWT expires, the server should reject it and return a 401 Unauthorized response. The client must then obtain a new token.",
     },
   ],
 

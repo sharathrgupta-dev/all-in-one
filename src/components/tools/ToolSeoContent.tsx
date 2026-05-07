@@ -199,6 +199,22 @@ function Base64DecodeContent() {
         </li>
       </ul>
 
+      <h2 className={h2}>What is Base64?</h2>
+      <p className={prose}>
+        Base64 converts binary data into ASCII text using a 64-character alphabet
+        (A–Z, a–z, 0–9, +, /). It adds approximately 33% size overhead. URL-safe
+        Base64 (Base64URL) replaces + with - and / with _ for use in URLs and JWTs.
+        Base64 is an encoding scheme, NOT encryption — anyone can decode it.
+      </p>
+
+      <h2 className={h2}>Example</h2>
+      <p className={prose}>
+        <strong>Input text:</strong> Hello, DevBench!
+        <br />
+        <strong>Base64 output:</strong>{" "}
+        <code className="font-mono text-xs">SGVsbG8sIERldkJlbmNoIQ==</code>
+      </p>
+
       <p className={prose}>
         Also useful:{" "}
         <Link href="/tools/base64-encode" className="text-accent hover:underline">

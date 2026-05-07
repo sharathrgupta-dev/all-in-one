@@ -1,10 +1,17 @@
 import type { Metadata } from "next";
 import Footer from "@/components/Footer";
+import ToolFaqSection from "@/components/tools/ToolFaqSection";
+import JsonLd from "@/components/JsonLd";
+import { TOOL_FAQS } from "@/lib/tool-faqs";
+import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
+
+const JSON_TITLE = "JSON Formatter, Validator & Toolkit";
+const JSON_DESC =
+  "Format and minify JSON, tree view, diff, YAML/CSV/TOML export, schema validation, encrypt, NDJSON, table mode — full JSON workspace in the browser.";
 
 export const metadata: Metadata = {
-  title: "JSON Tools — Format, Validate, Transform & Diff | DevBench",
-  description:
-    "Format and minify JSON, tree view, diff, YAML/CSV/TOML export, schema validation, encrypt, NDJSON, table mode — full JSON workspace in the browser.",
+  title: JSON_TITLE,
+  description: JSON_DESC,
   keywords: [
     "JSON formatter",
     "JSON validator",
@@ -12,8 +19,53 @@ export const metadata: Metadata = {
     "JSON to YAML",
     "JSON schema validator",
   ],
-  alternates: { canonical: "https://devbench.co.in/json" },
+  alternates: { canonical: `${SITE_URL}/json` },
+  ...socialMetadata({
+    title: JSON_TITLE,
+    description: JSON_DESC,
+    canonicalPath: "/json",
+    ogImageUrl: `${SITE_URL}/json/opengraph-image`,
+    ogImageAlt: `${JSON_TITLE} | DevBench`,
+  }),
 };
+
+const webAppSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  name: "JSON Formatter & Validator",
+  url: `${SITE_URL}/json`,
+  description: JSON_DESC,
+  applicationCategory: "DeveloperApplication",
+  operatingSystem: "Web",
+  browserRequirements: "Requires JavaScript",
+  offers: {
+    "@type": "Offer",
+    price: "0",
+    priceCurrency: "USD",
+  },
+  provider: {
+    "@type": "Organization",
+    name: "DevBench",
+    url: SITE_URL,
+  },
+};
+
+const jsonFaqs = TOOL_FAQS["json"];
+const faqSchema =
+  jsonFaqs?.length
+    ? {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        mainEntity: jsonFaqs.map((faq) => ({
+          "@type": "Question",
+          name: faq.q,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: faq.a,
+          },
+        })),
+      }
+    : null;
 
 export default function JsonToolkitLayout({
   children,
@@ -22,6 +74,8 @@ export default function JsonToolkitLayout({
 }) {
   return (
     <>
+      <JsonLd data={webAppSchema} />
+      {faqSchema && <JsonLd data={faqSchema} />}
       {children}
       <section className="max-w-5xl mx-auto px-4 pb-10 w-full border-t border-border pt-8 mt-2 space-y-3">
         <h2 className="text-base font-semibold text-foreground mt-6 mb-2">
@@ -93,6 +147,7 @@ export default function JsonToolkitLayout({
           between services.
         </p>
       </section>
+      <ToolFaqSection slug="json" />
       <Footer />
     </>
   );
