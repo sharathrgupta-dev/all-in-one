@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     "free graph calculator",
     "Desmos alternative",
   ],
+  alternates: { canonical: "https://devbench.co.in/graph-calculator" },
 };
 
 export default function GraphCalculatorLayout({

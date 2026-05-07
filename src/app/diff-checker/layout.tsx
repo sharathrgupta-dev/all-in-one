@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     "difference finder",
     "diffchecker alternative",
   ],
+  alternates: { canonical: "https://devbench.co.in/diff-checker" },
 };
 
 export default function DiffCheckerLayout({

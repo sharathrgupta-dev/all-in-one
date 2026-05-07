@@ -81,6 +81,7 @@ export const TOOLS: Tool[] = [
   { slug: "html-to-markdown", name: "HTML → Markdown", shortName: "HTML → MD", description: "Convert HTML back to Markdown", category: "text", icon: "←M" },
   { slug: "html-to-text", name: "HTML → Plain Text", shortName: "HTML → Text", description: "Strip all HTML tags and return plain text", category: "text", icon: "←H" },
   { slug: "strip-markdown", name: "Strip Markdown", shortName: "Strip MD", description: "Remove all Markdown formatting", category: "text", icon: "✕M" },
+  { slug: "unicode-checker", name: "Unicode Checker", shortName: "Unicode", description: "Inspect every character: codepoint, name, category, script, UTF-8 bytes, HTML entity — highlights invisible and dangerous characters", category: "text", icon: "U+" },
 
   // Dev Tools
   { slug: "aes-encrypt-decrypt", name: "AES-256-GCM Encryptor", shortName: "AES", description: "Encrypt and decrypt text with AES-256-GCM — password-based, client-side only", category: "dev", icon: "🔐" },

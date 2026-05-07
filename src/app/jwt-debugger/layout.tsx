@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     "jwt.io alternative",
     "decode JWT online",
   ],
+  alternates: { canonical: "https://devbench.co.in/jwt-debugger" },
 };
 
 export default function JwtDebuggerLayout({

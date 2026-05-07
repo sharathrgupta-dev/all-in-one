@@ -29,6 +29,7 @@ const CUSTOM_TOOL_SLUGS = new Set([
   "regex-tester", "uuid-generator",
   "http-status-reference", "css-box-shadow",
   "image-format-converter", "svg-optimizer", "exif-viewer",
+  "unicode-checker",
   // finance form tools
   "simple-interest", "gst-calculator", "discount-calculator",
   "tip-calculator", "roi-calculator", "profit-loss-calculator",

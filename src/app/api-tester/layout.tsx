@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   description:
     "Send GET, POST, PUT, PATCH, DELETE requests with headers, auth, and body. View formatted responses and export code snippets — uses a safe proxy.",
   keywords: ["API tester", "HTTP client online", "REST client", "test API"],
+  alternates: { canonical: "https://devbench.co.in/api-tester" },
 };
 
 export default function ApiTesterLayout({

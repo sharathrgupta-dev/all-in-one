@@ -13,6 +13,7 @@ export const metadata: Metadata = {
     "JSON beautifier",
     "online formatter",
   ],
+  alternates: { canonical: "https://devbench.co.in/code-beautify" },
 };
 
 export default function CodeBeautifyLayout({

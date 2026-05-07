@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   description:
     "Convert Unix timestamps to dates and back. Live clock, timezone-aware conversions, duration breakdown — client-side.",
   keywords: ["epoch converter", "unix timestamp", "timestamp to date"],
+  alternates: { canonical: "https://devbench.co.in/epoch" },
 };
 
 export default function EpochLayout({ children }: { children: React.ReactNode }) {

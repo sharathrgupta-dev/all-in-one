@@ -12,6 +12,7 @@ export const metadata: Metadata = {
     "JSON to YAML",
     "JSON schema validator",
   ],
+  alternates: { canonical: "https://devbench.co.in/json" },
 };
 
 export default function JsonToolkitLayout({

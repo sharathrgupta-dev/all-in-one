@@ -27,6 +27,7 @@ import CssBoxShadowTool from "@/components/tools/CssBoxShadowTool";
 import ImageFormatConverterTool from "@/components/tools/ImageFormatConverterTool";
 import SvgOptimizerTool from "@/components/tools/SvgOptimizerTool";
 import ExifViewerTool from "@/components/tools/ExifViewerTool";
+import UnicodeCheckerTool from "@/components/tools/UnicodeCheckerTool";
 
 const FINANCE_SLUGS = new Set([
   "simple-interest", "gst-calculator", "discount-calculator",
@@ -81,6 +82,7 @@ export default function CustomToolOutlet({
     case "image-format-converter":  return <ImageFormatConverterTool tool={tool} />;
     case "svg-optimizer":           return <SvgOptimizerTool tool={tool} />;
     case "exif-viewer":             return <ExifViewerTool tool={tool} />;
+    case "unicode-checker":         return <UnicodeCheckerTool tool={tool} />;
     default:                        return null;
   }
 }

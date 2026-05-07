@@ -5,6 +5,7 @@ export const metadata: Metadata = {
   description:
     "Build and understand cron expressions with plain-English descriptions, next run times, and presets — crontab-style scheduler helper.",
   keywords: ["cron editor", "crontab", "cron expression", "schedule builder"],
+  alternates: { canonical: "https://devbench.co.in/cron-editor" },
 };
 
 export default function CronEditorLayout({
