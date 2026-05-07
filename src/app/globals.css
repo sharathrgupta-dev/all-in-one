@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Manual theme toggle on <html class="dark"> — default Tailwind v4 uses prefers-color-scheme only */
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #fafafa;
   --foreground: #111111;

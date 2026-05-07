@@ -1,17 +1,11 @@
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Script from "next/script";
-import dynamic from "next/dynamic";
 import "./globals.css";
 import { TOOLS } from "@/lib/tools-registry";
+import LazyCommandPalette from "@/components/LazyCommandPalette";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-
-// Lazy-load CommandPalette — it's only needed when the user presses ⌘K.
-// Keeping it out of the initial bundle removes ~80 KB from the critical path.
-const CommandPalette = dynamic(() => import("@/components/CommandPalette"), {
-  ssr: false,
-});
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -114,6 +108,12 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      {/* Sync theme on <html> before CSS/paint so Tailwind dark: matches preference (see globals.css @custom-variant) */}
+      <script
+        dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem("theme"),r=document.documentElement,m=window.matchMedia("(prefers-color-scheme: dark)").matches;if(t==="dark"){r.classList.add("dark");r.classList.remove("light");}else if(t==="light"){r.classList.remove("dark");r.classList.add("light");}else{r.classList.toggle("dark",m);r.classList.remove("light");}}catch(e){}})();`,
+        }}
+      />
       {/* Preconnect hints — only origins this page actually requests */}
       <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
       <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
@@ -145,7 +145,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
           />
         </noscript>
         {children}
-        <CommandPalette tools={TOOLS} />
+        <LazyCommandPalette tools={TOOLS} />
         <Analytics />
         <SpeedInsights />
       </body>

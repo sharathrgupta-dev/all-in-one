@@ -24,22 +24,30 @@ export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const root = document.documentElement;
-    const stored = localStorage.getItem("theme");
-    if (stored === "dark") {
-      setDark(true);
-      root.classList.add("dark");
-      root.classList.remove("light");
-    } else if (stored === "light") {
-      setDark(false);
-      root.classList.remove("dark");
-      root.classList.add("light");
-    } else {
-      // No saved preference — follow OS setting
-      const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-      setDark(prefersDark);
-      if (prefersDark) root.classList.add("dark");
+    // Inline script in layout already applied classes — sync icon state from DOM.
+    setDark(document.documentElement.classList.contains("dark"));
+
+    function onStorage(e: StorageEvent) {
+      if (e.key !== "theme") return;
+      const root = document.documentElement;
+      const t = localStorage.getItem("theme");
+      if (t === "dark") {
+        root.classList.add("dark");
+        root.classList.remove("light");
+        setDark(true);
+      } else if (t === "light") {
+        root.classList.remove("dark");
+        root.classList.add("light");
+        setDark(false);
+      } else {
+        const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+        root.classList.toggle("dark", prefersDark);
+        root.classList.remove("light");
+        setDark(prefersDark);
+      }
     }
+    window.addEventListener("storage", onStorage);
+    return () => window.removeEventListener("storage", onStorage);
   }, []);
 
   function toggleTheme() {
@@ -94,7 +102,9 @@ export default function Header() {
           </button>
 
           <button
+            type="button"
             onClick={toggleTheme}
+            suppressHydrationWarning
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
             aria-label="Toggle theme"
           >
