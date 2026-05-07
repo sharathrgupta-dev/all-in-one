@@ -4,6 +4,8 @@ import Script from "next/script";
 import "./globals.css";
 import { TOOLS } from "@/lib/tools-registry";
 import CommandPalette from "@/components/CommandPalette";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -92,6 +94,7 @@ export const metadata: Metadata = {
   },
   other: {
     "google-adsense-account": "ca-pub-6450653669194686",
+    "impact-site-verification": "cc3bd3ed-9ab6-44e7-9814-e7d4d48e2416",
   },
 };
 
@@ -135,6 +138,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         </noscript>
         {children}
         <CommandPalette tools={TOOLS} />
+        <Analytics />
+        <SpeedInsights />
       </body>
       <Script
         async

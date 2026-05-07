@@ -198,7 +198,7 @@ export const TOOLS: Tool[] = [
     slug: "image-format-converter",
     name: "Image Format Converter",
     shortName: "Img Convert",
-    description: "Convert images between PNG, JPEG, and WebP — quality slider, size comparison, download. 100% client-side.",
+    description: "Convert SVG, PNG, JPEG, WebP, BMP, GIF to PNG, JPEG, or WebP — quality slider, size comparison, download. 100% client-side.",
     category: "image",
     icon: "🔄",
   },

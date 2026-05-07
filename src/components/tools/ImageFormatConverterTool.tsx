@@ -19,7 +19,32 @@ const FORMAT_EXTS: Record<OutputFormat, string> = {
   "image/webp": "webp",
 };
 
-const ACCEPTS = "image/png, image/jpeg, image/webp, image/bmp, image/gif, image/avif, image/tiff";
+const ACCEPTS = "image/png, image/jpeg, image/webp, image/bmp, image/gif, image/avif, image/tiff, image/svg+xml";
+
+// Extract natural pixel dimensions from an SVG string (viewBox or width/height attrs)
+function parseSvgDimensions(svgText: string): { w: number; h: number } {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(svgText, "image/svg+xml");
+  const svg = doc.querySelector("svg");
+  if (!svg) return { w: 800, h: 600 };
+
+  const wAttr = svg.getAttribute("width");
+  const hAttr = svg.getAttribute("height");
+  const vb    = svg.getAttribute("viewBox");
+
+  if (wAttr && hAttr) {
+    const w = parseFloat(wAttr);
+    const h = parseFloat(hAttr);
+    if (!isNaN(w) && !isNaN(h) && w > 0 && h > 0) return { w, h };
+  }
+  if (vb) {
+    const parts = vb.trim().split(/[\s,]+/).map(Number);
+    if (parts.length >= 4 && parts[2] > 0 && parts[3] > 0) {
+      return { w: parts[2], h: parts[3] };
+    }
+  }
+  return { w: 800, h: 600 };
+}
 
 function formatBytes(b: number) {
   if (b < 1024) return `${b} B`;
@@ -32,10 +57,11 @@ export default function ImageFormatConverterTool({ tool }: { tool: Tool }) {
   const [srcName, setSrcName]     = useState("");
   const [srcSize, setSrcSize]     = useState(0);
   const [srcType, setSrcType]     = useState("");
+  const [svgDims, setSvgDims]     = useState<{ w: number; h: number } | null>(null);
 
   const [outUrl, setOutUrl]       = useState<string | null>(null);
   const [outSize, setOutSize]     = useState(0);
-  const [outFormat, setOutFormat] = useState<OutputFormat>("image/webp");
+  const [outFormat, setOutFormat] = useState<OutputFormat>("image/png");
   const [quality, setQuality]     = useState(92);
   const [converting, setConverting] = useState(false);
   const [dims, setDims]           = useState<{ w: number; h: number } | null>(null);
@@ -52,6 +78,16 @@ export default function ImageFormatConverterTool({ tool }: { tool: Tool }) {
     setSrcType(file.type);
     setOutUrl(null);
     setDims(null);
+    setSvgDims(null);
+
+    if (file.type === "image/svg+xml") {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const text = e.target?.result as string;
+        setSvgDims(parseSvgDimensions(text));
+      };
+      reader.readAsText(file);
+    }
   }, []);
 
   function onDrop(e: React.DragEvent) {
@@ -71,19 +107,22 @@ export default function ImageFormatConverterTool({ tool }: { tool: Tool }) {
     const img = new Image();
     img.onload = () => {
       const canvas = canvasRef.current!;
-      canvas.width  = img.naturalWidth;
-      canvas.height = img.naturalHeight;
-      setDims({ w: img.naturalWidth, h: img.naturalHeight });
+      // SVGs may report 0 natural dimensions — use parsed viewBox/width attrs instead
+      const w = img.naturalWidth  || svgDims?.w || 800;
+      const h = img.naturalHeight || svgDims?.h || 600;
+      canvas.width  = w;
+      canvas.height = h;
+      setDims({ w, h });
 
       const ctx = canvas.getContext("2d")!;
-      // Fill white background for JPEG (transparent → white)
+      // Fill white background for JPEG (transparent → white), also good default for SVG
       if (outFormat === "image/jpeg") {
         ctx.fillStyle = "#ffffff";
         ctx.fillRect(0, 0, canvas.width, canvas.height);
       } else {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
       }
-      ctx.drawImage(img, 0, 0);
+      ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
       const q = outFormat === "image/png" ? undefined : quality / 100;
       canvas.toBlob(
@@ -130,7 +169,7 @@ export default function ImageFormatConverterTool({ tool }: { tool: Tool }) {
             <>
               <ImageIcon className="mx-auto w-10 h-10 text-muted-foreground mb-3" />
               <p className="text-sm font-medium">Drop an image or click to upload</p>
-              <p className="text-xs text-muted-foreground mt-1">PNG · JPEG · WebP · BMP · GIF · AVIF · TIFF</p>
+              <p className="text-xs text-muted-foreground mt-1">SVG · PNG · JPEG · WebP · BMP · GIF · AVIF · TIFF</p>
             </>
           )}
           <input ref={inputRef} type="file" accept={ACCEPTS} className="hidden" onChange={onFileChange} />

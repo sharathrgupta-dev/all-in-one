@@ -1,0 +1,7 @@
+#!/bin/sh
+# Auto-update CHANGELOG.md after every commit.
+# Activated by: git config core.hooksPath .githooks
+node scripts/changelog.mjs
+# Stage and amend the changelog into the same commit silently
+git add CHANGELOG.md
+git commit --amend --no-edit --no-verify -q

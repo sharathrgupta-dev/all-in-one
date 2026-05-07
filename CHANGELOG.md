@@ -1,93 +1,47 @@
 # Changelog
 
-All notable changes to DevBench are documented here.
+> Auto-generated from git log. Run `npm run changelog` to refresh.
 
----
-
-## [Unreleased] — 2026-05-07
+## 2026-05-07
 
 ### Added
-- **Unicode Checker** — Per-character codepoint inspector: U+ code, official name, category, script, UTF-8 bytes, HTML entity; highlights invisible/dangerous characters (ZWJ, ZWNJ, RTL override, zero-width)
-- **Regex Tester** (full rewrite) — Named capture group display, `d` (indices) flag, color-coded regex explanation strip with token tokenizer, Code Generator (JavaScript / Python / PHP snippets), Quick Reference sidebar (Anchors, Character classes, Quantifiers, Groups, Substitution)
-- **CSS Box Shadow Builder** — Multi-layer shadow editor with live preview, slider controls for offset/blur/spread/opacity, Tailwind hint, copy-ready CSS output
-- **HTTP Status Reference** — All 57 HTTP codes (1xx–5xx) in searchable accordion, color-coded by range, with description and use-case notes
-- **Image Format Converter** — Client-side canvas conversion between PNG, JPEG, WebP; shows % size change, quality slider for JPEG/WebP
-- **SVG Optimizer** — 7 configurable passes (comments, metadata, Inkscape/AI data, hidden elements, empty groups, default attrs, whitespace) without shipping SVGO; code/preview toggle with size savings display
-- **EXIF Viewer** — Drag-and-drop JPEG/TIFF/HEIC EXIF reader; groups Camera, Settings, Timestamps, GPS (links to Google Maps), Image, Other; dynamic-imported `exifr` to keep off the critical path
-- **⌘K Command Palette** — Spotlight-style search across all tools; keyboard nav ↑↓↵, Escape to close; triggered by `Cmd+K` / `Ctrl+K` or the Header button
-- **Favourites (Pinned)** — Star any tool card; pinned tools surfaced at the top of the homepage; persisted in `localStorage`
-- **Recently Used** — Last 8 tool visits auto-tracked per `localStorage`; shown below pinned tools on unfiltered homepage view
-- **Split View in JSON workspace** — Side-by-side JSON input + interactive tree; toggleable via toolbar button
-- **JSONPath copy in JSON tree** — Click any node to copy its path; three formats: JSONPath dot notation (`$.a.b[0]`), JSON Pointer RFC 6901 (`/a/b/0`), bracket notation; always-visible path bar; "Copy JSONPath" added to right-click context menu
+- update tools registry and enhance Image Format Converter to support SVG; add Vercel analytics and speed insights (`d09ad7b`)
+- add Unicode Checker tool to the tool registry and update related components for integration (`1cc7980`)
+- update tool registry with new tools including Image Format Converter, SVG Optimizer, EXIF Viewer, HTTP Status Reference, and CSS Box Shadow Builder; enhance ToolSearch component with recent and favourite tools functionality (`aa08778`)
+- refactor ToolSearch component to accept tools as a prop, improving modularity and reducing client bundle size (`5d9183d`)
 
-### Fixed
-- Mobile PageSpeed regression (93→74): `ToolSearch` was importing the entire TOOLS array client-side, ballooning TBT on throttled mobile CPUs; moved `tools` as a server-rendered prop to eliminate the client bundle cost
-
----
-
-## [v0.8] — 2026-05-06
+## 2026-05-06
 
 ### Added
-- JSON-LD structured data (`@type: WebApplication`) on homepage and all tool pages
-- Google Tag Manager integration (`G-V6MSPDCYDK`)
-- Google AdSense metadata
-- Vercel Web Analytics
-- Google site-verification metadata
-- Privacy policy page with advertising/cookie disclosures
+- implement redirects for JSON formatter and enhance layout with viewport settings and accessibility improvements (`433d67a`)
+- enhance Graph Calculator layout with detailed descriptions, supported functions, and tips for improved user guidance and experience (`e7d9b64`)
+- enhance API Tester and Code Beautify pages with detailed descriptions, features, and usage instructions to improve user experience and understanding (`a3c6244`)
+- add detailed explanations and usage examples for cron expressions, diff checker, epoch time, and JSON toolkit to enhance user understanding and functionality (`a45b34d`)
+- enhance JWT Debugger page with detailed explanations of JWT structure, signing algorithms, and security warnings for improved user understanding (`be3ff63`)
+- update tool layout and page components to display related tools and enhance tool descriptions (`5da0c04`)
+- add Google verification metadata to enhance site authenticity and SEO (`4b19c39`)
+- add JSON-LD structured data for homepage and tool pages to improve SEO and metadata representation (`013ed96`)
+- integrate Google Tag Manager for enhanced tracking and analytics (`461cd0b`)
+- add Google AdSense account information to metadata in layout (`9a326e1`)
+- Add Vercel Web Analytics integration (`68b0dac`)
+- update privacy policy content and layout, including advertising disclosures and cookie usage information (`9707121`)
+
+## 2026-05-05
+
+### Added
+- add various tools including HTML Preview, Markdown Preview, Regex Tester, String Inspector, and UUID Generator (`ecfb356`)
+- Add Background Remover tool and update configuration for turbopack support. Include @imgly/background-removal dependency in package.json and package-lock.json. Clean up unused imports and enhance tool descriptions across various components. (`ca6410b`)
+- Add unit conversion functionality and categorize tools into finance, health, math, and datetime sections. Enhance AgeCalculatorTool with improved type handling and update CustomToolOutlet to support new tool categories. (`d86db82`)
+- Add QR code generation tools and enhance finance, health, and math categories in the tool registry (`334cbf1`)
+- Add pdf-lib dependency and introduce new tools in Code Beautify (`22c85d5`)
 
 ### Changed
-- Extensive SEO copy additions across all workspace pages: JSON, JWT Debugger, Diff Checker, Epoch Time, Graph Calculator, API Tester, Code Beautify, Cron Editor
-- Tool layout updated: related tools section per tool page
-- URL redirect: `/json-formatter` → `/json`
+- rename project from DevForge to DevBench and update related metadata (`242f099`)
+- Update package dependencies and enhance Code Beautify layout. Added Prettier and sql-formatter to package.json, improved metadata descriptions, and integrated CodeBeautifyWorkspace component. Enhanced CopyButton component with a disabled state. (`f7d59bb`)
+- Remove favicon and update page layout with new features, including dynamic matrix size support and improved descriptions. Replace icons in Header and Footer components with DevForgeMark. (`2e188d7`)
 
-### Fixed
-- Viewport meta tag added to layout to prevent mobile zoom issues
-- Accessibility: `aria-label` and `aria-pressed` on icon-only buttons in JSON workspace
+## 2026-05-04
 
----
-
-## [v0.7] — 2026-05-05
-
-### Added
-- **HTML Preview** — Sandboxed iframe live renderer with optional JS execution
-- **Markdown Preview** — Live side-by-side editor with GFM support
-- **Regex Tester** (initial) — Live match highlighting, group capture, substitution
-- **String Inspector** — Length, bytes, Unicode codepoints (first 120 chars), char frequency, entropy
-- **UUID / ULID / Nano ID Generator**
-- **Background Remover** — Client-side background removal via `@imgly/background-removal`
-- Unit converter, Finance tools (Simple Interest, GST, Discount, Tip, ROI, P&L), Health tools (BMI, BMR, TDEE, Water Intake, Body Fat), Math solvers (Quadratic, Pythagorean, GCD/LCM), Datetime tools (Days Between, Countdown, Week Number, Due Date)
-- **QR Code Generator** — Text/URL to QR with download
-
----
-
-## [v0.6] — 2026-05-05
-
-### Added
-- **Code Beautify** workspace — Prettier-based formatter for JS/TS/CSS/HTML, SQL formatter, PDF tools (merge, split, reorder), XML suite
-- `pdf-lib` integration for PDF page editor
-- Turbopack dev server configuration
-
----
-
-## [v0.5] — 2026-05-04
-
-### Added
-- Initial project structure: Next.js 16, Tailwind CSS v4, shadcn/ui
-- JSON workspace (formatter, diff, JSONPath, tree view, YAML↔JSON, CSV↔JSON, JSON→TypeScript, JSON→XML)
-- JWT Debugger
-- Diff Checker (text + JSON)
-- Epoch Time converter
-- Graph Calculator (function plotter)
-- API Tester (HTTP client with proxy route)
-- Cron Editor / parser
-- Encoding tools (Base64, URL encode, HTML entities, Hex, Binary, ROT13, Morse)
-- Text tools (Case Converter, Word Counter, Slug Generator, Lorem Ipsum, Line Sorter, Find & Replace, Whitespace Normalizer)
-- Dev tools (AES-256-GCM, Hash Generator, Color Converter, Password Generator, URL Parser, Base Converter)
-- Conversion tools (Temperature, Byte, Unit, Number→Words, Roman Numerals, Timezone, Duration, Percentage, Aspect Ratio)
-- Header, Footer, ToolSearch homepage with category filters
-
----
-
-## [v0.1] — 2026-05-04
-
-- Initial commit / scaffolding
+### Changed
+- Implement initial project structure and setup (`56cc343`)
+- Initial commit (`8bb03c1`)
