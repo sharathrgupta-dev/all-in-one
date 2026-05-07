@@ -333,14 +333,21 @@ export function reverseString(input: string): Result {
 }
 
 export function markdownToHtml(input: string): Result {
-  let html = input;
+  // Escape HTML entities first to prevent XSS injection via raw HTML tags
+  let html = input
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
   html = html.replace(/^### (.+)$/gm, "<h3>$1</h3>");
   html = html.replace(/^## (.+)$/gm, "<h2>$1</h2>");
   html = html.replace(/^# (.+)$/gm, "<h1>$1</h1>");
   html = html.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
   html = html.replace(/\*(.+?)\*/g, "<em>$1</em>");
   html = html.replace(/`(.+?)`/g, "<code>$1</code>");
-  html = html.replace(/\[(.+?)\]\((.+?)\)/g, '<a href="$2">$1</a>');
+  html = html.replace(/\[(.+?)\]\((.+?)\)/g, (_, text, href) => {
+    const safeHref = /^(https?:\/\/|\/|#|mailto:)/i.test(href) ? href : "#";
+    return `<a href="${safeHref}" target="_blank" rel="noopener noreferrer">${text}</a>`;
+  });
   html = html.replace(/^- (.+)$/gm, "<li>$1</li>");
   html = html.replace(/(<li>.*<\/li>\n?)+/g, (m) => `<ul>\n${m}</ul>\n`);
   html = html.replace(/^(?!<[hulo])((?!^\s*$).+)$/gm, "<p>$1</p>");

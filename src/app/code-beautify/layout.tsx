@@ -12,6 +12,8 @@ export const metadata: Metadata = {
     "SQL formatter",
     "JSON beautifier",
     "online formatter",
+    "code beautifier",
+    "Prettier online",
   ],
   alternates: { canonical: "https://devbench.co.in/code-beautify" },
 };

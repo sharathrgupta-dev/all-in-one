@@ -7,7 +7,6 @@ import {
   AlertCircle, CheckCircle2, ArrowRightLeft, Wand2, AlertTriangle,
 } from "lucide-react";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 // ── YAML helpers ─────────────────────────────────────────────────────────────
 
@@ -640,7 +639,6 @@ export default function YamlPage() {
         )}
 
       </main>
-      <Footer />
     </div>
   );
 }

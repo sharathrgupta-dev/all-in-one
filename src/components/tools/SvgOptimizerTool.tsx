@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { Copy, Check, Download, Upload, Sparkles } from "lucide-react";
 import ToolPageHero from "@/components/tools/ToolPageHero";
 import type { Tool } from "@/lib/tools-registry";
@@ -137,6 +137,15 @@ export default function SvgOptimizerTool({ tool }: { tool: Tool }) {
   const [opts, setOpts] = useState(DEFAULT_OPTS);
   const [copied, setCopied] = useState(false);
   const [view, setView] = useState<"code" | "preview">("code");
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!result) { setPreviewUrl(null); return; }
+    const blob = new Blob([result.output], { type: "image/svg+xml" });
+    const url = URL.createObjectURL(blob);
+    setPreviewUrl(url);
+    return () => URL.revokeObjectURL(url);
+  }, [result]);
 
   const inputRef = (node: HTMLInputElement | null) => { /* file input ref */ };
 
@@ -274,10 +283,15 @@ export default function SvgOptimizerTool({ tool }: { tool: Tool }) {
                     className="w-full h-64 px-4 py-3 rounded-xl border border-border bg-muted/30 font-mono text-xs resize-none focus:outline-none scrollbar-thin"
                   />
                 ) : (
-                  <div
-                    className="w-full h-64 rounded-xl border border-border bg-[url('/grid.svg')] bg-muted/20 flex items-center justify-center overflow-hidden p-4"
-                    dangerouslySetInnerHTML={{ __html: result.output }}
-                  />
+                  <div className="w-full h-64 rounded-xl border border-border bg-muted/20 flex items-center justify-center overflow-hidden p-4">
+                    {previewUrl && (
+                      <img
+                        src={previewUrl}
+                        alt="SVG preview"
+                        className="max-w-full max-h-full object-contain"
+                      />
+                    )}
+                  </div>
                 )}
               </div>
             )}

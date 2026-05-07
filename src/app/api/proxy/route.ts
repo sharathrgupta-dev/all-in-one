@@ -1,8 +1,25 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const BLOCKED_HOSTS = ["localhost", "127.0.0.1", "0.0.0.0", "[::1]"];
+const BLOCKED_HOSTS = new Set(["localhost", "127.0.0.1", "0.0.0.0", "[::1]"]);
 const MAX_BODY_SIZE = 5 * 1024 * 1024; // 5 MB
 const TIMEOUT_MS = 30_000;
+
+function isPrivateAddress(hostname: string): boolean {
+  const parts = hostname.split(".").map(Number);
+  if (parts.length === 4 && parts.every((n) => !isNaN(n) && n >= 0 && n <= 255)) {
+    const [a, b] = parts;
+    return (
+      a === 10 ||
+      (a === 172 && b >= 16 && b <= 31) ||
+      (a === 192 && b === 168) ||
+      (a === 169 && b === 254) ||
+      a === 127 ||
+      a === 0
+    );
+  }
+  const h = hostname.replace(/^\[|\]$/g, "").toLowerCase();
+  return h === "::1" || h.startsWith("fc") || h.startsWith("fd") || h.startsWith("fe80");
+}
 
 export async function POST(req: NextRequest) {
   try {
@@ -25,8 +42,8 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid URL." }, { status: 400 });
     }
 
-    if (BLOCKED_HOSTS.includes(parsed.hostname)) {
-      return NextResponse.json({ error: "Requests to localhost are not allowed." }, { status: 403 });
+    if (BLOCKED_HOSTS.has(parsed.hostname) || isPrivateAddress(parsed.hostname)) {
+      return NextResponse.json({ error: "Requests to private/internal addresses are not allowed." }, { status: 403 });
     }
 
     const controller = new AbortController();

@@ -5,7 +5,8 @@
 ## 2026-05-07
 
 ### Added
-- update next.config.ts for production optimizations, add Footer component to tool layout, and implement dynamic imports for tool components to improve performance (`97b2ea4`)
+- enhance proxy route to block private addresses and improve request validation; update API Tester and Code Beautify metadata with additional keywords (`e7af0ab`)
+- update next.config.ts for production optimizations, add Footer component to tool layout, and implement dynamic imports for tool components to improve performance (`9fb2148`)
 - add YAML tools to the workspace routes and update tool registry with new YAML converters and formatter (`5d32583`)
 - update tools registry and enhance Image Format Converter to support SVG; add Vercel analytics and speed insights (`355d74a`)
 - add Unicode Checker tool to the tool registry and update related components for integration (`1cc7980`)
