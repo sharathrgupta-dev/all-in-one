@@ -5,7 +5,8 @@
 ## 2026-05-07
 
 ### Added
-- update package.json with browserslist configuration, enhance layout preconnect hints for optimized loading, and refine styling in various components for improved accessibility and user experience (`a5b0139`)
+- implement dynamic import for CommandPalette to optimize initial bundle size and update styling for improved accessibility (`a006c6f`)
+- update package.json with browserslist configuration, enhance layout preconnect hints for optimized loading, and refine styling in various components for improved accessibility and user experience (`8c02893`)
 - add blog routes to sitemap, update navigation links in Header and Footer, and refine JSON Formatter links for improved user access (`8d5dc2e`)
 - update affiliate links in Footer and HomePage, enhance tool metadata with dynamic content, and improve tool descriptions for better user engagement (`e64b693`)
 - integrate FAQ sections into JWT Debugger and Tool Slug layouts, enhancing user experience with structured data and improved SEO (`fdb61fb`)
