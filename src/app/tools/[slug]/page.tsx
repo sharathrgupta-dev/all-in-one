@@ -14,7 +14,6 @@ import {
 } from "lucide-react";
 import { getToolBySlug, CATEGORIES } from "@/lib/tools-registry";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 import * as engines from "@/lib/tool-engines";
 import CustomToolOutlet from "@/components/tools/CustomToolOutlet";
 
@@ -149,15 +148,9 @@ export default function ToolPage() {
             <p className="text-muted-foreground mb-4">
               The tool &quot;{slug}&quot; doesn&apos;t exist.
             </p>
-            <Link
-              href="/"
-              className="text-accent hover:underline"
-            >
-              ← Back to tools
-            </Link>
+            <Link href="/" className="text-accent hover:underline">← Back to tools</Link>
           </div>
         </main>
-        <Footer />
       </>
     );
   }
@@ -167,7 +160,6 @@ export default function ToolPage() {
       <>
         <Header />
         <CustomToolOutlet slug={slug} tool={tool} />
-        <Footer />
       </>
     );
   }
@@ -364,7 +356,6 @@ export default function ToolPage() {
           </div>
         )}
       </main>
-      <Footer />
     </>
   );
 }

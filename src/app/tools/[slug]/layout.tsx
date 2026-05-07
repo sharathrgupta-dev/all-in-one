@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getToolBySlug, getToolsByCategory, CATEGORIES } from "@/lib/tools-registry";
 import ToolSeoContent from "@/components/tools/ToolSeoContent";
 import TrackToolVisit from "@/components/TrackToolVisit";
+import Footer from "@/components/Footer";
 
 export async function generateMetadata({
   params,
@@ -129,6 +130,7 @@ export default async function ToolSlugLayout({
           </ul>
         </aside>
       )}
+      <Footer />
     </>
   );
 }
