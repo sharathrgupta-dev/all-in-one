@@ -62,8 +62,8 @@ export default function HomePage() {
           </div>
         </section>
 
-        {/* Interactive search + tool grid — client component */}
-        <ToolSearch />
+        {/* Interactive search + tool grid — client component, tools passed as prop to keep registry out of client bundle */}
+        <ToolSearch tools={TOOLS} />
       </main>
       <Footer />
 

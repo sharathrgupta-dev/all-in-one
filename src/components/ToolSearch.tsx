@@ -15,7 +15,7 @@ import {
   Sigma,
   CalendarDays,
 } from "lucide-react";
-import { TOOLS, CATEGORIES, type ToolCategory } from "@/lib/tools-registry";
+import { CATEGORIES, type Tool, type ToolCategory } from "@/lib/tools-registry";
 
 const CATEGORY_ICONS: Record<ToolCategory, React.ElementType> = {
   json:       Braces,
@@ -38,7 +38,7 @@ function toolHref(slug: string): string {
   return WORKSPACE_ROUTES[slug] ?? `/tools/${slug}`;
 }
 
-function ToolCard({ tool }: { tool: (typeof TOOLS)[number] }) {
+function ToolCard({ tool }: { tool: Tool }) {
   return (
     <Link
       href={toolHref(tool.slug)}
@@ -61,28 +61,28 @@ function ToolCard({ tool }: { tool: (typeof TOOLS)[number] }) {
   );
 }
 
-export default function ToolSearch() {
+export default function ToolSearch({ tools }: { tools: Tool[] }) {
   const [search, setSearch] = useState("");
   const [activeCategory, setActiveCategory] = useState<ToolCategory | "all">("all");
 
   const filtered = useMemo(() => {
-    let tools = TOOLS;
-    if (activeCategory !== "all") tools = tools.filter((t) => t.category === activeCategory);
+    let result = tools;
+    if (activeCategory !== "all") result = result.filter((t) => t.category === activeCategory);
     if (search.trim()) {
       const q = search.toLowerCase();
-      tools = tools.filter(
+      result = result.filter(
         (t) =>
           t.name.toLowerCase().includes(q) ||
           t.description.toLowerCase().includes(q) ||
           t.shortName.toLowerCase().includes(q),
       );
     }
-    return tools;
-  }, [search, activeCategory]);
+    return result;
+  }, [tools, search, activeCategory]);
 
   const grouped = useMemo(() => {
     if (activeCategory !== "all" || search.trim()) return null;
-    const map = new Map<ToolCategory, typeof TOOLS>();
+    const map = new Map<ToolCategory, Tool[]>();
     for (const tool of filtered) {
       const arr = map.get(tool.category) ?? [];
       arr.push(tool);
@@ -115,11 +115,11 @@ export default function ToolSearch() {
               : "bg-muted text-muted-foreground hover:text-foreground"
           }`}
         >
-          All ({TOOLS.length})
+          All ({tools.length})
         </button>
         {(Object.keys(CATEGORIES) as ToolCategory[]).map((cat) => {
           const Icon  = CATEGORY_ICONS[cat];
-          const count = TOOLS.filter((t) => t.category === cat).length;
+          const count = tools.filter((t) => t.category === cat).length;
           return (
             <button
               key={cat}
