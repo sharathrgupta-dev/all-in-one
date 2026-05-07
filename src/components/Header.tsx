@@ -74,7 +74,7 @@ export default function Header() {
             aria-label="Open search"
           >
             <span>Search</span>
-            <kbd className="text-[10px] font-mono opacity-60">⌘K</kbd>
+            <kbd className="text-[10px] font-mono text-muted-foreground/80">⌘K</kbd>
           </button>
 
           <button

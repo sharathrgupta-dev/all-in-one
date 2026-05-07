@@ -39,6 +39,12 @@
     "socket.io-client": "^4.8.3",
     "sql-formatter": "^15.7.3"
   },
+  "browserslist": [
+    "chrome >= 87",
+    "edge >= 88",
+    "firefox >= 78",
+    "safari >= 14"
+  ],
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",

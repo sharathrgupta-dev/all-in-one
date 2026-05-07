@@ -65,7 +65,7 @@ export default function HomePage() {
         {/* Sponsor bar */}
         <div className="border-b border-border bg-muted/30">
           <div className="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs text-muted-foreground">
-            <span className="opacity-60 uppercase tracking-wide font-medium text-[10px]">Sponsored</span>
+            <span className="text-muted-foreground/70 uppercase tracking-wide font-medium text-[10px]">Sponsored</span>
             <a
               href="https://namecheap.pxf.io/c/7275861/3884366/5618?partnerpropertyid=8365175"
               target="_blank"

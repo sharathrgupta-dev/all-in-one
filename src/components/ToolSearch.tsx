@@ -209,7 +209,7 @@ export default function ToolSearch({ tools }: { tools: Tool[] }) {
           className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
             activeCategory === "all"
               ? "bg-accent text-accent-foreground"
-              : "bg-muted text-muted-foreground hover:text-foreground"
+              : "bg-muted text-foreground/70 hover:text-foreground"
           }`}
         >
           All ({tools.length})
@@ -224,7 +224,7 @@ export default function ToolSearch({ tools }: { tools: Tool[] }) {
               className={`flex items-center gap-1.5 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                 activeCategory === cat
                   ? "bg-accent text-accent-foreground"
-                  : "bg-muted text-muted-foreground hover:text-foreground"
+                  : "bg-muted text-foreground/70 hover:text-foreground"
               }`}
             >
               <Icon className="w-3.5 h-3.5" />

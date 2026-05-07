@@ -108,11 +108,13 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      {/* Preconnect hints — reduce DNS + TLS latency for third-party origins */}
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-      <link rel="dns-prefetch" href="https://www.googletagmanager.com" />
-      <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
+      {/* Preconnect hints — only origins this page actually requests */}
+      <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
+      <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossOrigin="anonymous" />
+      <link rel="dns-prefetch" href="https://fundingchoicesmessages.google.com" />
+      {/* Inline critical above-the-fold styles to prevent render-blocking on LCP element */}
+      <style dangerouslySetInnerHTML={{ __html: `body{background:#fff;color:#0a0a0a}@media(prefers-color-scheme:dark){body{background:#0a0a0a;color:#fafafa}}` }} />
 
       {/* Google Tag Manager — head script */}
       <Script
