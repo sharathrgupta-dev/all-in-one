@@ -363,7 +363,7 @@ export default function ToolPage() {
 }
 
 function needsDualInput(slug: string): boolean {
-  return ["text-diff", "json-diff"].includes(slug);
+  return ["text-diff", "json-diff", "semver-compare"].includes(slug);
 }
 
 function needsNoInput(slug: string): boolean {
@@ -974,6 +974,12 @@ async function runTool(
       );
     case "mime-lookup":
       return engines.mimeLookup(input);
+    case "semver-compare":
+      return engines.compareSemverVersions(input, input2 || "");
+    case "chmod-calculator":
+      return engines.chmodCalculator(input);
+    case "dotenv-parser":
+      return engines.parseDotenv(input);
 
     // Conversion
     case "unit-converter":

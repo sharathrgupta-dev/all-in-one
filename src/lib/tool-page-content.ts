@@ -159,4 +159,28 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
     openingParagraph:
       "Salary Hike Calculator shows the percentage change, absolute increase (or decrease), and monthly difference between your old and new package. Switch between annual and monthly figures to match how your offer letter is written. Handy for comparing counter-offers, promotion letters, and cost-of-living adjustments before you accept.",
   },
+
+  "semver-compare": {
+    title: "SemVer Comparator — Compare npm Semantic Versions Online",
+    metaDescription:
+      "Compare two semantic versions like npm: validate, prerelease-aware ordering, semver.diff major/minor/patch. Free browser tool — nothing uploaded.",
+    openingParagraph:
+      "SemVer Comparator evaluates two version strings with the same semantics as npm and Node’s semver package — including prereleases and v-prefix normalization. See whether A is older or newer than B, the numeric compare result, and whether the difference is a major, minor, or patch bump. Use it when triaging dependency upgrades, Git tags, or package.json ranges.",
+  },
+
+  "chmod-calculator": {
+    title: "chmod Calculator — Octal ↔ Symbolic Permissions",
+    metaDescription:
+      "Convert Unix chmod octals (755, 0644) to rwx notation and back. Supports ls -l output and setuid/setgid/sticky. Runs in your browser.",
+    openingParagraph:
+      "chmod Calculator translates between numeric octal modes and symbolic rwx strings for user, group, and others. Paste a mode like 755 or rwxr-xr-x, or a full ls -l permission field; four-digit octals show setuid, setgid, and sticky bits. Handy for Dockerfiles, deployment scripts, and infra-as-code when you need to double-check permission masks.",
+  },
+
+  "dotenv-parser": {
+    title: ".env Parser — Dotenv to JSON Online",
+    metaDescription:
+      "Parse .env files into JSON in the browser: KEY=value lines, export prefix, duplicate-key warnings. No upload — safe for secrets snippets.",
+    openingParagraph:
+      ".env Parser reads dotenv-style configuration from your clipboard: it skips comments and blank lines, strips quotes, flags duplicate keys (last wins), and emits compact JSON for all variables. Use it to validate env blocks before committing .env.example files, compare environments, or document required variables — all locally in the browser.",
+  },
 };

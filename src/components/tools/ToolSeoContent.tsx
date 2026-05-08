@@ -1824,6 +1824,64 @@ function MimeLookupContent() {
   );
 }
 
+function SemverCompareContent() {
+  return (
+    <Section>
+      <h2 className={h2}>Semantic versioning (SemVer)</h2>
+      <p className={prose}>
+        Compare two versions using the same rules as npm, Yarn, and pnpm:
+        major.minor.patch with optional prerelease tags (
+        <code className="font-mono text-xs">-alpha.1</code>,
+        <code className="font-mono text-xs">-rc.0</code>). The comparator
+        validates each string, normalizes values like{" "}
+        <code className="font-mono text-xs">v1.0.0</code>, and reports{" "}
+        <code className="font-mono text-xs">semver.compare</code> and{" "}
+        <code className="font-mono text-xs">semver.diff</code> so you can see
+        whether a bump is major, minor, or patch — exactly what you need when
+        reviewing dependency upgrades or release tags in CI.
+      </p>
+    </Section>
+  );
+}
+
+function ChmodCalculatorContent() {
+  return (
+    <Section>
+      <h2 className={h2}>Unix file permissions</h2>
+      <p className={prose}>
+        Converts between numeric octal modes (
+        <code className="font-mono text-xs">755</code>,{" "}
+        <code className="font-mono text-xs">0644</code>) and symbolic notation (
+        <code className="font-mono text-xs">rwxr-xr-x</code>). Paste output from{" "}
+        <code className="font-mono text-xs">ls -l</code> (optional leading file-type
+        letter) or a stat-style four-digit octal value to see setuid, setgid, and
+        sticky bits. All processing runs in your browser — ideal when writing
+        Dockerfiles, Ansible tasks, Terraform{" "}
+        <code className="font-mono text-xs">file</code> resources, or shell scripts
+        that set ownership and mode.
+      </p>
+    </Section>
+  );
+}
+
+function DotenvParserContent() {
+  return (
+    <Section>
+      <h2 className={h2}>Dotenv (.env) files</h2>
+      <p className={prose}>
+        Parses KEY=value lines from a{" "}
+        <code className="font-mono text-xs">.env</code> file into JSON, skips
+        comments and blank lines, understands optional{" "}
+        <code className="font-mono text-xs">export</code>, and warns when the same
+        key appears twice (later assignments win, matching typical dotenv loaders).
+        Use it to sanity-check secrets before committing example env files,
+        compare staging vs production blocks, or convert a pasted env snippet into
+        structured data for documentation — without uploading anything to a server.
+      </p>
+    </Section>
+  );
+}
+
 function HtmlPreviewContent() {
   return (
     <Section>
@@ -2651,6 +2709,9 @@ const CONTENT_MAP: Record<string, React.FC> = {
   "curl-formatter": CurlFormatterContent,
   "string-escape": StringEscapeContent,
   "mime-lookup": MimeLookupContent,
+  "semver-compare": SemverCompareContent,
+  "chmod-calculator": ChmodCalculatorContent,
+  "dotenv-parser": DotenvParserContent,
   "html-preview": HtmlPreviewContent,
   "markdown-preview": MarkdownPreviewContent,
   // Text

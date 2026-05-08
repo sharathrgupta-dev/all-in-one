@@ -1,3 +1,4 @@
+import semver from "semver";
 import yaml from "js-yaml";
 
 type Result = string | { output: string; error?: string };
@@ -1228,6 +1229,224 @@ export function mimeLookup(input: string): Result {
     return matches.map(([k, v]) => `.${k} → ${v}`).join("\n");
   }
   return { output: "", error: `No MIME type found for "${input}"` };
+}
+
+export function compareSemverVersions(a: string, b: string): Result {
+  const rawA = a.trim();
+  const rawB = b.trim();
+  if (!rawA || !rawB) {
+    return { output: "", error: "Enter version A and version B." };
+  }
+
+  const resolve = (raw: string): string | null => {
+    const t = raw.trim();
+    const cleaned = semver.clean(t);
+    if (cleaned && semver.valid(cleaned)) return cleaned;
+    const coerced = semver.coerce(t);
+    if (coerced && semver.valid(coerced.version)) return coerced.version;
+    return semver.valid(t);
+  };
+
+  const va = resolve(rawA);
+  const vb = resolve(rawB);
+  if (!va || !vb) {
+    const bad: string[] = [];
+    if (!va) bad.push("A");
+    if (!vb) bad.push("B");
+    return {
+      output: "",
+      error: `Invalid semver (${bad.join(" & ")}). Try forms like 1.2.3 or v2.0.0-beta.1.`,
+    };
+  }
+
+  const cmp = semver.compare(va, vb);
+  const rel =
+    cmp < 0 ? "A < B (A is older)" : cmp > 0 ? "A > B (A is newer)" : "A === B";
+  const diff = semver.diff(va, vb);
+
+  const lines: string[] = [];
+  lines.push(`Version A: ${va}`);
+  lines.push(
+    `  major / minor / patch: ${semver.major(va)} / ${semver.minor(va)} / ${semver.patch(va)}`
+  );
+  const preA = semver.prerelease(va);
+  lines.push(`  prerelease: ${preA ? JSON.stringify(preA) : "(none)"}`);
+  lines.push("");
+  lines.push(`Version B: ${vb}`);
+  lines.push(
+    `  major / minor / patch: ${semver.major(vb)} / ${semver.minor(vb)} / ${semver.patch(vb)}`
+  );
+  const preB = semver.prerelease(vb);
+  lines.push(`  prerelease: ${preB ? JSON.stringify(preB) : "(none)"}`);
+  lines.push("");
+  lines.push(`Comparison: ${rel}`);
+  lines.push(`semver.compare(A,B): ${cmp}`);
+  lines.push(`semver.diff(A,B): ${diff ?? "(equal)"}`);
+  return lines.join("\n");
+}
+
+function digitToRwx(d: number): string {
+  const r = d & 4 ? "r" : "-";
+  const w = d & 2 ? "w" : "-";
+  const x = d & 1 ? "x" : "-";
+  return r + w + x;
+}
+
+function tripletToDigit(t: string): number | null {
+  if (t.length !== 3) return null;
+  let n = 0;
+  if (t[0] === "r") n |= 4;
+  else if (t[0] !== "-") return null;
+  if (t[1] === "w") n |= 2;
+  else if (t[1] !== "-") return null;
+  const z = t[2];
+  if (z === "-") return n;
+  if ("xXsStT".includes(z)) {
+    n |= 1;
+    return n;
+  }
+  return null;
+}
+
+export function chmodCalculator(input: string): Result {
+  const raw = input.trim();
+  if (!raw) {
+    return {
+      output: "",
+      error:
+        "Enter a 3- or 4-digit octal mode (e.g. 755, 4755) or a symbolic mode (e.g. rwxr-xr-x).",
+    };
+  }
+
+  const s = raw.replace(/^chmod\s+/i, "").trim();
+
+  const octMatch = s.match(/^0*([0-7]{3,4})$/);
+  if (octMatch) {
+    const octStr = octMatch[1];
+    const mode = parseInt(octStr, 8);
+    const perm = mode & 0o777;
+    const u = (perm >> 6) & 7;
+    const g = (perm >> 3) & 7;
+    const o = perm & 7;
+    const sym = `${digitToRwx(u)}${digitToRwx(g)}${digitToRwx(o)}`;
+    const lines: string[] = [];
+    lines.push(`Symbolic (rwx triplets): ${sym}`);
+    lines.push(`Octal (permission bits): ${perm.toString(8).padStart(3, "0")}`);
+    if (octStr.length >= 4 || mode > 0o777) {
+      lines.push(`Octal (full, stat-style): ${octStr}`);
+      const bits: string[] = [];
+      if (mode & 0o4000) bits.push("setuid");
+      if (mode & 0o2000) bits.push("setgid");
+      if (mode & 0o1000) bits.push("sticky");
+      if (bits.length) lines.push(`Special bits: ${bits.join(", ")}`);
+    }
+    lines.push(`Decimal mode: ${mode}`);
+    return lines.join("\n");
+  }
+
+  let body = s;
+  const lsMatch = s.match(
+    /^([bcdplsw-])([r-][w-][xsStT-])([r-][w-][xsStT-])([r-][w-][xsStT-])$/
+  );
+  if (lsMatch) {
+    body = lsMatch[2] + lsMatch[3] + lsMatch[4];
+  }
+
+  const sym9 =
+    /^([r-][w-][xsStT-])([r-][w-][xsStT-])([r-][w-][xsStT-])$/;
+  const tripletMatch = body.match(sym9);
+  if (!tripletMatch) {
+    return {
+      output: "",
+      error:
+        'Expected octal (e.g. 644, 0755) or nine symbolic permission characters (e.g. rwxr-xr-x). Optional ls-style leading type letter.',
+    };
+  }
+
+  const d1 = tripletToDigit(tripletMatch[1]);
+  const d2 = tripletToDigit(tripletMatch[2]);
+  const d3 = tripletToDigit(tripletMatch[3]);
+  if (d1 === null || d2 === null || d3 === null) {
+    return {
+      output: "",
+      error:
+        "Could not parse symbolic triplets — each group uses r/-, w/-, and x/s/t/- in the third position.",
+    };
+  }
+
+  const perm = (d1 << 6) | (d2 << 3) | d3;
+  const oct3 = perm.toString(8).padStart(3, "0");
+  const symOut = `${digitToRwx(d1)}${digitToRwx(d2)}${digitToRwx(d3)}`;
+  return [
+    `Octal: ${oct3}`,
+    `Symbolic: ${symOut}`,
+    `Decimal (permission bits): ${perm}`,
+  ].join("\n");
+}
+
+export function parseDotenv(input: string): Result {
+  const lines = input.split(/\r?\n/);
+  const map = new Map<string, string>();
+  const duplicateKeys: string[] = [];
+  const parseIssues: string[] = [];
+
+  const assignRe = /^\s*(?:export\s+)?([A-Za-z_][A-Za-z0-9_]*)\s*=\s*(.*)$/;
+
+  function stripQuotes(val: string): string {
+    const v = val.trimEnd();
+    if (v.startsWith('"') && v.endsWith('"')) {
+      return v
+        .slice(1, -1)
+        .replace(/\\n/g, "\n")
+        .replace(/\\"/g, '"')
+        .replace(/\\\\/g, "\\");
+    }
+    if (v.startsWith("'") && v.endsWith("'")) {
+      return v.slice(1, -1).replace(/\\'/g, "'");
+    }
+    return val.trim();
+  }
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+    if (!trimmed || trimmed.startsWith("#")) continue;
+
+    const m = trimmed.match(assignRe);
+    if (!m) {
+      parseIssues.push(
+        `Line ${i + 1}: not KEY=value — ${trimmed.slice(0, 72)}${trimmed.length > 72 ? "…" : ""}`
+      );
+      continue;
+    }
+    const key = m[1];
+    const value = stripQuotes(m[2]);
+    if (map.has(key)) duplicateKeys.push(key);
+    map.set(key, value);
+  }
+
+  const obj = Object.fromEntries(map);
+  const json = JSON.stringify(obj, null, 2);
+
+  const out: string[] = [];
+  out.push(`Keys parsed: ${map.size}`);
+  if (duplicateKeys.length) {
+    const uniq = [...new Set(duplicateKeys)];
+    out.push(`Duplicate keys (later value wins): ${uniq.join(", ")}`);
+  }
+  if (parseIssues.length) {
+    out.push("");
+    out.push("Warnings:");
+    for (const w of parseIssues.slice(0, 25)) out.push(`  - ${w}`);
+    if (parseIssues.length > 25) {
+      out.push(`  … and ${parseIssues.length - 25} more`);
+    }
+  }
+  out.push("");
+  out.push("JSON:");
+  out.push(json);
+
+  return out.join("\n");
 }
 
 // ============================================================

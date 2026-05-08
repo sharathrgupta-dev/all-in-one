@@ -105,6 +105,9 @@ export const TOOLS: Tool[] = [
   { slug: "curl-formatter", name: "cURL Formatter", shortName: "cURL fmt", description: "Normalize messy cURL into clean, copy-pasteable commands (quotes, flags, line breaks)", category: "dev", icon: "⌘", inputLabel: "Messy cURL", outputLabel: "Formatted cURL" },
   { slug: "string-escape", name: "String Escape", shortName: "Escape", description: "Escape strings for JSON, JS, SQL, Regex", category: "dev", icon: "\\\\" },
   { slug: "mime-lookup", name: "MIME Type Lookup", shortName: "MIME", description: "Look up MIME types by file extension", category: "dev", icon: "📋" },
+  { slug: "semver-compare", name: "SemVer Comparator", shortName: "SemVer", description: "Compare npm-style semantic versions, validate, and see major/minor/patch diff", category: "dev", icon: "ⓥ", inputLabel: "Version A", outputLabel: "Version B" },
+  { slug: "chmod-calculator", name: "chmod Calculator", shortName: "chmod", description: "Convert Unix permission octals (755) ↔ symbolic (rwxr-xr-x), including setuid bits", category: "dev", icon: "rwx", inputLabel: "Octal or symbolic (e.g. 755 or rwxr-xr-x)", outputLabel: "Converted" },
+  { slug: "dotenv-parser", name: ".env Parser", shortName: ".env", description: "Parse .env files to JSON and flag duplicate keys — Docker & CI friendly", category: "dev", icon: "⚙", inputLabel: ".env contents", outputLabel: "Parsed output" },
 
   // Conversion Tools
   { slug: "temperature-converter", name: "Temperature Converter", shortName: "Temp", description: "Convert Celsius, Fahrenheit, and Kelvin", category: "conversion", icon: "°" },

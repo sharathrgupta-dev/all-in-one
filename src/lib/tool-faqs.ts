@@ -282,4 +282,73 @@ export const TOOL_FAQS: Record<string, Faq[]> = {
       a: "JavaScript (modern browsers and Node.js 19+): crypto.randomUUID(). Node.js (older): import { v4 as uuidv4 } from 'uuid'. Python: import uuid; uuid.uuid4(). Go: github.com/google/uuid. All these produce RFC 4122-compliant v4 UUIDs.",
     },
   ],
+
+  "semver-compare": [
+    {
+      q: "What is semantic versioning (SemVer)?",
+      a: "Semantic versioning labels releases as MAJOR.MINOR.PATCH (for example 2.4.1). A MAJOR bump signals breaking changes, MINOR adds backward-compatible features, and PATCH is for backward-compatible fixes. Optional prerelease segments such as -alpha.1 or -rc.2 sort before the final release with the same MAJOR.MINOR.PATCH.",
+    },
+    {
+      q: "Does this comparator match npm and Node.js semver?",
+      a: "Yes. The tool uses the same semver rules as the npm ecosystem: versions may use a leading v, prerelease and build metadata follow the SemVer 2.0.0 ordering rules, and loose inputs can be coerced when they clearly resemble a version (for example package tags copied from a registry).",
+    },
+    {
+      q: "Why does 1.0.0-beta.1 sort before 1.0.0?",
+      a: "Prerelease identifiers have lower precedence than the normal release with the same MAJOR.MINOR.PATCH. So 1.0.0-beta.1 is considered older than 1.0.0 — you should ship the stable 1.0.0 after beta testing.",
+    },
+    {
+      q: "What does semver.diff tell me?",
+      a: "When version A is less than version B, semver.diff describes the kind of bump between them: major, minor, patch, or prerelease. If the versions are equal, there is no diff. It is useful when scanning changelog-worthy jumps between two tags or package versions.",
+    },
+    {
+      q: "Is my version string sent to a server?",
+      a: "No. Comparison runs entirely in your browser. Paste version numbers from package.json, Git tags, or CI logs without uploading them anywhere.",
+    },
+  ],
+
+  "chmod-calculator": [
+    {
+      q: "What does chmod 755 mean?",
+      a: "Octal chmod uses three digits for owner, group, and others. Each digit is the sum of read (4), write (2), and execute (1). 755 means the owner has read, write, and execute (4+2+1=7), while group and others have read and execute only (4+1=5). It is typical for directories and executable files on Unix servers.",
+    },
+    {
+      q: "What is the difference between 644 and 755?",
+      a: "644 is rw-r--r--: the owner can read and write; everyone else can only read. It is standard for non-executable files. 755 is rwxr-xr-x: the owner can read, write, and execute; others can read and execute — common for scripts and directories that must be entered.",
+    },
+    {
+      q: "Can I paste ls -l permission characters?",
+      a: "Yes. You can paste the nine permission characters (rwxr-xr-x), optionally with the leading file-type letter from ls -l (for example -rwxr-xr-x). The tool converts them to the numeric octal mode for the basic permission bits.",
+    },
+    {
+      q: "What are the fourth octal digit and special bits?",
+      a: "A leading 4, 2, or 1 in a four-digit octal mode sets setuid, setgid, or the sticky bit on top of the usual three digits for rwx triplets. For example 4755 includes setuid. The calculator calls out those bits when you enter a four-digit octal value.",
+    },
+    {
+      q: "Does this change files on my machine?",
+      a: "No. It only converts between representations for planning Dockerfiles, Ansible, Terraform, or shell scripts. Run chmod on your actual system or container when you are ready to apply permissions.",
+    },
+  ],
+
+  "dotenv-parser": [
+    {
+      q: "What is a .env file?",
+      a: "A .env file lists environment variables as KEY=value lines (often one per line). Runtimes and tools such as Docker Compose, Node dotenv, or framework CLIs can load these into the process environment at startup. Keep real secrets out of version control — commit a .env.example with dummy values instead.",
+    },
+    {
+      q: "Which value wins if the same key appears twice?",
+      a: "Typical dotenv loaders apply lines in order and later assignments override earlier ones. This parser warns about duplicate keys and keeps the last value in the JSON output to match that behaviour.",
+    },
+    {
+      q: "Are quotes and export supported?",
+      a: "Lines may use optional export before the key. Values can be wrapped in single or double quotes; basic escape sequences inside quoted strings are unescaped in the parsed result.",
+    },
+    {
+      q: "Does this validate variable names?",
+      a: "Assignments must look like shell-style identifiers: letters, digits, and underscores, starting with a letter or underscore. Lines that do not match KEY=value form are reported as warnings rather than silently dropped.",
+    },
+    {
+      q: "Is my .env sent to DevBench servers?",
+      a: "No. Parsing happens entirely in your browser. Treat every online paste as sensitive anyway — avoid sharing production secrets in screenshots or chat.",
+    },
+  ],
 };
