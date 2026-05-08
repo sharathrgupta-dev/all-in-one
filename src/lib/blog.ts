@@ -12,6 +12,30 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: "how-to-validate-json-online",
+    title: "How to Validate JSON Online (Safely)",
+    date: "2026-05-08",
+    excerpt:
+      "Validate JSON before it breaks production APIs — what “valid JSON” means, how browser-only tools differ from server uploads, and a simple workflow you can repeat every time.",
+    tags: ["json", "debugging", "web"],
+    readMinutes: 5,
+    relatedToolSlug: "json-formatter",
+    relatedToolLabel: "JSON Formatter & Validator",
+    relatedToolHref: "/json",
+  },
+  {
+    slug: "jwt-decoder-without-uploading-to-server",
+    title: "JWT Decoder Without Uploading to a Server",
+    date: "2026-05-07",
+    excerpt:
+      "Decode JWT header and payload in the browser: why Base64 is not encryption, what stays local vs what never leaves your machine, and why decoding still isn’t verification.",
+    tags: ["jwt", "security", "auth"],
+    readMinutes: 5,
+    relatedToolSlug: "jwt-debugger",
+    relatedToolLabel: "JWT Debugger",
+    relatedToolHref: "/jwt-debugger",
+  },
+  {
     slug: "uuid-vs-ulid-vs-nanoid",
     title: "UUID vs ULID vs Nano ID: Which Should You Use?",
     date: "2026-05-05",

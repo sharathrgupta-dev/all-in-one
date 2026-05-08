@@ -450,7 +450,110 @@ function RegexCheatSheet() {
   );
 }
 
+function HowToValidateJsonOnline() {
+  return (
+    <div className="space-y-4">
+      <p className={prose}>
+        Invalid JSON is one of the fastest ways to break APIs, CI pipelines, and config deploys — often with an error message that points at the wrong line. Validating JSON before you merge or ship catches problems early. Here is what “validate” actually means, how online tools differ, and a repeatable workflow.
+      </p>
+
+      <h2 className={h2}>What “valid JSON” means</h2>
+      <p className={prose}>
+        JSON validation usually means <strong>syntax checking</strong>: the text must follow{" "}
+        <Link href="/blog/common-json-errors" className="text-accent hover:underline">
+          strict rules
+        </Link>{" "}
+        — double-quoted keys and strings, no trailing commas, no comments, no{" "}
+        <code className={code}>undefined</code>. A validator runs <code className={code}>JSON.parse()</code> (or equivalent) and either succeeds or reports the first parse error with a position.
+      </p>
+      <p className={prose}>
+        That is different from <strong>schema validation</strong> (JSON Schema, OpenAPI), which checks whether the <em>shape</em> of the data matches what your service expects — required fields, types, enums. You need both in mature systems: syntax first, then schema where it matters.
+      </p>
+
+      <h2 className={h2}>Why “online” matters for privacy</h2>
+      <p className={prose}>
+        Many “JSON validator” sites send your paste to a backend or third-party analytics. For internal configs, sample API payloads, or anything proprietary, that is a real leak surface. Before you paste sensitive data anywhere, check whether processing happens <strong>entirely in your browser</strong> (no upload) — or use a local editor / CLI.
+      </p>
+      <ul className={ul}>
+        <li><strong>Browser-only tools</strong> — parsing runs in JavaScript on your machine; nothing should leave the tab except what you explicitly export.</li>
+        <li><strong>Server-backed validators</strong> — convenient for huge files or shared links, but assume the text is stored or logged unless the product states otherwise.</li>
+        <li><strong>CLI</strong> — <code className={code}>jq . file.json</code> or <code className={code}>python -m json.tool</code> are fine for local files and CI.</li>
+      </ul>
+
+      <h2 className={h2}>How to validate JSON online (step by step)</h2>
+      <ol className={ol}>
+        <li>Copy the raw JSON — not a screenshot, not markdown — from your editor, log, or HTTP client.</li>
+        <li>Paste into a validator that runs client-side. You should get either “valid” or a single clear error (line/column or pointer).</li>
+        <li>If invalid, fix the first error only; often later errors are cascading artifacts.</li>
+        <li>Re-run until parse succeeds. Optionally pretty-print to confirm structure.</li>
+        <li>For APIs, paste the same payload into your integration test or schema validator before deploy.</li>
+      </ol>
+
+      <h2 className={h2}>Tips that save time</h2>
+      <ul className={ul}>
+        <li>Watch for smart quotes from Slack or Word — replace with straight <code className={code}>"</code>.</li>
+        <li>Large minified blobs: use a formatter after validation so diffs are readable.</li>
+        <li>If validation passes but the API still rejects the body, the problem is usually headers, encoding, or schema — not JSON syntax.</li>
+      </ul>
+
+      <h2 className={h2}>Try it on DevBench</h2>
+      <p className={prose}>
+        The JSON Formatter &amp; Validator runs in your browser — paste, validate, and format without sending your payload to our servers. Use it whenever you need a quick sanity check before commit or deploy.
+      </p>
+    </div>
+  );
+}
+
+function JwtDecoderWithoutUploading() {
+  return (
+    <div className="space-y-4">
+      <p className={prose}>
+        A JWT looks opaque, but the header and payload are only <strong>Base64URL-encoded JSON</strong>. Anyone who has the token string can decode those two parts — no secret required. That is why “decoding” in the browser is straightforward; the security story is about where the token travels, not about magic encryption of the payload.
+      </p>
+
+      <h2 className={h2}>What “without uploading to a server” means</h2>
+      <p className={prose}>
+        Some JWT tools send your token to an API to decode or verify. If you care about operational secrecy — staging tokens, internal user IDs in claims, or compliance — you want a tool where the token never leaves your device in an HTTP request. A proper client-side decoder only runs JavaScript in your tab: split the three JWT segments, Base64URL-decode header and payload, then pretty-print JSON.
+      </p>
+      <p className={prose}>
+        DevBench’s JWT Debugger follows that model: decode and inspect locally in the browser, with no round-trip to decode the header and payload.
+      </p>
+
+      <h2 className={h2}>Decoding is not verifying</h2>
+      <p className={prose}>
+        Reading the payload does <strong>not</strong> prove the token is legitimate. Signature verification (HMAC with a secret, or asymmetric keys) must use the correct key material on a trusted path. A malicious token can still contain arbitrary claims; only verification binds those claims to an issuer.
+      </p>
+      <p className={prose}>
+        For a full tour of header algorithms and pitfalls, see{" "}
+        <Link href="/blog/jwt-explained" className="text-accent hover:underline">
+          JWT Explained: Header, Payload, and Signature Decoded
+        </Link>
+        .
+      </p>
+
+      <h2 className={h2}>When you should still be careful</h2>
+      <ul className={ul}>
+        <li><strong>Shared or recorded screens</strong> — claims may include emails, tenant IDs, or session metadata.</li>
+        <li><strong>Browser extensions</strong> — treat them like untrusted code with access to page content.</li>
+        <li><strong>Refresh tokens and long-lived secrets</strong> — decoding is fine; storing or logging them is not.</li>
+      </ul>
+      <p className={prose}>
+        If a token is highly sensitive, prefer local OpenSSL or <code className={code}>jwt-cli</code> on an air-gapped machine — same math, zero web surface.
+      </p>
+
+      <h2 className={h2}>Practical workflow</h2>
+      <ol className={ol}>
+        <li>Copy the JWT from the <code className={code}>Authorization</code> header or your auth library’s debug output.</li>
+        <li>Paste into a client-side decoder and confirm <code className={code}>alg</code>, <code className={code}>iss</code>, <code className={code}>exp</code>, and audience claims match expectations.</li>
+        <li>If something looks wrong, rotate credentials and verify signatures on the server — never trust decode output alone for authorization decisions.</li>
+      </ol>
+    </div>
+  );
+}
+
 export const POST_CONTENT: Record<string, React.ReactNode> = {
+  "how-to-validate-json-online": <HowToValidateJsonOnline />,
+  "jwt-decoder-without-uploading-to-server": <JwtDecoderWithoutUploading />,
   "uuid-vs-ulid-vs-nanoid": <UuidVsUlidVsNanoid />,
   "jwt-explained": <JwtExplained />,
   "encodeuricomponent-vs-encodeuri": <EncodeUriComponentVsEncodeUri />,
