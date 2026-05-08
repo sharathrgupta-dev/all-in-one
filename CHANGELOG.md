@@ -5,7 +5,8 @@
 ## 2026-05-08
 
 ### Added
-- add new blog posts for JSON validation and JWT decoding, including detailed guides and best practices for safe usage (`833352f`)
+- add Salary Hike Calculator tool with detailed functionality for comparing old and new salaries, including percentage change and monthly difference; update package dependencies and enhance sitemap with new routes (`38625b1`)
+- add new blog posts for JSON validation and JWT decoding, including detailed guides and best practices for safe usage (`36f6284`)
 - update layouts to include web application enrichment for enhanced metadata, improve tool descriptions, and streamline theme management in the RootLayout (`2d2c1fa`)
 - enhance tool metadata across various layouts with dynamic content, integrate structured data for SEO improvements, and update FAQ sections for better user engagement (`f5fb665`)
 

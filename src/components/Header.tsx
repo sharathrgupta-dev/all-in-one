@@ -6,17 +6,20 @@ import { Sun, Moon, Menu, X } from "lucide-react";
 import DevBenchMark from "@/components/DevBenchMark";
 
 const NAV_LINKS = [
-  { href: "/json",            label: "JSON"      },
-  { href: "/yaml",            label: "YAML"      },
-  { href: "/api-tester",      label: "API"       },
-  { href: "/jwt-debugger",    label: "JWT"       },
-  { href: "/diff-checker",    label: "Diff"      },
-  { href: "/code-beautify",   label: "Beautify"  },
-  { href: "/epoch",           label: "Epoch"     },
-  { href: "/cron-editor",     label: "Cron"      },
-  { href: "/graph-calculator",label: "Math"      },
-  { href: "/blog",            label: "Blog"      },
-  { href: "/contact",         label: "Contact"   },
+  { href: "/json",             label: "JSON"      },
+  { href: "/yaml",             label: "YAML"      },
+  { href: "/api-tester",       label: "API"       },
+  { href: "/jwt-debugger",     label: "JWT"       },
+  { href: "/diff-checker",     label: "Diff"      },
+  { href: "/code-beautify",    label: "Beautify"  },
+  { href: "/epoch",            label: "Epoch"     },
+  { href: "/linux-cheatsheet", label: "CLI"       },
+  { href: "/date-calculator",  label: "Date +"    },
+  { href: "/astronomy",        label: "Sun/Moon"  },
+  { href: "/cron-editor",      label: "Cron"      },
+  { href: "/graph-calculator", label: "Math"      },
+  { href: "/blog",             label: "Blog"      },
+  { href: "/contact",          label: "Contact"   },
 ];
 
 export default function Header() {

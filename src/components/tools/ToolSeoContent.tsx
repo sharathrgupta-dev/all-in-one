@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { getToolBySlug, CATEGORIES } from "@/lib/tools-registry";
 
 const prose =
   "text-sm text-muted-foreground leading-relaxed";
@@ -16,6 +17,59 @@ function Section({ children }: { children: React.ReactNode }) {
 }
 
 const ol = "list-decimal list-inside space-y-1.5 text-sm text-muted-foreground";
+
+/** ~200+ words when no bespoke CONTENT_MAP — matches DevBench tone (browser-first, no signup). */
+function ToolFallbackExplainer({ slug }: { slug: string }) {
+  const tool = getToolBySlug(slug);
+  if (!tool) return null;
+  const cat = CATEGORIES[tool.category];
+  const desc =
+    tool.description.endsWith(".") || tool.description.endsWith("…")
+      ? tool.description
+      : `${tool.description}.`;
+  return (
+    <Section>
+      <h2 className={h2}>What {tool.name} does</h2>
+      <p className={prose}>
+        <strong className="text-foreground">{tool.name}</strong> {desc}{" "}
+        It lives in DevBench&apos;s <strong className="text-foreground">{cat.label}</strong> collection — open it in any modern browser with
+        JavaScript enabled. There is no install step and no account wall: you get the UI immediately so you can paste input, tweak options,
+        and copy output during real debugging sessions.
+      </p>
+      <p className={prose}>
+        Like the rest of DevBench, this workflow runs <strong className="text-foreground">entirely in your browser</strong> by default.
+        Your text and files are processed with client-side JavaScript, which means they are not sent to our servers for routine formatting or
+        conversion — open DevTools → Network and you should see no upload when you use the core controls. That makes these tools practical for
+        internal payloads, configs, and drafts when you want to avoid unnecessary cloud round-trips.
+      </p>
+      <p className={prose}>
+        Start from the controls above: paste or type into the labelled fields, upload when the tool supports files, and watch results update as
+        you work. If output looks unexpected, verify encoding (UTF-8), line endings, and whether the tool expects structured input such as JSON,
+        YAML, CSV, or hex. Many utilities include copy buttons or downloadable results so you can drop answers straight back into tickets, CI logs,
+        or documentation.
+      </p>
+      <h2 className={h2}>When to use it</h2>
+      <ul className={ul}>
+        <li>
+          Quick one-off checks during development — faster than spinning up a REPL when you only need a transform or sanity check.
+        </li>
+        <li>
+          Sharing your screen: everything stays local to the browser tab so you can demo without pushing sensitive data through a backend.
+        </li>
+        <li>
+          Pairing with related DevBench tools via the &quot;More {cat.label} tools&quot; links when your task spans encoding, parsing, or formatting.
+        </li>
+        <li>
+          Teaching or documentation walkthroughs where readers can reproduce steps without installing CLI tooling first.
+        </li>
+      </ul>
+      <p className={prose}>
+        If you need deterministic automation at scale, shell scripts and CI pipelines still win — use DevBench to prototype the transform and
+        validate edge cases, then port the same logic into your stack when you are happy with the behaviour.
+      </p>
+    </Section>
+  );
+}
 
 function JsonFormatterContent() {
   return (
@@ -2275,6 +2329,25 @@ function LoanEmiContent() {
   );
 }
 
+function SalaryHikeContent() {
+  return (
+    <Section>
+      <h2 className={h2}>How to use the Salary Hike calculator</h2>
+      <ol className={ol}>
+        <li>Choose whether your numbers are <strong>annual</strong> (CTC per year) or <strong>monthly</strong> (gross or take-home per month).</li>
+        <li>Enter your <strong>old</strong> salary and <strong>new</strong> salary in the same units.</li>
+        <li>Read the percentage change, absolute difference, and estimated monthly bump.</li>
+      </ol>
+      <h2 className={h2}>What is a salary hike percentage?</h2>
+      <p className={prose}>
+        The hike percentage is <code className="font-mono text-xs bg-muted px-1 py-0.5 rounded">(new − old) / old × 100</code>. It
+        describes how much larger the new package is relative to the old one — useful for comparing offers, promotions, and inflation
+        adjustments. This tool does not model tax, bonus, stock, or deductions; it only compares the two numbers you enter.
+      </p>
+    </Section>
+  );
+}
+
 // ── Health ───────────────────────────────────────────────────────────────────
 
 function BmiCalculatorContent() {
@@ -2609,6 +2682,7 @@ const CONTENT_MAP: Record<string, React.FC> = {
   "profit-loss-calculator": ProfitLossContent,
   "compound-interest": CompoundInterestContent,
   "loan-emi-calculator": LoanEmiContent,
+  "salary-hike-calculator": SalaryHikeContent,
   // Health
   "bmi-calculator": BmiCalculatorContent,
   "bmr-calculator": BmrCalculatorContent,
@@ -2727,6 +2801,6 @@ const CONTENT_MAP: Record<string, React.FC> = {
 
 export default function ToolSeoContent({ slug }: { slug: string }) {
   const Content = CONTENT_MAP[slug];
-  if (!Content) return null;
-  return <Content />;
+  if (Content) return <Content />;
+  return <ToolFallbackExplainer slug={slug} />;
 }

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Footer from "@/components/Footer";
 import { TOOL_FAQS } from "@/lib/tool-faqs";
 import ToolFaqSection from "@/components/tools/ToolFaqSection";
 import JsonLd from "@/components/JsonLd";
@@ -82,6 +83,7 @@ export default function JwtDebuggerLayout({
       <JsonLd data={faqSchema} />
       {children}
       <ToolFaqSection slug="jwt-debugger" />
+      <Footer />
     </>
   );
 }

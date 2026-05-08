@@ -33,6 +33,7 @@ const CUSTOM_TOOL_SLUGS = new Set([
   // finance form tools
   "simple-interest", "gst-calculator", "discount-calculator",
   "tip-calculator", "roi-calculator", "profit-loss-calculator",
+  "salary-hike-calculator",
   // health form tools
   "bmr-calculator", "calorie-calculator", "water-intake-calculator", "body-fat-calculator",
   // math form tools

@@ -35,6 +35,7 @@ const UnicodeCheckerTool      = dynamic(() => import("@/components/tools/Unicode
 const FINANCE_SLUGS = new Set([
   "simple-interest", "gst-calculator", "discount-calculator",
   "tip-calculator", "roi-calculator", "profit-loss-calculator",
+  "salary-hike-calculator",
 ]);
 const HEALTH_SLUGS = new Set([
   "bmr-calculator", "calorie-calculator",

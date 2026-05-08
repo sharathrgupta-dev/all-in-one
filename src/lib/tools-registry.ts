@@ -127,6 +127,7 @@ export const TOOLS: Tool[] = [
   { slug: "profit-loss-calculator", name: "Profit & Loss", shortName: "P&L", description: "revenue=… cost=… → margin & markup", category: "finance", icon: "📊", inputLabel: "Values", outputLabel: "Analysis" },
   { slug: "compound-interest", name: "Compound Interest", shortName: "Compound", description: "Future value with compounding frequency — interactive form", category: "finance", icon: "📉" },
   { slug: "loan-emi-calculator", name: "Loan EMI Calculator", shortName: "EMI", description: "Monthly EMI, total interest, amortization-style summary", category: "finance", icon: "🏦" },
+  { slug: "salary-hike-calculator", name: "Salary Hike Calculator", shortName: "Hike %", description: "Old vs new salary — percent raise, absolute bump, monthly difference", category: "finance", icon: "📈", inputLabel: "Salaries", outputLabel: "Hike %" },
 
   // Health & fitness
   { slug: "bmi-calculator", name: "BMI Calculator", shortName: "BMI", description: "Body mass index from height & weight with WHO-style bands", category: "health", icon: "⚖" },

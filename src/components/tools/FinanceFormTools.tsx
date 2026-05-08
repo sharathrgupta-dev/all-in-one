@@ -329,6 +329,111 @@ function ProfitLossCalculator() {
   );
 }
 
+function SalaryHikeCalculator() {
+  const [basis, setBasis] = useState<"annual" | "monthly">("annual");
+  const [oldSalary, setOldSalary] = useState("800000");
+  const [newSalary, setNewSalary] = useState("920000");
+
+  const out = useMemo(() => {
+    const oldN = parseFloat(oldSalary);
+    const newN = parseFloat(newSalary);
+    if (!isFinite(oldN) || !isFinite(newN) || oldN <= 0) return null;
+    const diff = newN - oldN;
+    const pct = (diff / oldN) * 100;
+    const div = basis === "annual" ? 12 : 1;
+    const oldM = oldN / div;
+    const newM = newN / div;
+    return {
+      diff,
+      pct,
+      oldM,
+      newM,
+      monthlyDiff: newM - oldM,
+      oldN,
+      newN,
+      isIncrease: diff >= 0,
+    };
+  }, [basis, oldSalary, newSalary]);
+
+  const unit = basis === "annual" ? "year" : "month";
+
+  return (
+    <div className="space-y-5">
+      <div className="flex flex-wrap gap-3 items-center">
+        <span className="text-sm font-medium">Salary amounts are:</span>
+        <div className="inline-flex rounded-xl border border-border p-1 bg-muted/40">
+          <button
+            type="button"
+            onClick={() => setBasis("annual")}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              basis === "annual" ? "bg-card shadow text-foreground" : "text-muted-foreground"
+            }`}
+          >
+            Annual (per year)
+          </button>
+          <button
+            type="button"
+            onClick={() => setBasis("monthly")}
+            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+              basis === "monthly" ? "bg-card shadow text-foreground" : "text-muted-foreground"
+            }`}
+          >
+            Monthly (take-home / gross per month)
+          </button>
+        </div>
+      </div>
+
+      <div className="grid gap-4 sm:grid-cols-2">
+        <Field label={`Old salary (per ${unit})`} hint="Package before hike">
+          <input
+            type="number"
+            min={0}
+            step={100}
+            value={oldSalary}
+            onChange={(e) => setOldSalary(e.target.value)}
+            className={inp}
+          />
+        </Field>
+        <Field label={`New salary (per ${unit})`} hint="After hike / revised offer">
+          <input
+            type="number"
+            min={0}
+            step={100}
+            value={newSalary}
+            onChange={(e) => setNewSalary(e.target.value)}
+            className={inp}
+          />
+        </Field>
+      </div>
+
+      {out ? (
+        <div className="space-y-4">
+          <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            <StatCard
+              label={out.isIncrease ? "Hike %" : "Change %"}
+              value={`${fmt(out.pct, 2)}%`}
+              accent
+            />
+            <StatCard
+              label={out.isIncrease ? "Increase" : "Change"}
+              value={`${out.isIncrease ? "+" : ""}${fmt(out.diff)}`}
+            />
+            <StatCard label={`Per month (${basis === "annual" ? "÷12" : "same"})`} value={`${out.isIncrease ? "+" : ""}${fmt(out.monthlyDiff)}`} />
+            <StatCard label="Multiple" value={`${fmt(out.newN / out.oldN, 4)}×`} />
+          </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            <strong className="text-foreground">Monthly difference</strong> is computed as (new − old) / 12 when you enter{" "}
+            <strong>annual</strong> figures, or (new − old) when you enter <strong>monthly</strong> figures. This does not deduct tax or
+            variable pay — use it as a quick sanity check on raise letters.
+          </p>
+        </div>
+      ) : (
+        <p className="text-sm text-destructive">Enter valid positive salaries.</p>
+      )}
+    </div>
+  );
+}
+
 // ─── Dispatcher ─────────────────────────────────────────────────────────────
 export default function FinanceFormTools({ tool }: { tool: Tool }) {
   const body = (() => {
@@ -339,6 +444,7 @@ export default function FinanceFormTools({ tool }: { tool: Tool }) {
       case "tip-calculator":        return <TipCalculator />;
       case "roi-calculator":        return <RoiCalculator />;
       case "profit-loss-calculator":return <ProfitLossCalculator />;
+      case "salary-hike-calculator": return <SalaryHikeCalculator />;
       default:                      return null;
     }
   })();

@@ -151,4 +151,12 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
     openingParagraph:
       "Markdown Preview is a split-pane editor that renders GitHub Flavored Markdown (GFM) in real time alongside the source. Write on the left, see the rendered result on the right as you type. Supports all GFM extensions — tables, task lists, strikethrough, fenced code blocks with language tags, and auto-linked URLs. Copy the rendered HTML output for pasting into a CMS, or download the Markdown source as a .md file.",
   },
+
+  "salary-hike-calculator": {
+    title: "Salary Hike Calculator — Raise % and Monthly Difference",
+    metaDescription:
+      "Compare old and new salary: percent hike, total increase, and per-month difference. Annual or monthly input. Free, runs in your browser — no data stored.",
+    openingParagraph:
+      "Salary Hike Calculator shows the percentage change, absolute increase (or decrease), and monthly difference between your old and new package. Switch between annual and monthly figures to match how your offer letter is written. Handy for comparing counter-offers, promotion letters, and cost-of-living adjustments before you accept.",
+  },
 };

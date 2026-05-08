@@ -19,7 +19,6 @@ import {
   Sparkles,
 } from "lucide-react";
 import Header from "@/components/Header";
-import Footer from "@/components/Footer";
 
 // ─── base64url helpers ──────────────────────────────────────────────────
 
@@ -1055,8 +1054,6 @@ export default function JWTDebuggerPage() {
           .
         </p>
       </section>
-
-      <Footer />
     </>
   );
 }
