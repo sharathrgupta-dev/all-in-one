@@ -5,7 +5,8 @@
 ## 2026-05-09
 
 ### Added
-- add Product Hunt review and follow buttons in Footer component to enhance user engagement and visibility (`b6e508a`)
+- update Footer component to include Product Hunt review and follow buttons, improving user engagement and visibility (`4d6eb72`)
+- add Product Hunt review and follow buttons in Footer component to enhance user engagement and visibility (`ef29d0a`)
 
 ## 2026-05-08
 

@@ -57,6 +57,42 @@ export default function Footer() {
           </div>
         </div>
 
+        {/* Product Hunt — above main footer links */}
+        <div className="mb-6 pb-6 border-b border-border">
+          <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:flex-wrap sm:gap-8">
+            <a
+              href="https://www.producthunt.com/products/devbench-2/reviews/new?utm_source=badge-product_review&utm_medium=badge"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-lg ring-offset-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-label="Leave DevBench a review on Product Hunt"
+            >
+              <img
+                src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1220022&theme=dark"
+                alt="DevBench — A free all-in-one toolkit for developers — no login required — Product Hunt"
+                width={250}
+                height={54}
+                className="h-[54px] w-[250px]"
+              />
+            </a>
+            <a
+              href="https://www.producthunt.com/products/devbench-2?utm_source=badge-follow&utm_medium=badge"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block rounded-lg ring-offset-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+              aria-label="Follow DevBench on Product Hunt"
+            >
+              <img
+                src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1220022&theme=neutral"
+                alt="DevBench — A free all-in-one toolkit for developers — no login required — Product Hunt"
+                width={250}
+                height={54}
+                className="h-[54px] w-[250px]"
+              />
+            </a>
+          </div>
+        </div>
+
         {/* Logo + nav */}
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex flex-col items-center gap-2 sm:items-start">
@@ -95,44 +131,6 @@ export default function Footer() {
             >
               Privacy
             </Link>
-          </div>
-        </div>
-
-        <div className="mt-6 flex flex-col items-center gap-4 border-t border-border pt-6">
-          <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:flex-wrap sm:gap-8">
-            <a
-              href="https://www.producthunt.com/products/devbench-2/reviews/new?utm_source=badge-product_review&utm_medium=badge"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block rounded-lg ring-offset-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              aria-label="Leave DevBench a review on Product Hunt"
-            >
-              <img
-                src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1220022&theme=dark"
-                alt="DevBench — A free all-in-one toolkit for developers — no login required — Product Hunt"
-                width={250}
-                height={54}
-                className="h-[54px] w-[250px]"
-              />
-            </a>
-            <div className="flex flex-col items-center gap-2">
-              <span className="text-xs text-muted-foreground">Follow us on</span>
-              <a
-                href="https://www.producthunt.com/products/devbench-2?utm_source=badge-follow&utm_medium=badge"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-block rounded-lg ring-offset-background transition-opacity hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-                aria-label="Follow DevBench on Product Hunt"
-              >
-                <img
-                  src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1220022&theme=neutral"
-                  alt="DevBench — A free all-in-one toolkit for developers — no login required — Product Hunt"
-                  width={250}
-                  height={54}
-                  className="h-[54px] w-[250px]"
-                />
-              </a>
-            </div>
           </div>
         </div>
 
