@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { Shield, ExternalLink } from "lucide-react";
 import DevBenchMark from "@/components/DevBenchMark";
-import NamecheapLogo from "@/components/NamecheapLogo";
 
 const AFFILIATE_LINKS = [
   {
@@ -26,10 +25,9 @@ export default function Footer() {
     <footer className="border-t border-border bg-background">
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
 
-        {/* Affiliate / Recommended — shown first */}
         <div className="mb-6 pb-6 border-b border-border">
           <p className="text-[11px] font-medium text-muted-foreground/60 uppercase tracking-wider mb-2.5 text-center sm:text-left">
-            Recommended Hosting
+            Recommended hosting
           </p>
           <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
             {AFFILIATE_LINKS.map((link) => (
@@ -45,19 +43,9 @@ export default function Footer() {
                 <ExternalLink className="h-3 w-3 opacity-40" />
               </a>
             ))}
-            <a
-              href="https://namecheap.pxf.io/c/7275861/3884366/5618?partnerpropertyid=8365175"
-              target="_blank"
-              rel="nofollow noopener noreferrer sponsored"
-              className="inline-flex items-center self-center opacity-50 hover:opacity-80 transition-opacity"
-              aria-label="Namecheap"
-            >
-              <NamecheapLogo className="h-5 w-auto text-foreground" />
-            </a>
           </div>
         </div>
 
-        {/* Product Hunt — above main footer links */}
         <div className="mb-6 pb-6 border-b border-border">
           <div className="flex flex-col items-center justify-center gap-6 sm:flex-row sm:flex-wrap sm:gap-8">
             <a
@@ -93,7 +81,6 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Logo + nav */}
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <Link href="/" className="flex items-center gap-2 text-foreground">
@@ -101,8 +88,8 @@ export default function Footer() {
               <span className="font-bold tracking-tight">DevBench</span>
             </Link>
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Shield className="h-3.5 w-3.5" />
-              All tools run client-side. No data leaves your browser.
+              <Shield className="h-3.5 w-3.5 shrink-0" />
+              No login required — your work stays in your browser.
             </p>
           </div>
 

@@ -8,6 +8,7 @@ import DevBenchMark from "@/components/DevBenchMark";
 const NAV_LINKS = [
   { href: "/json",             label: "JSON"      },
   { href: "/yaml",             label: "YAML"      },
+  { href: "/pdf",              label: "PDF"       },
   { href: "/api-tester",       label: "API"       },
   { href: "/jwt-debugger",     label: "JWT"       },
   { href: "/diff-checker",     label: "Diff"      },

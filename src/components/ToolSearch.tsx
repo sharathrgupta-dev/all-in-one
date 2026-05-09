@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useCallback, memo } from "react";
 import Link from "next/link";
-import { Star, Search, Braces, Code2, Type, Wrench, ArrowRightLeft, Sparkles, DollarSign, Heart, Sigma, CalendarDays, Clock, Pin } from "lucide-react";
+import { Star, Search, Braces, Code2, Type, Wrench, ArrowRightLeft, Sparkles, DollarSign, Heart, Sigma, CalendarDays, Clock, Pin, FileStack } from "lucide-react";
 import { CATEGORIES, type Tool, type ToolCategory } from "@/lib/tools-registry";
 
 const CATEGORY_ICONS: Record<ToolCategory, React.ElementType> = {
@@ -11,6 +11,7 @@ const CATEGORY_ICONS: Record<ToolCategory, React.ElementType> = {
   text:       Type,
   dev:        Wrench,
   image:      Sparkles,
+  pdf:        FileStack,
   conversion: ArrowRightLeft,
   finance:    DollarSign,
   health:     Heart,
@@ -93,7 +94,9 @@ const ToolCard = memo(function ToolCard({
       </Link>
       <button
         onClick={() => onToggleFavourite(tool.slug)}
-        aria-label={isFavourite ? "Unpin tool" : "Pin tool"}
+        aria-label={
+          isFavourite ? "Remove from shortcuts" : "Save to shortcuts"
+        }
         className={`absolute top-2.5 right-2.5 p-1 rounded-md transition-colors ${
           isFavourite
             ? "text-amber-400 opacity-100"
@@ -190,12 +193,22 @@ export default function ToolSearch({ tools }: { tools: Tool[] }) {
 
   return (
     <section className="max-w-6xl mx-auto px-4 py-12 pb-20">
+      <header className="mb-10 max-w-2xl mx-auto text-center">
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
+          Find what you need
+        </h2>
+        <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+          Search by keyword or browse by category below. Every tool opens instantly in your
+          browser — no account, no upload queue.
+        </p>
+      </header>
+
       {/* Search */}
       <div className="relative max-w-xl mx-auto mb-8">
         <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <input
           type="search"
-          placeholder="Search tools… (e.g. base64, json, color)"
+          placeholder="Try PDF, JSON, loan, hex, timezone…"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 text-base shadow-sm"
@@ -238,14 +251,14 @@ export default function ToolSearch({ tools }: { tools: Tool[] }) {
       {showPersonalised && (
         <div className="mb-4">
           <MiniSection
-            title="Pinned"
+            title="Your shortcuts"
             icon={Pin}
             tools={pinnedTools}
             favouriteSet={favouriteSet}
             onToggleFavourite={toggleFavourite}
           />
           <MiniSection
-            title="Recently Used"
+            title="Pick up where you left off"
             icon={Clock}
             tools={recentTools}
             favouriteSet={favouriteSet}
@@ -257,9 +270,11 @@ export default function ToolSearch({ tools }: { tools: Tool[] }) {
 
       {/* Tool grid */}
       {filtered.length === 0 ? (
-        <div className="text-center py-20 text-muted-foreground">
-          <p className="text-lg">No tools match your search.</p>
-          <p className="text-sm mt-1">Try a different keyword.</p>
+        <div className="rounded-2xl border border-border bg-muted/30 px-6 py-16 text-center text-muted-foreground">
+          <p className="text-lg font-medium text-foreground">Nothing matched that search</p>
+          <p className="mt-2 text-sm">
+            Try a shorter word, clear the box to see everything, or switch category above.
+          </p>
         </div>
       ) : grouped ? (
         <div className="space-y-12">

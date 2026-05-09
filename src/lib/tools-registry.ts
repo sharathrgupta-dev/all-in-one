@@ -15,6 +15,7 @@ export type ToolCategory =
   | "text"
   | "dev"
   | "image"
+  | "pdf"
   | "conversion"
   | "finance"
   | "health"
@@ -30,6 +31,7 @@ export const CATEGORIES: Record<
   text: { label: "Text", color: "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" },
   dev: { label: "Dev", color: "bg-amber-500/10 text-amber-600 dark:text-amber-400" },
   image: { label: "Image", color: "bg-rose-500/10 text-rose-600 dark:text-rose-400" },
+  pdf: { label: "PDF", color: "bg-orange-500/10 text-orange-800 dark:text-orange-300" },
   conversion: { label: "Conversion", color: "bg-cyan-500/10 text-cyan-600 dark:text-cyan-400" },
   finance: { label: "Finance", color: "bg-green-500/10 text-green-700 dark:text-green-400" },
   health: { label: "Health", color: "bg-red-500/10 text-red-600 dark:text-red-400" },
@@ -121,7 +123,7 @@ export const TOOLS: Tool[] = [
   { slug: "aspect-ratio", name: "Aspect Ratio Calculator", shortName: "Ratio", description: "Calculate aspect ratio from dimensions", category: "conversion", icon: "⊞" },
   { slug: "world-clock", name: "World Clock", shortName: "Clock", description: "Current time across major cities (same grid as timezone tool)", category: "datetime", icon: "🌍", inputLabel: "Optional ISO date/time (blank = now)", outputLabel: "Times" },
 
-  // Finance (Tool Stack–style)
+  // Finance calculators
   { slug: "simple-interest", name: "Simple Interest", shortName: "SI", description: "principal=… rate=… time=… (% per year, years)", category: "finance", icon: "💵", inputLabel: "Values (key=value lines)", outputLabel: "Result" },
   { slug: "gst-calculator", name: "GST / VAT Calculator", shortName: "GST", description: "amount + rate; exclusive adds tax or inclusive extracts tax", category: "finance", icon: "🧾", inputLabel: "amount=… rate=…", outputLabel: "Breakdown" },
   { slug: "discount-calculator", name: "Discount Calculator", shortName: "−%", description: "price=… discount=… (% off)", category: "finance", icon: "🏷", inputLabel: "Values", outputLabel: "Sale price" },
@@ -151,10 +153,10 @@ export const TOOLS: Tool[] = [
   { slug: "week-number-calculator", name: "ISO Week Number", shortName: "Wk", description: "ISO week & year for any date", category: "datetime", icon: "📆", inputLabel: "date=YYYY-MM-DD", outputLabel: "Week" },
   { slug: "due-date-calculator", name: "Due Date (pregnancy)", shortName: "EDD", description: "EDD from LMP (+280 days, Naegele)", category: "datetime", icon: "🍼", inputLabel: "lmp=YYYY-MM-DD", outputLabel: "EDD" },
 
-  // Dev / design extras (Tool Stack overlap)
+  // Dev / design extras
   { slug: "contrast-checker", name: "Contrast Checker (WCAG)", shortName: "AA", description: "Foreground & background — WCAG contrast ratio", category: "dev", icon: "👁" },
   { slug: "gradient-generator", name: "CSS Gradient Generator", shortName: "CSS ∇", description: "Linear gradient preview + CSS snippet", category: "dev", icon: "🌈" },
-  { slug: "currency-converter", name: "Currency Converter", shortName: "FX", description: "Live rates via Frankfurter (ECB) — amount & currency pair", category: "conversion", icon: "💱" },
+  { slug: "currency-converter", name: "Currency Converter", shortName: "FX", description: "Live exchange rates (ECB reference) — amount & currency pair", category: "conversion", icon: "💱" },
 
   // Browser-based files & XML suite
   {
@@ -181,13 +183,122 @@ export const TOOLS: Tool[] = [
     category: "image",
     icon: "🗜",
   },
+  // PDF suite — order matches /pdf hub (organize → optimize → convert → review)
+  {
+    slug: "merge-pdf",
+    name: "Merge PDF",
+    shortName: "Merge",
+    description:
+      "Combine multiple PDFs in the order you choose — drag to reorder files, one merged download",
+    category: "pdf",
+    icon: "📎",
+  },
+  {
+    slug: "split-pdf",
+    name: "Split PDF",
+    shortName: "Split",
+    description:
+      "Split a PDF into separate files — one PDF per page, packaged in a ZIP",
+    category: "pdf",
+    icon: "✂️",
+  },
+  {
+    slug: "organize-pdf",
+    name: "Organize PDF",
+    shortName: "Organize",
+    description:
+      "Reorder pages — move pages up or down, then export a new PDF",
+    category: "pdf",
+    icon: "📋",
+  },
+  {
+    slug: "rotate-pdf",
+    name: "Rotate PDF",
+    shortName: "Rotate",
+    description:
+      "Rotate every page by 90°, 180°, or 270° — useful for scanned uploads",
+    category: "pdf",
+    icon: "↻",
+  },
+  {
+    slug: "pdf-page-numbers",
+    name: "PDF Page Numbers",
+    shortName: "Page #",
+    description:
+      "Add centered footer page numbers — optional “Page X of Y” format",
+    category: "pdf",
+    icon: "#",
+  },
   {
     slug: "pdf-page-editor",
     name: "PDF Page Editor",
     shortName: "PDF",
-    description: "Remove pages or extract selected pages into a new PDF — 100% client-side with pdf-lib",
-    category: "dev",
+    description: "Remove pages or extract selected pages into a new PDF — 100% client-side in your browser",
+    category: "pdf",
     icon: "📄",
+  },
+  {
+    slug: "compress-pdf",
+    name: "Compress PDF",
+    shortName: "Compress",
+    description:
+      "Shrink PDF file size with object streams — best for mostly digital PDFs",
+    category: "pdf",
+    icon: "🗜",
+  },
+  {
+    slug: "watermark-pdf",
+    name: "Watermark PDF",
+    shortName: "Watermark",
+    description:
+      "Add a diagonal text watermark across all pages — opacity control",
+    category: "pdf",
+    icon: "💧",
+  },
+  {
+    slug: "image-to-pdf",
+    name: "Image to PDF",
+    shortName: "IMG→PDF",
+    description:
+      "Combine JPG, PNG, WebP, and more into one A4 PDF — reorder pages, drag-and-drop, download instantly in your browser",
+    category: "pdf",
+    icon: "📑",
+  },
+  {
+    slug: "text-to-pdf",
+    name: "Text to PDF",
+    shortName: "TXT→PDF",
+    description:
+      "Turn plain text into a downloadable A4 PDF — automatic line wrap and page breaks",
+    category: "pdf",
+    icon: "¶",
+  },
+  {
+    slug: "html-to-pdf",
+    name: "HTML to PDF",
+    shortName: "HTML→PDF",
+    description:
+      "Preview HTML and save as PDF via your browser print dialog — no upload",
+    category: "pdf",
+    icon: "⟨⟩",
+  },
+  {
+    slug: "pdf-to-jpg",
+    name: "PDF to JPG",
+    shortName: "PDF→JPG",
+    description:
+      "Export each page as a JPEG — adjustable quality and scale, packed in a ZIP",
+    category: "pdf",
+    icon: "🖼",
+  },
+  {
+    slug: "pdf-compare",
+    name: "Compare PDF",
+    shortName: "Compare",
+    description:
+      "Extract text from two PDFs and show a unified diff — works best with digital (non-scanned) files",
+    category: "pdf",
+    icon: "⚖",
   },
   {
     slug: "xml-suite",

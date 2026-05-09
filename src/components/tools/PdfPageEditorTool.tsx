@@ -246,16 +246,7 @@ export default function PdfPageEditorTool({ tool }: { tool: Tool }) {
         </div>
 
         <p className="text-xs text-muted-foreground leading-relaxed">
-          Processing uses{" "}
-          <a
-            href="https://pdf-lib.js.org/"
-            className="text-accent hover:underline"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            pdf-lib
-          </a>{" "}
-          in your browser. Password-protected PDFs are not supported.
+          All processing runs in your browser. Password-protected PDFs are not supported.
         </p>
       </div>
     </main>

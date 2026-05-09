@@ -21,7 +21,12 @@ import CustomToolOutlet from "@/components/tools/CustomToolOutlet";
 const CUSTOM_TOOL_SLUGS = new Set([
   // rich UI workspaces
   "background-remover",
-  "image-resizer", "image-compressor", "pdf-page-editor", "xml-suite",
+  "image-resizer", "image-compressor",
+  "pdf-page-editor", "image-to-pdf",
+  "merge-pdf", "split-pdf", "compress-pdf", "pdf-to-jpg", "rotate-pdf",
+  "watermark-pdf", "organize-pdf", "pdf-page-numbers", "pdf-compare",
+  "text-to-pdf", "html-to-pdf",
+  "xml-suite",
   "qr-code", "age-calculator", "bmi-calculator", "compound-interest",
   "loan-emi-calculator", "contrast-checker", "gradient-generator", "currency-converter",
   // dev tools with rich UI
@@ -1023,7 +1028,7 @@ async function runTool(
     case "world-clock":
       return engines.convertTimezone(input);
 
-    // Finance & calculators (Tool Stack parity)
+    // Finance & calculators
     case "simple-interest":
       return engines.calcSimpleInterest(input);
     case "gst-calculator":

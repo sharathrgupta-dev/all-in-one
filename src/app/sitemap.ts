@@ -7,6 +7,7 @@ const BASE = "https://devbench.co.in";
 const WORKSPACE_ROUTES = [
   { path: "/json",             priority: 0.9, freq: "weekly"  },
   { path: "/yaml",             priority: 0.9, freq: "weekly"  },
+  { path: "/pdf",              priority: 0.85, freq: "monthly" },
   { path: "/jwt-debugger",     priority: 0.9, freq: "monthly" },
   { path: "/api-tester",       priority: 0.9, freq: "monthly" },
   { path: "/diff-checker",     priority: 0.9, freq: "monthly" },

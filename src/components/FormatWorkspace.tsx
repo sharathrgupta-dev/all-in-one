@@ -11,7 +11,7 @@ import {
   type BeautifierLang,
 } from "@/lib/code-beautifiers";
 
-export default function CodeBeautifyWorkspace() {
+export default function FormatWorkspace() {
   const [lang, setLang] = useState<BeautifierLang>("javascript");
   const [input, setInput] = useState(CODE_SAMPLES.javascript);
   const [output, setOutput] = useState("");

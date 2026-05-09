@@ -15,7 +15,6 @@ export const metadata: Metadata = {
     "matrix calculator",
     "plot function",
     "free graph calculator",
-    "Desmos alternative",
   ],
   alternates: { canonical: `${SITE_URL}/graph-calculator` },
   ...socialMetadata({ title, description, canonicalPath: "/graph-calculator" }),

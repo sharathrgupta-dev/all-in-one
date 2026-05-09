@@ -3,7 +3,7 @@ import { socialMetadata, SITE_URL } from "@/lib/social-metadata";
 
 const title = "About";
 const description =
-  "DevBench is a client-side developer toolkit: JSON, encoding, diff, JWT, API testing, math suite, and more.";
+  "DevBench is a browser-first toolkit for JSON, YAML, PDFs, HTTP checks, converters, and more — private and fast.";
 
 export const metadata: Metadata = {
   title,

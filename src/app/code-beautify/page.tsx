@@ -18,7 +18,7 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import CodeBeautifyWorkspace from "@/components/CodeBeautifyWorkspace";
+import FormatWorkspace from "@/components/FormatWorkspace";
 import { TOOLS, CATEGORIES } from "@/lib/tools-registry";
 
 function toolHref(slug: string) {
@@ -64,7 +64,7 @@ const STANDALONE_HUB: HubLink[] = [
   },
 ];
 
-/** Inspired by [CodeBeautify](https://codebeautify.org/) popular tiles — mapped to DevBench routes. */
+/** Frequently opened formatter & utility routes. */
 const POPULAR: HubLink[] = [
   { href: "/json", label: "JSON Beautifier" },
   { href: "/tools/xml-to-json", label: "XML Viewer → JSON" },
@@ -92,6 +92,10 @@ const POPULAR: HubLink[] = [
   { href: "/tools/curl-to-fetch", label: "cURL → Fetch" },
   { href: "/tools/image-resizer", label: "Image Resizer" },
   { href: "/tools/pdf-page-editor", label: "PDF Page Editor" },
+  { href: "/tools/image-to-pdf", label: "Image to PDF" },
+  { href: "/tools/text-to-pdf", label: "Text to PDF" },
+  { href: "/tools/html-to-pdf", label: "HTML to PDF" },
+  { href: "/pdf", label: "PDF tools hub" },
   { href: "/tools/xml-suite", label: "XML Tools Suite" },
   { href: "/tools/morse-code", label: "Morse Code Translator" },
   { href: "/tools/color-converter", label: "HEX ↔ RGB ↔ HSL" },
@@ -197,6 +201,8 @@ const CATEGORY_SECTIONS: {
     title: "Images & PDF",
     icon: FileImage,
     links: [
+      { href: "/pdf", label: "PDF tools hub (all PDF utilities)" },
+      { href: "/tools/image-to-pdf", label: "Image → PDF (combine photos)" },
       { href: "/tools/image-resizer", label: "Image resizer (PNG, JPEG, WebP)" },
       { href: "/tools/pdf-page-editor", label: "PDF page editor (remove / extract)" },
     ],
@@ -277,7 +283,7 @@ export default function CodeBeautifyPage() {
             </p>
           </div>
 
-          <CodeBeautifyWorkspace />
+          <FormatWorkspace />
 
           <div className="mx-auto max-w-6xl px-4 pb-14 pt-4">
             <h2 className="mb-4 text-center text-sm font-semibold uppercase tracking-wide text-muted-foreground">
@@ -349,7 +355,7 @@ export default function CodeBeautifyPage() {
           </div>
         </section>
 
-        {/* Popular — dense grid like codebeautify.org */}
+        {/* Popular — dense link grid */}
         <section className="mx-auto max-w-6xl px-4 pb-12">
           <h2 className="mb-4 text-sm font-semibold uppercase tracking-wide text-muted-foreground">
             Popular tools
@@ -403,16 +409,7 @@ export default function CodeBeautifyPage() {
 
           <div className="mt-12 rounded-2xl border border-border bg-muted/30 p-6 text-center">
             <p className="text-sm text-muted-foreground">
-              Catalog layout inspired by{" "}
-              <a
-                href="https://codebeautify.org/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-accent hover:underline"
-              >
-                CodeBeautify
-              </a>
-              . Want filters on every tool?{" "}
+              Want filters on every tool?{" "}
               <Link href="/" className="font-semibold text-accent hover:underline">
                 DevBench home
               </Link>{" "}

@@ -882,7 +882,7 @@ export default function GraphCalculatorPage() {
               <Calculator size={22} className="text-accent" />
               <div className="min-w-0">
                 <h1 className="text-lg font-semibold text-foreground tracking-tight leading-tight">Math Suite</h1>
-                <p className="text-[11px] text-muted-foreground truncate">Inspired by Desmos · client-side</p>
+                <p className="text-[11px] text-muted-foreground truncate">Interactive graphing · client-side</p>
               </div>
             </a>
             <span className="text-xs text-muted-foreground hidden lg:inline shrink-0">DevBench</span>
@@ -1292,7 +1292,7 @@ export default function GraphCalculatorPage() {
       </div>
       ) : (
       <div className="border-t border-border bg-card px-4 py-1.5 flex items-center text-xs text-muted-foreground shrink-0">
-        <span className="ml-auto">Client-side math · Not affiliated with Desmos</span>
+        <span className="ml-auto">Client-side math</span>
       </div>
       )}
     </div>

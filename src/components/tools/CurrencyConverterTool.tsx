@@ -131,16 +131,15 @@ export default function CurrencyConverterTool({ tool }: { tool: Tool }) {
               {to}
             </p>
             <p className="mt-2 text-sm text-muted-foreground">
-              Rate date: {result.date} · Source:{" "}
+              Rate date: {result.date} ·{" "}
               <a
-                href="https://www.frankfurter.app/"
+                href="https://www.ecb.europa.eu/stats/policy_and_exchange_rates/euro_reference_exchange_rates/html/index.en.html"
                 className="text-accent hover:underline"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                Frankfurter API
-              </a>{" "}
-              (ECB data)
+                ECB reference exchange rates
+              </a>
             </p>
           </div>
         )}

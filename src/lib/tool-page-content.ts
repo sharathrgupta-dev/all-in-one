@@ -183,4 +183,12 @@ export const TOOL_PAGE_CONTENT: Record<string, ToolPageContent> = {
     openingParagraph:
       ".env Parser reads dotenv-style configuration from your clipboard: it skips comments and blank lines, strips quotes, flags duplicate keys (last wins), and emits compact JSON for all variables. Use it to validate env blocks before committing .env.example files, compare environments, or document required variables — all locally in the browser.",
   },
+
+  "image-to-pdf": {
+    title: "Image to PDF — JPG, PNG, WebP to One PDF (Free, Browser-Only)",
+    metaDescription:
+      "Merge images into a single A4 PDF: reorder pages, PNG/JPEG/WebP/GIF supported. Runs entirely in your browser — nothing uploaded to DevBench.",
+    openingParagraph:
+      "Image to PDF turns any sequence of photos or screenshots into one print-ready document. Drop files or pick them from disk, drag to reorder pages, and download a PDF where each image fits an A4 page with margins. Raster formats decode locally; large bitmaps are scaled so embedding stays reliable — ideal for scans, invoices, and boards.",
+  },
 };

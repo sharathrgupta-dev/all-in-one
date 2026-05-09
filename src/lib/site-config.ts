@@ -8,7 +8,7 @@ function envEmail(key: string): string | undefined {
 
 /** Public inbox for the Contact page (mailto). Override with NEXT_PUBLIC_CONTACT_EMAIL in `.env.local`. */
 export const SITE_CONTACT_EMAIL =
-  envEmail("NEXT_PUBLIC_CONTACT_EMAIL") ?? "rsbentertainments@gmail.com";
+  envEmail("NEXT_PUBLIC_CONTACT_EMAIL") ?? "devbenchcare@gmail.com";
 
 export const SITE_PRIVACY_EMAIL =
   envEmail("NEXT_PUBLIC_PRIVACY_EMAIL") ?? SITE_CONTACT_EMAIL;

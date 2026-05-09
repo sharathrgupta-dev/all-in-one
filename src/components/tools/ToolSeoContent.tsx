@@ -2803,10 +2803,25 @@ const CONTENT_MAP: Record<string, React.FC> = {
       <h2 className={h2}>PDF page editor</h2>
       <p className={prose}>
         Extract pages from a PDF, reorder them, remove specific pages, or merge
-        multiple PDFs into one — entirely in the browser using the pdf-lib
-        library. No file is sent to a server. Useful for splitting large PDFs,
-        removing confidential pages before sharing, and reorganising document
-        sections.
+        multiple PDFs into one — entirely in your browser. No file is sent to a
+        server. Useful for splitting large PDFs, removing confidential pages before
+        sharing, and reorganising document sections.
+      </p>
+    </Section>
+  )) as React.FC,
+  "image-to-pdf": (() => (
+    <Section>
+      <h2 className={h2}>Image to PDF — private & fast</h2>
+      <p className={prose}>
+        Combines raster images into a single PDF where each picture becomes its own
+        A4-sized page. PNG and JPEG embed directly; formats like WebP and GIF are
+        rasterized in the canvas API first so they can be embedded reliably in the
+        PDF. Nothing is uploaded — generation happens entirely in your tab.
+      </p>
+      <p className={prose}>
+        Use it for scanned receipts, screenshot packs, design boards, or exporting a
+        slide deck from still frames. Reorder thumbnails before download so the PDF
+        matches your narrative.
       </p>
     </Section>
   )) as React.FC,

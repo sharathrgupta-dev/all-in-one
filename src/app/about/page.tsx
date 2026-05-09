@@ -18,15 +18,15 @@ export default function AboutPage() {
         <h1 className="text-3xl font-bold tracking-tight">About DevBench</h1>
         <div className="mt-6 space-y-4 text-muted-foreground leading-relaxed">
           <p>
-            DevBench is an all-in-one developer toolkit that runs entirely in
-            your browser. Format JSON, encode data, compare text, debug JWTs,
-            test HTTP APIs, edit cron expressions, beautify code, and use
-            dozens of smaller converters — without signing up and without
-            sending your payloads to our servers.
+            DevBench is a calm, browser-first toolkit for everyday work: tidy up
+            JSON and YAML, merge or compress PDFs, run HTTP checks, spin through
+            finance and unit converters, and handle dozens of small tasks — no
+            account, and nothing leaves your device unless you choose to export
+            or share it.
           </p>
           <p>
-            We focus on speed and privacy: heavy work stays on your machine,
-            using Web Crypto and modern JS where needed.
+            We keep things fast and private: the heavy lifting runs locally with
+            Web Crypto and modern JavaScript when it helps.
           </p>
           <p>
             Have feedback or a tool idea?{" "}
