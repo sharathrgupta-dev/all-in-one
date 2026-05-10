@@ -4,19 +4,20 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ToolSearch from "@/components/ToolSearch";
 import JsonLd from "@/components/JsonLd";
+import TrackedAffiliateLink from "@/components/TrackedAffiliateLink";
 
 const websiteSchema = {
   "@context": "https://schema.org",
   "@type": "WebSite",
   name: "DevBench",
-  url: "https://devbench.co.in",
+  url: "https://www.devbench.co.in",
   description:
     `${TOOLS.length}+ free tools in your browser — JSON, PDFs, converters, calculators. No signup.`,
   potentialAction: {
     "@type": "SearchAction",
     target: {
       "@type": "EntryPoint",
-      urlTemplate: "https://devbench.co.in/?q={search_term_string}",
+      urlTemplate: "https://www.devbench.co.in/?q={search_term_string}",
     },
     "query-input": "required name=search_term_string",
   },
@@ -44,7 +45,7 @@ export default function HomePage() {
   return (
     <>
       <Header />
-      <main className="flex-1">
+      <main id="main" className="flex-1">
         {/* Hero — server-rendered for fast LCP */}
         <section className="relative overflow-hidden border-b border-border">
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,var(--accent-light),transparent_70%)] opacity-60" />
@@ -97,32 +98,35 @@ export default function HomePage() {
             <span className="text-muted-foreground/70 uppercase tracking-wide font-medium text-[10px]">
               Sponsored
             </span>
-            <a
+            <TrackedAffiliateLink
               href="https://namecheap.pxf.io/c/7275861/3884366/5618?partnerpropertyid=8365175"
-              target="_blank"
-              rel="nofollow noopener noreferrer sponsored"
+              vendor="namecheap"
+              offer="shared_hosting"
+              placement="homepage_sponsor_bar"
               className="hover:text-foreground transition-colors"
             >
               Shared Hosting from $1.58/mo ↗
-            </a>
-            <span className="opacity-30 hidden sm:inline">·</span>
-            <a
+            </TrackedAffiliateLink>
+            <span aria-hidden="true" className="opacity-30 hidden sm:inline">·</span>
+            <TrackedAffiliateLink
               href="https://namecheap.pxf.io/c/7275861/3884368/5618?partnerpropertyid=8365175"
-              target="_blank"
-              rel="nofollow noopener noreferrer sponsored"
+              vendor="namecheap"
+              offer="vps_hosting"
+              placement="homepage_sponsor_bar"
               className="hover:text-foreground transition-colors"
             >
               VPS Hosting from $6.88/mo ↗
-            </a>
-            <span className="opacity-30 hidden sm:inline">·</span>
-            <a
+            </TrackedAffiliateLink>
+            <span aria-hidden="true" className="opacity-30 hidden sm:inline">·</span>
+            <TrackedAffiliateLink
               href="https://namecheap.pxf.io/c/7275861/3884352/5618?partnerpropertyid=8365175"
-              target="_blank"
-              rel="nofollow noopener noreferrer sponsored"
+              vendor="namecheap"
+              offer="domains_ssl_dns"
+              placement="homepage_sponsor_bar"
               className="hover:text-foreground transition-colors"
             >
               Domains, SSLs & Premium DNS — Discounts Sitewide ↗
-            </a>
+            </TrackedAffiliateLink>
           </div>
         </div>
 

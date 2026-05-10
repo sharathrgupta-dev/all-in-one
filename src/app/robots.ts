@@ -9,7 +9,6 @@ export default function robots(): MetadataRoute.Robots {
         disallow: ["/api/"],
       },
     ],
-    sitemap: "https://devbench.co.in/sitemap.xml",
-    host: "https://devbench.co.in",
+    sitemap: "https://www.devbench.co.in/sitemap.xml",
   };
 }

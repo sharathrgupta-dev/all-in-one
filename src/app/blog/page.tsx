@@ -159,19 +159,19 @@ export default function BlogPage() {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "Blog",
-            "@id": "https://devbench.co.in/blog",
-            url: "https://devbench.co.in/blog",
+            "@id": "https://www.devbench.co.in/blog",
+            url: "https://www.devbench.co.in/blog",
             name: "DevBench Blog",
             description: "Developer guides on JWT, UUID, regex, JSON, URL encoding, and more.",
             publisher: {
               "@type": "Organization",
               name: "DevBench",
-              url: "https://devbench.co.in",
+              url: "https://www.devbench.co.in",
             },
             blogPost: BLOG_POSTS.map((p) => ({
               "@type": "BlogPosting",
               headline: p.title,
-              url: `https://devbench.co.in/blog/${p.slug}`,
+              url: `https://www.devbench.co.in/blog/${p.slug}`,
               datePublished: p.date,
               description: p.excerpt,
             })),

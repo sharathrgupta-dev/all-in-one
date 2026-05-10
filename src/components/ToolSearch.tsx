@@ -97,13 +97,14 @@ const ToolCard = memo(function ToolCard({
         aria-label={
           isFavourite ? "Remove from shortcuts" : "Save to shortcuts"
         }
-        className={`absolute top-2.5 right-2.5 p-1 rounded-md transition-colors ${
+        aria-pressed={isFavourite}
+        className={`absolute top-2 right-2 p-1.5 rounded-md transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:opacity-100 ${
           isFavourite
             ? "text-amber-400 opacity-100"
-            : "text-muted-foreground opacity-0 group-hover:opacity-60 hover:!opacity-100 hover:text-amber-400"
+            : "text-muted-foreground opacity-0 group-hover:opacity-70 hover:!opacity-100 hover:text-amber-400"
         }`}
       >
-        <Star className={`w-3.5 h-3.5 ${isFavourite ? "fill-amber-400" : ""}`} />
+        <Star aria-hidden="true" className={`w-4 h-4 ${isFavourite ? "fill-amber-400" : ""}`} />
       </button>
     </div>
   );
@@ -205,10 +206,15 @@ export default function ToolSearch({ tools }: { tools: Tool[] }) {
 
       {/* Search */}
       <div className="relative max-w-xl mx-auto mb-8">
-        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <label htmlFor="tool-search" className="sr-only">
+          Search tools
+        </label>
+        <Search aria-hidden="true" className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <input
+          id="tool-search"
           type="search"
           placeholder="Try PDF, JSON, loan, hex, timezone…"
+          aria-label="Search tools"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-border bg-card text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring/40 text-base shadow-sm"

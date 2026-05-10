@@ -2,10 +2,15 @@
 
 > Auto-generated from git log. Run `npm run changelog` to refresh.
 
+## 2026-05-10
+
+### Added
+- implement comprehensive security headers and update site URLs to use the 'www' subdomain for improved SEO and security; enhance accessibility features in layout and header components (`dd46418`)
+
 ## 2026-05-09
 
 ### Added
-- add new tools for JSON to TSV and TSV to JSON conversions, along with a log line parser; enhance sitemap with new routes and update tool metadata for improved user experience (`464e190`)
+- add new tools for JSON to TSV and TSV to JSON conversions, along with a log line parser; enhance sitemap with new routes and update tool metadata for improved user experience (`063bb78`)
 - add PDF tools including merging, splitting, and converting images to PDF; update package dependencies and enhance sitemap with new routes (`eeeaeed`)
 - update Footer component to include Product Hunt review and follow buttons, improving user engagement and visibility (`b6df59e`)
 - add Product Hunt review and follow buttons in Footer component to enhance user engagement and visibility (`ef29d0a`)

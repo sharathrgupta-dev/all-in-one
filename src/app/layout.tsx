@@ -20,43 +20,19 @@ const geistMono = Geist_Mono({
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
+  viewportFit: "cover",
   themeColor: "#4f46e5",
 };
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://devbench.co.in"),
+  metadataBase: new URL("https://www.devbench.co.in"),
   title: {
     default: "DevBench — Free Online Developer Tools",
     template: "%s | DevBench",
   },
   description:
     "100+ free browser-based developer tools. Format JSON, encode Base64, test regex, debug JWT, compare text, generate UUID, convert YAML, and more. No signup — everything runs in your browser.",
-  keywords: [
-    "developer tools online",
-    "free developer tools",
-    "JSON formatter online",
-    "JSON validator",
-    "Base64 encoder decoder",
-    "regex tester online",
-    "JWT debugger",
-    "text diff checker",
-    "UUID generator",
-    "ULID generator",
-    "YAML to JSON converter",
-    "JSON to CSV",
-    "URL encoder decoder",
-    "SHA256 hash generator",
-    "markdown preview",
-    "cron expression parser",
-    "Unix timestamp converter",
-    "password generator",
-    "color converter HEX RGB HSL",
-    "HTML to JSX converter",
-    "developer toolkit",
-    "online coding tools",
-    "devbench",
-  ],
-  authors: [{ name: "DevBench", url: "https://devbench.co.in" }],
+  authors: [{ name: "DevBench", url: "https://www.devbench.co.in" }],
   creator: "DevBench",
   publisher: "DevBench",
   robots: {
@@ -72,7 +48,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://devbench.co.in",
+    url: "https://www.devbench.co.in",
     siteName: "DevBench",
     title: "DevBench — Free Online Developer Tools",
     description:
@@ -87,7 +63,7 @@ export const metadata: Metadata = {
     creator: "@devbench",
   },
   alternates: {
-    canonical: "https://devbench.co.in",
+    canonical: "https://www.devbench.co.in",
   },
   verification: {
     google: "IgIfgAzxEG7NcxiC8hTObe1nFIY-WNqIAjS2mBi0h8o",
@@ -142,14 +118,25 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         />
       </head>
       <body className="min-h-full flex flex-col bg-background text-foreground">
+        {/* Skip to content — visible only when focused; first-tab-stop for keyboard users */}
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:rounded-md focus:bg-accent focus:px-3 focus:py-2 focus:text-sm focus:font-medium focus:text-accent-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+        >
+          Skip to content
+        </a>
         {/* Google Tag Manager — noscript fallback */}
         <noscript>
           <iframe
             src="https://www.googletagmanager.com/ns.html?id=GTM-NBTV4W35"
+            title="Google Tag Manager"
             height="0"
             width="0"
             style={{ display: "none", visibility: "hidden" }}
           />
+          <div style={{ padding: "1rem", textAlign: "center", fontFamily: "system-ui" }}>
+            DevBench tools require JavaScript to run in your browser. Please enable JS to use them.
+          </div>
         </noscript>
         {children}
         <LazyCommandPalette tools={TOOLS} />

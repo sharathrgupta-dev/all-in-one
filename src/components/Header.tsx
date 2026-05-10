@@ -99,10 +99,9 @@ export default function Header() {
           <button
             onClick={() => window.dispatchEvent(new Event("devbench:open-palette"))}
             className="hidden sm:inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-border text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
-            aria-label="Open search"
           >
             <span>Search</span>
-            <kbd className="text-[10px] font-mono text-muted-foreground/80">⌘K</kbd>
+            <kbd aria-label="keyboard shortcut Command K" className="text-[10px] font-mono text-muted-foreground/80">⌘K</kbd>
           </button>
 
           <button
@@ -110,25 +109,28 @@ export default function Header() {
             onClick={toggleTheme}
             suppressHydrationWarning
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-            aria-label="Toggle theme"
+            aria-label={dark ? "Switch to light mode" : "Switch to dark mode"}
+            aria-pressed={dark}
           >
-            {dark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {dark ? <Sun aria-hidden="true" className="h-4 w-4" /> : <Moon aria-hidden="true" className="h-4 w-4" />}
           </button>
 
           {/* Mobile hamburger */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:hidden"
-            aria-label="Toggle menu"
+            aria-label={menuOpen ? "Close menu" : "Open menu"}
+            aria-expanded={menuOpen}
+            aria-controls="mobile-nav"
           >
-            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+            {menuOpen ? <X aria-hidden="true" className="h-4 w-4" /> : <Menu aria-hidden="true" className="h-4 w-4" />}
           </button>
         </div>
       </div>
 
       {/* Mobile nav */}
       {menuOpen && (
-        <nav className="border-t border-border bg-background px-4 pb-3 pt-2 lg:hidden grid grid-cols-3 gap-1">
+        <nav id="mobile-nav" className="border-t border-border bg-background px-4 pb-3 pt-2 lg:hidden grid grid-cols-3 gap-1">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}

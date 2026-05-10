@@ -1,4 +1,4 @@
-export const SITE_URL = "https://devbench.co.in";
+export const SITE_URL = "https://www.devbench.co.in";
 export const SITE_NAME = "DevBench";
 
 function envEmail(key: string): string | undefined {

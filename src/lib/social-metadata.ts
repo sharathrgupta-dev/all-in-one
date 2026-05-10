@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-export const SITE_URL = "https://devbench.co.in";
+export const SITE_URL = "https://www.devbench.co.in";
 
 type SocialOpts = {
   title: string;

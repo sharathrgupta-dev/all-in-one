@@ -1,22 +1,26 @@
 import Link from "next/link";
 import { Shield, ExternalLink } from "lucide-react";
 import DevBenchMark from "@/components/DevBenchMark";
+import TrackedAffiliateLink from "@/components/TrackedAffiliateLink";
 
 const AFFILIATE_LINKS = [
   {
     label: "Shared Hosting",
     href: "https://namecheap.pxf.io/c/7275861/3884366/5618?partnerpropertyid=8365175",
     desc: "from $1.58/mo",
+    offer: "shared_hosting",
   },
   {
     label: "VPS Hosting",
     href: "https://namecheap.pxf.io/c/7275861/3884368/5618?partnerpropertyid=8365175",
     desc: "from $6.88/mo",
+    offer: "vps_hosting",
   },
   {
     label: "Domains, SSLs & DNS",
     href: "https://namecheap.pxf.io/c/7275861/3884352/5618?partnerpropertyid=8365175",
     desc: "discounts sitewide",
+    offer: "domains_ssl_dns",
   },
 ];
 
@@ -31,17 +35,18 @@ export default function Footer() {
           </p>
           <div className="flex flex-wrap gap-3 justify-center sm:justify-start">
             {AFFILIATE_LINKS.map((link) => (
-              <a
+              <TrackedAffiliateLink
                 key={link.href}
                 href={link.href}
-                target="_blank"
-                rel="nofollow noopener noreferrer sponsored"
+                vendor="namecheap"
+                offer={link.offer}
+                placement="footer"
                 className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-border bg-card text-xs text-muted-foreground hover:text-foreground hover:bg-muted transition-colors"
               >
                 <span className="font-medium">{link.label}</span>
-                <span className="opacity-60">{link.desc}</span>
-                <ExternalLink className="h-3 w-3 opacity-40" />
-              </a>
+                <span className="opacity-70">{link.desc}</span>
+                <ExternalLink aria-hidden="true" className="h-3 w-3 opacity-50" />
+              </TrackedAffiliateLink>
             ))}
           </div>
         </div>
@@ -57,9 +62,11 @@ export default function Footer() {
             >
               <img
                 src="https://api.producthunt.com/widgets/embed-image/v1/product_review.svg?product_id=1220022&theme=dark"
-                alt="DevBench — A free all-in-one toolkit for developers — no login required — Product Hunt"
+                alt="Leave DevBench a review on Product Hunt"
                 width={250}
                 height={54}
+                loading="lazy"
+                decoding="async"
                 className="h-[54px] w-[250px]"
               />
             </a>
@@ -72,9 +79,11 @@ export default function Footer() {
             >
               <img
                 src="https://api.producthunt.com/widgets/embed-image/v1/follow.svg?product_id=1220022&theme=neutral"
-                alt="DevBench — A free all-in-one toolkit for developers — no login required — Product Hunt"
+                alt="Follow DevBench on Product Hunt"
                 width={250}
                 height={54}
+                loading="lazy"
+                decoding="async"
                 className="h-[54px] w-[250px]"
               />
             </a>
@@ -84,11 +93,11 @@ export default function Footer() {
         <div className="flex flex-col items-center gap-6 sm:flex-row sm:justify-between">
           <div className="flex flex-col items-center gap-2 sm:items-start">
             <Link href="/" className="flex items-center gap-2 text-foreground">
-              <DevBenchMark className="h-6 w-6 text-accent" />
+              <DevBenchMark aria-hidden="true" className="h-6 w-6 text-accent" />
               <span className="font-bold tracking-tight">DevBench</span>
             </Link>
             <p className="flex items-center gap-1.5 text-xs text-muted-foreground">
-              <Shield className="h-3.5 w-3.5 shrink-0" />
+              <Shield aria-hidden="true" className="h-3.5 w-3.5 shrink-0" />
               No login required — your work stays in your browser.
             </p>
           </div>
