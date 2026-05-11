@@ -245,6 +245,240 @@ async function renderImage(ctx: BuildContext, b64: string): Promise<void> {
   }
 }
 
+// ─── HTML output rendering ─────────────────────────────────────────────
+
+interface TableData {
+  headers: string[];
+  rows: string[][];
+}
+
+// Strip Colab/Jupyter UI scaffolding before parsing — these elements add raw
+// markup noise when their HTML output is rendered as text.
+function stripJupyterNoise(html: string): string {
+  return html
+    // Colab DataFrame interactive buttons
+    .replace(/<div class="colab-df-buttons"[\s\S]*?<\/div>/g, "")
+    .replace(/<button class="colab-df-[\s\S]*?<\/button>/g, "")
+    .replace(/<style[\s\S]*?<\/style>/g, "")
+    .replace(/<script[\s\S]*?<\/script>/g, "");
+}
+
+function parseHtmlTables(html: string): TableData[] {
+  try {
+    const doc = new DOMParser().parseFromString(stripJupyterNoise(html), "text/html");
+    const tables = Array.from(doc.querySelectorAll("table"));
+    return tables.map((tbl) => {
+      const headers: string[] = [];
+      const thead = tbl.querySelector("thead");
+      if (thead) {
+        thead.querySelectorAll("tr").forEach((tr) => {
+          if (headers.length === 0) {
+            tr.querySelectorAll("th, td").forEach((cell) => {
+              headers.push(cell.textContent?.trim() ?? "");
+            });
+          }
+        });
+      }
+      const rows: string[][] = [];
+      const bodyTr = tbl.querySelector("tbody")
+        ? Array.from(tbl.querySelectorAll("tbody tr"))
+        : Array.from(tbl.querySelectorAll("tr")).slice(thead ? 1 : 0);
+      bodyTr.forEach((tr) => {
+        const row: string[] = [];
+        tr.querySelectorAll("th, td").forEach((cell) => {
+          row.push(cell.textContent?.trim() ?? "");
+        });
+        if (row.length > 0) rows.push(row);
+      });
+      return { headers, rows };
+    });
+  } catch {
+    return [];
+  }
+}
+
+function htmlToPlainText(html: string): string {
+  try {
+    const doc = new DOMParser().parseFromString(stripJupyterNoise(html), "text/html");
+    // Remove all tables (rendered separately)
+    doc.querySelectorAll("table").forEach((t) => t.remove());
+    return (doc.body.textContent ?? "").replace(/\n\s*\n/g, "\n").trim();
+  } catch {
+    return html.replace(/<[^>]+>/g, "").trim();
+  }
+}
+
+function drawTable(ctx: BuildContext, table: TableData): void {
+  const numCols = Math.max(table.headers.length, ...table.rows.map((r) => r.length), 0);
+  if (numCols === 0) return;
+
+  const fontSize = 8.5;
+  const lineH = fontSize * 1.35;
+  const cellPadX = 6;
+  const cellPadY = 4;
+
+  // Equalise short rows by padding with empty cells
+  const headerRow = [...table.headers];
+  while (headerRow.length < numCols) headerRow.push("");
+  const dataRows = table.rows.map((r) => {
+    const padded = [...r];
+    while (padded.length < numCols) padded.push("");
+    return padded;
+  });
+
+  // Measure column widths from content
+  const measure = (s: string) => ctx.mono.widthOfTextAtSize(s, fontSize);
+  const measureBold = (s: string) => ctx.proseBold.widthOfTextAtSize(s, fontSize);
+  const colW: number[] = new Array(numCols).fill(0);
+  for (let i = 0; i < numCols; i++) {
+    colW[i] = Math.max(colW[i], measureBold(headerRow[i]));
+    for (const row of dataRows) {
+      colW[i] = Math.max(colW[i], measure(row[i]));
+    }
+    colW[i] += cellPadX * 2;
+  }
+  // Cap to available width — scale down proportionally if overflowing
+  const totalW = colW.reduce((a, b) => a + b, 0);
+  const finalW = totalW > ctx.maxW ? colW.map((w) => (w * ctx.maxW) / totalW) : colW;
+  const tableW = finalW.reduce((a, b) => a + b, 0);
+
+  const rowH = lineH + cellPadY * 2;
+  const hasHeader = table.headers.length > 0;
+  const drawHeader = (yTop: number) => {
+    if (!hasHeader) return;
+    // Header background
+    ctx.page.drawRectangle({
+      x: MARGIN,
+      y: yTop - rowH,
+      width: tableW,
+      height: rowH,
+      color: rgb(0.94, 0.96, 0.99),
+    });
+    let x = MARGIN;
+    for (let i = 0; i < numCols; i++) {
+      const txt = headerRow[i];
+      ctx.page.drawText(txt, {
+        x: x + cellPadX,
+        y: yTop - cellPadY - fontSize,
+        size: fontSize,
+        font: ctx.proseBold,
+        color: rgb(0.12, 0.15, 0.22),
+      });
+      x += finalW[i];
+    }
+  };
+
+  // Repeating-header pagination
+  let yTop = ctx.y;
+  if (hasHeader) {
+    ensureSpace(ctx, rowH * 2);
+    yTop = ctx.y;
+    drawHeader(yTop);
+    yTop -= rowH;
+  }
+
+  for (let r = 0; r < dataRows.length; r++) {
+    if (yTop - rowH < MARGIN) {
+      // Close current page table border
+      ctx.page.drawLine({
+        start: { x: MARGIN, y: yTop },
+        end: { x: MARGIN + tableW, y: yTop },
+        thickness: 0.4,
+        color: rgb(0.85, 0.88, 0.93),
+      });
+      newPage(ctx);
+      yTop = ctx.y;
+      if (hasHeader) {
+        drawHeader(yTop);
+        yTop -= rowH;
+      }
+    }
+    // Alternating row tint
+    if (r % 2 === 1) {
+      ctx.page.drawRectangle({
+        x: MARGIN,
+        y: yTop - rowH,
+        width: tableW,
+        height: rowH,
+        color: rgb(0.985, 0.985, 0.99),
+      });
+    }
+    let x = MARGIN;
+    for (let i = 0; i < numCols; i++) {
+      // Truncate text that would overflow its column with an ellipsis
+      let txt = dataRows[r][i];
+      const maxTxtW = finalW[i] - cellPadX * 2;
+      if (measure(txt) > maxTxtW) {
+        // binary-search-ish truncation
+        let lo = 0;
+        let hi = txt.length;
+        while (lo < hi) {
+          const mid = Math.ceil((lo + hi) / 2);
+          if (measure(txt.slice(0, mid) + "…") <= maxTxtW) lo = mid;
+          else hi = mid - 1;
+        }
+        txt = txt.slice(0, lo) + "…";
+      }
+      ctx.page.drawText(txt, {
+        x: x + cellPadX,
+        y: yTop - cellPadY - fontSize,
+        size: fontSize,
+        font: ctx.mono,
+        color: rgb(0.15, 0.18, 0.25),
+      });
+      x += finalW[i];
+    }
+    yTop -= rowH;
+  }
+
+  // Final border around whole table on this page section
+  const tableBottom = yTop;
+  ctx.page.drawRectangle({
+    x: MARGIN,
+    y: tableBottom,
+    width: tableW,
+    height: ctx.y - tableBottom,
+    borderColor: rgb(0.78, 0.82, 0.9),
+    borderWidth: 0.5,
+  });
+  // Inner vertical lines
+  let x = MARGIN;
+  for (let i = 0; i < numCols - 1; i++) {
+    x += finalW[i];
+    ctx.page.drawLine({
+      start: { x, y: tableBottom },
+      end: { x, y: ctx.y },
+      thickness: 0.3,
+      color: rgb(0.88, 0.9, 0.94),
+    });
+  }
+  // Horizontal line under header
+  if (hasHeader) {
+    ctx.page.drawLine({
+      start: { x: MARGIN, y: ctx.y - rowH },
+      end: { x: MARGIN + tableW, y: ctx.y - rowH },
+      thickness: 0.5,
+      color: rgb(0.78, 0.82, 0.9),
+    });
+  }
+
+  ctx.y = tableBottom - 6;
+}
+
+async function renderHtmlOutput(ctx: BuildContext, html: string): Promise<void> {
+  const tables = parseHtmlTables(html);
+  for (const table of tables) {
+    drawTable(ctx, table);
+  }
+  const leftover = htmlToPlainText(html);
+  if (leftover) {
+    drawCodeBlock(ctx, stripAnsi(leftover), {
+      tint: rgb(0.98, 0.98, 0.98),
+      border: rgb(0.88, 0.88, 0.9),
+    });
+  }
+}
+
 async function renderOutputs(ctx: BuildContext, outputs: NbOutput[]): Promise<void> {
   for (const out of outputs) {
     if (out.output_type === "stream") {
@@ -254,8 +488,11 @@ async function renderOutputs(ctx: BuildContext, outputs: NbOutput[]): Promise<vo
       });
     } else if (out.output_type === "execute_result" || out.output_type === "display_data") {
       const data = out.data ?? {};
+      // Priority: PNG image > HTML (tables) > plain text fallback
       if (data["image/png"]) {
         await renderImage(ctx, joinSource(data["image/png"]));
+      } else if (data["text/html"]) {
+        await renderHtmlOutput(ctx, joinSource(data["text/html"]));
       } else if (data["text/plain"]) {
         drawCodeBlock(ctx, stripAnsi(joinSource(data["text/plain"])), {
           tint: rgb(0.98, 0.98, 0.98),
