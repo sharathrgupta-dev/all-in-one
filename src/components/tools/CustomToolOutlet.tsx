@@ -43,6 +43,8 @@ const ImageFormatConverterTool = dynamic(() => import("@/components/tools/ImageF
 const SvgOptimizerTool        = dynamic(() => import("@/components/tools/SvgOptimizerTool"));
 const ExifViewerTool          = dynamic(() => import("@/components/tools/ExifViewerTool"));
 const UnicodeCheckerTool      = dynamic(() => import("@/components/tools/UnicodeCheckerTool"));
+const MermaidEditorTool       = dynamic(() => import("@/components/tools/MermaidEditorTool"));
+const TimezoneConverterTool   = dynamic(() => import("@/components/tools/TimezoneConverterTool"));
 
 const FINANCE_SLUGS = new Set([
   "simple-interest", "gst-calculator", "discount-calculator",
@@ -105,6 +107,8 @@ export default function CustomToolOutlet({ slug, tool }: { slug: string; tool: T
     case "svg-optimizer":            return <SvgOptimizerTool tool={tool} />;
     case "exif-viewer":              return <ExifViewerTool tool={tool} />;
     case "unicode-checker":          return <UnicodeCheckerTool tool={tool} />;
+    case "mermaid-editor":           return <MermaidEditorTool tool={tool} />;
+    case "timezone-converter":       return <TimezoneConverterTool tool={tool} />;
     default:                         return null;
   }
 }

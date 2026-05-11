@@ -51,6 +51,9 @@ const CUSTOM_TOOL_SLUGS = new Set([
   "quadratic-solver", "pythagorean-theorem", "gcd-lcm-calculator",
   // datetime form tools
   "days-between-dates", "countdown-calculator", "week-number-calculator", "due-date-calculator",
+  "timezone-converter",
+  // diagramming
+  "mermaid-editor",
 ]);
 
 function CopyBtn({ text }: { text: string }) {

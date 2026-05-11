@@ -113,6 +113,8 @@ export const TOOLS: Tool[] = [
   { slug: "chmod-calculator", name: "chmod Calculator", shortName: "chmod", description: "Convert Unix permission octals (755) ↔ symbolic (rwxr-xr-x), including setuid bits", category: "dev", icon: "rwx", inputLabel: "Octal or symbolic (e.g. 755 or rwxr-xr-x)", outputLabel: "Converted" },
   { slug: "dotenv-parser", name: ".env Parser", shortName: ".env", description: "Parse .env files to JSON and flag duplicate keys — Docker & CI friendly", category: "dev", icon: "⚙", inputLabel: ".env contents", outputLabel: "Parsed output" },
   { slug: "log-parser", name: "Log Line Parser", shortName: "Log parser", description: "Turn plain-text logs into structured JSON — timestamps, levels, messages", category: "dev", icon: "⌁", inputLabel: "Log lines", outputLabel: "Structured JSON" },
+  { slug: "mermaid-editor", name: "Mermaid Diagram Editor", shortName: "Mermaid", description: "Live editor for Mermaid.js flowcharts, sequence diagrams, ER diagrams, Gantt charts — export SVG or PNG", category: "dev", icon: "◈" },
+  { slug: "timezone-converter", name: "Timezone Converter", shortName: "Timezone", description: "Convert a moment in time across multiple time zones with DST handling, shareable links, and 600+ IANA zones", category: "datetime", icon: "🌐" },
 
   // Conversion Tools
   { slug: "temperature-converter", name: "Temperature Converter", shortName: "Temp", description: "Convert Celsius, Fahrenheit, and Kelvin", category: "conversion", icon: "°" },
