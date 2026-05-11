@@ -875,9 +875,8 @@ export default function GraphCalculatorPage() {
   }, [compiledFns, expressions, view]);
 
   return (
-    <>
+    <div className="flex h-screen flex-col bg-background">
       <Header />
-      <div className="relative isolate flex flex-col h-[calc(100svh-53px)] bg-background">
       <header className="border-b border-border bg-card shrink-0">
         <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
@@ -1297,7 +1296,6 @@ export default function GraphCalculatorPage() {
         <span className="ml-auto">Client-side math</span>
       </div>
       )}
-      </div>
-    </>
+    </div>
   );
 }

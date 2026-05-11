@@ -13,7 +13,8 @@
 - update height calculation in GraphCalculator and JsonToolkit pages; enhance IpynbToPdfTool with detailed CLI instructions for PDF conversion (`f05afc4`)
 
 ### Changed
-- enhance IpynbToPdfTool with improved markdown parsing and HTML rendering (`2255a7d`)
+- simplify layout structure in GraphCalculator and JsonToolkit pages; enhance IpynbToPdfTool with iframe srcDoc handling (`d60fdce`)
+- enhance IpynbToPdfTool with improved markdown parsing and HTML rendering (`a8cfbdb`)
 
 ## 2026-05-10
 

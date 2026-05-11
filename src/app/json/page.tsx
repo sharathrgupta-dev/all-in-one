@@ -1911,9 +1911,8 @@ export default function JsonToolkitPage() {
   }, [input]);
 
   return (
-    <>
+    <div className="flex h-screen flex-col bg-background">
       <Header />
-      <div className="relative isolate flex flex-col h-[calc(100svh-53px)] bg-background">
       {/* Workspace header */}
       <header className="border-b border-border bg-card px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
@@ -2948,8 +2947,7 @@ export default function JsonToolkitPage() {
           onAction={handleContextAction}
         />
       )}
-      </div>
-    </>
+    </div>
   );
 }
 

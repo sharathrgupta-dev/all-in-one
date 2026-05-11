@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import {
   Upload,
   FileText,
@@ -632,13 +632,6 @@ export default function IpynbToPdfTool({ tool }: { tool: Tool }) {
     if (f) void acceptFile(f);
   };
 
-  // Reload iframe content when html changes (some browsers don't fully refresh srcDoc)
-  useEffect(() => {
-    const iframe = iframeRef.current;
-    if (!iframe || !html) return;
-    iframe.srcdoc = html;
-  }, [html]);
-
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-8">
       <ToolPageHero tool={tool} />
@@ -824,6 +817,7 @@ export default function IpynbToPdfTool({ tool }: { tool: Tool }) {
             {tab === "preview" ? (
               <iframe
                 ref={iframeRef}
+                srcDoc={html}
                 title="Notebook preview"
                 className="h-[640px] w-full rounded-lg border border-border bg-white"
                 sandbox="allow-same-origin allow-modals allow-popups"
