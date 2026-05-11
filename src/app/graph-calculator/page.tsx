@@ -877,7 +877,7 @@ export default function GraphCalculatorPage() {
   return (
     <>
       <Header />
-      <div className="flex flex-col h-[calc(100dvh-53px)] bg-background">
+      <div className="relative isolate flex flex-col h-[calc(100svh-53px)] bg-background">
       <header className="border-b border-border bg-card shrink-0">
         <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">

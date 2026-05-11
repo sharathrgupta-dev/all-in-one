@@ -472,6 +472,63 @@ export default function IpynbToPdfTool({ tool }: { tool: Tool }) {
             <li>✗ Interactive widgets (ipywidgets)</li>
           </ul>
         </details>
+
+        {/* CLI alternative — for users who want full LaTeX + widget support */}
+        <details className="rounded-lg border border-border bg-background px-4 py-3 text-xs text-muted-foreground">
+          <summary className="cursor-pointer font-medium text-foreground/80">
+            Need LaTeX math, widgets, or matching Jupyter&apos;s native output? Use <code className="font-mono text-[11px]">nbconvert</code>
+          </summary>
+          <div className="mt-3 space-y-3">
+            <p>
+              For full-fidelity PDFs with rendered LaTeX equations, matplotlib plots, and exact Jupyter styling, run the official <code className="font-mono">nbconvert</code> tool locally. This browser converter trades some output fidelity for zero install and zero upload.
+            </p>
+
+            <div>
+              <p className="font-semibold text-foreground/80 mb-1">Install (one-time)</p>
+              <pre className="overflow-x-auto rounded-md bg-muted/50 px-3 py-2 font-mono text-[11px] text-foreground">{`pip install nbconvert
+# PDF export needs a TeX distribution + Pandoc:
+# macOS:    brew install --cask mactex pandoc
+# Ubuntu:   sudo apt install texlive-xetex pandoc
+# Windows:  install MiKTeX + Pandoc from their sites`}</pre>
+            </div>
+
+            <div>
+              <p className="font-semibold text-foreground/80 mb-1">Basic PDF conversion</p>
+              <pre className="overflow-x-auto rounded-md bg-muted/50 px-3 py-2 font-mono text-[11px] text-foreground">{`jupyter nbconvert --to pdf your_notebook.ipynb`}</pre>
+            </div>
+
+            <div>
+              <p className="font-semibold text-foreground/80 mb-1">Skip the LaTeX dependency — go via HTML instead</p>
+              <pre className="overflow-x-auto rounded-md bg-muted/50 px-3 py-2 font-mono text-[11px] text-foreground">{`jupyter nbconvert --to webpdf --allow-chromium-download your_notebook.ipynb`}</pre>
+              <p className="mt-1 text-[11px]">
+                Uses Playwright/Chromium under the hood — no TeX needed. Output looks closer to your Jupyter Lab rendering.
+              </p>
+            </div>
+
+            <div>
+              <p className="font-semibold text-foreground/80 mb-1">Other useful flags</p>
+              <ul className="space-y-1 ml-3">
+                <li><code className="font-mono">--no-input</code> — hide code cells (great for sharing reports)</li>
+                <li><code className="font-mono">--TagRemovePreprocessor.remove_cell_tags=&apos;{"{"}hide{"}"}&apos;</code> — drop tagged cells</li>
+                <li><code className="font-mono">--execute</code> — re-run all cells before converting (fresh outputs)</li>
+                <li><code className="font-mono">--output-dir=./pdfs/</code> — choose where the PDF lands</li>
+              </ul>
+            </div>
+
+            <p className="text-[11px]">
+              <strong>Kaggle notebooks:</strong> download the <code className="font-mono">.ipynb</code> via File → Download Notebook, then convert locally with the commands above. (
+              <a
+                href="https://www.kaggle.com/discussions/getting-started/529313"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent hover:underline"
+              >
+                Kaggle community thread
+              </a>
+              )
+            </p>
+          </div>
+        </details>
       </div>
     </main>
   );

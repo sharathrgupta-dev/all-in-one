@@ -5,8 +5,11 @@
 ## 2026-05-11
 
 ### Added
-- add WebSocket Tester and Jupyter Notebook to PDF tools (`6b9c7c2`)
+- add WebSocket Tester and Jupyter Notebook to PDF tools (`2bed701`)
 - add Mermaid diagram editor and timezone converter tools (`dbebbf0`)
+
+### Fixed
+- update height calculation in GraphCalculator and JsonToolkit pages; enhance IpynbToPdfTool with detailed CLI instructions for PDF conversion (`7fcaf11`)
 
 ## 2026-05-10
 

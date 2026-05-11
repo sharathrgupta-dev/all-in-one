@@ -13,6 +13,7 @@ export const PDF_HUB_ORDER = [
   "watermark-pdf",
   "text-to-pdf",
   "html-to-pdf",
+  "ipynb-to-pdf",
   "pdf-to-jpg",
   "pdf-compare",
 ] as const;
@@ -39,6 +40,7 @@ const CONVERT_SLUGS = new Set<string>([
   "image-to-pdf",
   "text-to-pdf",
   "html-to-pdf",
+  "ipynb-to-pdf",
   "pdf-to-jpg",
 ]);
 
