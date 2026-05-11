@@ -45,6 +45,8 @@ const ExifViewerTool          = dynamic(() => import("@/components/tools/ExifVie
 const UnicodeCheckerTool      = dynamic(() => import("@/components/tools/UnicodeCheckerTool"));
 const MermaidEditorTool       = dynamic(() => import("@/components/tools/MermaidEditorTool"));
 const TimezoneConverterTool   = dynamic(() => import("@/components/tools/TimezoneConverterTool"));
+const WebSocketTesterTool     = dynamic(() => import("@/components/tools/WebSocketTesterTool"));
+const IpynbToPdfTool          = dynamic(() => import("@/components/tools/IpynbToPdfTool"));
 
 const FINANCE_SLUGS = new Set([
   "simple-interest", "gst-calculator", "discount-calculator",
@@ -109,6 +111,8 @@ export default function CustomToolOutlet({ slug, tool }: { slug: string; tool: T
     case "unicode-checker":          return <UnicodeCheckerTool tool={tool} />;
     case "mermaid-editor":           return <MermaidEditorTool tool={tool} />;
     case "timezone-converter":       return <TimezoneConverterTool tool={tool} />;
+    case "websocket-tester":         return <WebSocketTesterTool tool={tool} />;
+    case "ipynb-to-pdf":             return <IpynbToPdfTool tool={tool} />;
     default:                         return null;
   }
 }

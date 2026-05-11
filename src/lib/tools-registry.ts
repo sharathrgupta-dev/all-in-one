@@ -115,6 +115,7 @@ export const TOOLS: Tool[] = [
   { slug: "log-parser", name: "Log Line Parser", shortName: "Log parser", description: "Turn plain-text logs into structured JSON — timestamps, levels, messages", category: "dev", icon: "⌁", inputLabel: "Log lines", outputLabel: "Structured JSON" },
   { slug: "mermaid-editor", name: "Mermaid Diagram Editor", shortName: "Mermaid", description: "Live editor for Mermaid.js flowcharts, sequence diagrams, ER diagrams, Gantt charts — export SVG or PNG", category: "dev", icon: "◈" },
   { slug: "timezone-converter", name: "Timezone Converter", shortName: "Timezone", description: "Convert a moment in time across multiple time zones with DST handling, shareable links, and 600+ IANA zones", category: "datetime", icon: "🌐" },
+  { slug: "websocket-tester", name: "WebSocket Tester", shortName: "WS", description: "Open a WebSocket to any ws:// or wss:// endpoint, send messages, watch frames in real time, export the session log", category: "dev", icon: "⇄" },
 
   // Conversion Tools
   { slug: "temperature-converter", name: "Temperature Converter", shortName: "Temp", description: "Convert Celsius, Fahrenheit, and Kelvin", category: "conversion", icon: "°" },
@@ -286,6 +287,15 @@ export const TOOLS: Tool[] = [
       "Preview HTML and save as PDF via your browser print dialog — no upload",
     category: "pdf",
     icon: "⟨⟩",
+  },
+  {
+    slug: "ipynb-to-pdf",
+    name: "Jupyter Notebook to PDF",
+    shortName: "IPYNB→PDF",
+    description:
+      "Convert a .ipynb notebook to a printable PDF — markdown, code cells, stream output, and PNG outputs preserved, runs in your browser",
+    category: "pdf",
+    icon: "📓",
   },
   {
     slug: "pdf-to-jpg",

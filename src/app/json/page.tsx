@@ -52,6 +52,7 @@ import {
   ChevronLeft,
   Columns2,
 } from "lucide-react";
+import Header from "@/components/Header";
 
 // ── Types ────────────────────────────────────────────────────────────────
 
@@ -1910,15 +1911,14 @@ export default function JsonToolkitPage() {
   }, [input]);
 
   return (
-    <div className="flex flex-col h-screen bg-background">
-      {/* Header */}
+    <>
+      <Header />
+      <div className="flex flex-col h-[calc(100dvh-53px)] bg-background">
+      {/* Workspace header */}
       <header className="border-b border-border bg-card px-4 py-3 flex items-center justify-between shrink-0">
         <div className="flex items-center gap-3">
-          <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <FileJson size={22} className="text-accent" />
-            <h1 className="text-lg font-semibold text-foreground tracking-tight">JSON Toolkit</h1>
-          </a>
-          <span className="text-xs text-muted-foreground hidden sm:inline">DevBench</span>
+          <FileJson size={22} className="text-accent" />
+          <h1 className="text-lg font-semibold text-foreground tracking-tight">JSON Toolkit</h1>
         </div>
         <div className="flex items-center gap-3">
           <label className="flex items-center gap-2 text-sm text-muted-foreground cursor-pointer select-none">
@@ -2948,7 +2948,8 @@ export default function JsonToolkitPage() {
           onAction={handleContextAction}
         />
       )}
-    </div>
+      </div>
+    </>
   );
 }
 

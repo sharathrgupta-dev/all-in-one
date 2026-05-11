@@ -21,11 +21,13 @@ const CSP = [
   "upgrade-insecure-requests",
 ].join("; ");
 
-// Note: Strict-Transport-Security lives in vercel.json — it must be applied at
-// the edge so that Vercel's apex→www 308 redirect carries the header
-// (required for HSTS preload list eligibility).
+// HSTS is duplicated in vercel.json as a safety net, but it MUST be set here
+// too — the apex→www redirect (below in redirects()) runs inside Next.js and
+// inherits headers() values. HSTS preload requires the apex response to carry
+// `includeSubDomains; preload`.
 const SECURITY_HEADERS = [
   { key: "Content-Security-Policy", value: CSP },
+  { key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains; preload" },
   { key: "X-Content-Type-Options", value: "nosniff" },
   { key: "X-Frame-Options", value: "DENY" },
   { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
@@ -53,6 +55,19 @@ const nextConfig: NextConfig = {
 
   async redirects() {
     return [
+      // Apex → www. Must be handled in Next.js (not Vercel's edge domain redirect)
+      // so the 308 response carries the Strict-Transport-Security header from
+      // headers() above. Required for HSTS preload eligibility on the apex.
+      //
+      // ⚠️ Pair this with a Vercel dashboard change: set devbench.co.in to
+      //   "serve project" (not "redirect to www.devbench.co.in"). Otherwise this
+      //   rule never fires because Vercel intercepts apex traffic first.
+      {
+        source: "/:path*",
+        has: [{ type: "host", value: "devbench.co.in" }],
+        destination: "https://www.devbench.co.in/:path*",
+        permanent: true,
+      },
       {
         source: "/tools/json-formatter",
         destination: "/json",

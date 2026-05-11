@@ -5,7 +5,8 @@
 ## 2026-05-11
 
 ### Added
-- add Mermaid diagram editor and timezone converter tools (`f0d5bbb`)
+- add WebSocket Tester and Jupyter Notebook to PDF tools (`6b9c7c2`)
+- add Mermaid diagram editor and timezone converter tools (`dbebbf0`)
 
 ## 2026-05-10
 

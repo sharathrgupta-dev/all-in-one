@@ -54,6 +54,10 @@ const CUSTOM_TOOL_SLUGS = new Set([
   "timezone-converter",
   // diagramming
   "mermaid-editor",
+  // networking
+  "websocket-tester",
+  // PDF
+  "ipynb-to-pdf",
 ]);
 
 function CopyBtn({ text }: { text: string }) {

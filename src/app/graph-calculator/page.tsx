@@ -19,6 +19,7 @@ import {
   Sigma,
   Grid3x3,
 } from "lucide-react";
+import Header from "@/components/Header";
 
 // ── Types ─────────────────────────────────────────────────────────────
 
@@ -874,18 +875,19 @@ export default function GraphCalculatorPage() {
   }, [compiledFns, expressions, view]);
 
   return (
-    <div className="flex flex-col h-screen bg-background">
+    <>
+      <Header />
+      <div className="flex flex-col h-[calc(100dvh-53px)] bg-background">
       <header className="border-b border-border bg-card shrink-0">
         <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
-            <a href="/" className="flex items-center gap-2 hover:opacity-80 transition-opacity shrink-0">
+            <div className="flex items-center gap-2 shrink-0">
               <Calculator size={22} className="text-accent" />
               <div className="min-w-0">
                 <h1 className="text-lg font-semibold text-foreground tracking-tight leading-tight">Math Suite</h1>
                 <p className="text-[11px] text-muted-foreground truncate">Interactive graphing · client-side</p>
               </div>
-            </a>
-            <span className="text-xs text-muted-foreground hidden lg:inline shrink-0">DevBench</span>
+            </div>
           </div>
           {mode === "graph" && (
             <div className="flex items-center gap-1.5 shrink-0">
@@ -1295,6 +1297,7 @@ export default function GraphCalculatorPage() {
         <span className="ml-auto">Client-side math</span>
       </div>
       )}
-    </div>
+      </div>
+    </>
   );
 }

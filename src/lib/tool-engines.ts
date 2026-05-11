@@ -633,23 +633,74 @@ export function parseCron(input: string): Result {
   }
 
   const now = new Date();
-  const nextRuns: string[] = [];
+  const nextRuns: { date: Date; iso: string; local: string; rel: string }[] = [];
   const check = new Date(now);
   check.setSeconds(0, 0);
-  for (let attempts = 0; attempts < 525600 && nextRuns.length < 5; attempts++) {
+  for (let attempts = 0; attempts < 525600 && nextRuns.length < 10; attempts++) {
     check.setMinutes(check.getMinutes() + 1);
     if (matchesCron(check, parts)) {
-      nextRuns.push(check.toLocaleString());
+      const d = new Date(check);
+      nextRuns.push({
+        date: d,
+        iso: d.toISOString(),
+        local: d.toLocaleString(undefined, {
+          weekday: "short", year: "numeric", month: "short", day: "2-digit",
+          hour: "2-digit", minute: "2-digit",
+        }),
+        rel: formatRelative(now, d),
+      });
     }
   }
+
+  const intervals: number[] = [];
+  for (let i = 1; i < nextRuns.length; i++) {
+    intervals.push((nextRuns[i].date.getTime() - nextRuns[i - 1].date.getTime()) / 1000 / 60);
+  }
+  const summary = intervals.length
+    ? `Gap between runs: ${describeInterval(intervals)}`
+    : "Could not compute interval (only 0–1 run in the next year).";
 
   return [
     `Description: ${descriptions.join(", ")}`,
     `Expression:  ${input.trim()}`,
+    `Now:         ${now.toLocaleString()}`,
     "",
-    "Next 5 runs:",
-    ...nextRuns.map((r, i) => `  ${i + 1}. ${r}`),
+    summary,
+    "",
+    "Next 10 runs:",
+    ...nextRuns.map((r, i) => `  ${String(i + 1).padStart(2, " ")}. ${r.local}  (${r.rel})`),
   ].join("\n");
+}
+
+function formatRelative(from: Date, to: Date): string {
+  const seconds = Math.round((to.getTime() - from.getTime()) / 1000);
+  if (seconds < 60) return `in ${seconds}s`;
+  const minutes = Math.round(seconds / 60);
+  if (minutes < 60) return `in ${minutes}m`;
+  const hours = Math.round(minutes / 60);
+  if (hours < 24) return `in ${hours}h ${minutes % 60}m`;
+  const days = Math.round(hours / 24);
+  if (days < 30) return `in ${days}d`;
+  const months = Math.round(days / 30);
+  if (months < 12) return `in ~${months}mo`;
+  return `in ~${Math.round(months / 12)}y`;
+}
+
+function describeInterval(intervalsMin: number[]): string {
+  const min = Math.min(...intervalsMin);
+  const max = Math.max(...intervalsMin);
+  if (min === max) return `every ${formatMinutes(min)}`;
+  return `${formatMinutes(min)} – ${formatMinutes(max)} (irregular)`;
+}
+
+function formatMinutes(min: number): string {
+  if (min < 60) return `${min}m`;
+  const h = Math.floor(min / 60);
+  const m = Math.round(min % 60);
+  if (h < 24) return m ? `${h}h ${m}m` : `${h}h`;
+  const d = Math.floor(h / 24);
+  const hh = h % 24;
+  return hh ? `${d}d ${hh}h` : `${d}d`;
 }
 
 function matchesCron(d: Date, parts: string[]): boolean {
