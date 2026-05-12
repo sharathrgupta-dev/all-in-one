@@ -5,7 +5,8 @@
 ## 2026-05-12
 
 ### Added
-- add JSON-LD structured data for improved SEO across multiple layouts (`1a4ed26`)
+- enhance app metadata for improved PWA support (`5074c0a`)
+- add JSON-LD structured data for improved SEO across multiple layouts (`1f18621`)
 - enhance analytics tracking across various tools (`9940c46`)
 
 ### Changed

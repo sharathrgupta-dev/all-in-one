@@ -35,6 +35,20 @@ export const metadata: Metadata = {
   authors: [{ name: "DevBench", url: "https://www.devbench.co.in" }],
   creator: "DevBench",
   publisher: "DevBench",
+  manifest: "/manifest.webmanifest",
+  appleWebApp: {
+    capable: true,
+    title: "DevBench",
+    statusBarStyle: "default",
+  },
+  icons: {
+    icon: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+    apple: [
+      { url: "/icon.svg", type: "image/svg+xml" },
+    ],
+  },
   robots: {
     index: true,
     follow: true,
