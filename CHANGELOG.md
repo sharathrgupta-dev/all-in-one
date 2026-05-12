@@ -5,7 +5,8 @@
 ## 2026-05-12
 
 ### Added
-- enhance app metadata for improved PWA support (`5074c0a`)
+- enhance JSON handling and validation in JsonToolkit (`837d4a0`)
+- enhance app metadata for improved PWA support (`b2a253b`)
 - add JSON-LD structured data for improved SEO across multiple layouts (`1f18621`)
 - enhance analytics tracking across various tools (`9940c46`)
 

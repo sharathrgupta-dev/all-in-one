@@ -69,6 +69,8 @@ type ConvertTarget = "yaml" | "csv" | "typescript" | "env" | "base64" | "xml" | 
 interface FixResult {
   text: string;
   fixes: string[];
+  /** True when the fixed text parses as valid JSON */
+  success?: boolean;
 }
 
 interface JsonError {
@@ -130,9 +132,53 @@ function parseJsonError(input: string): JsonError | null {
   }
 }
 
+/** Strip BOM, trim, unwrap `"{\n  \"a\": 1\n}"` style stringified JSON (up to 3 layers). */
+function unwrapStringifiedJsonLayers(raw: string): { text: string; fixes: string[] } {
+  const fixes: string[] = [];
+  let t = raw;
+  if (t.length > 0 && t.charCodeAt(0) === 0xfeff) {
+    t = t.slice(1);
+    fixes.push("Removed BOM (UTF-8 byte order mark)");
+  }
+  const trimmed = t.trim();
+  if (trimmed !== t) {
+    fixes.push("Trimmed leading/trailing whitespace");
+    t = trimmed;
+  }
+
+  for (let layer = 0; layer < 3; layer++) {
+    const s = t.trim();
+    if (s.length < 2 || s[0] !== '"' || s[s.length - 1] !== '"') break;
+    try {
+      const inner = JSON.parse(s) as unknown;
+      if (typeof inner !== "string") break;
+      try {
+        JSON.parse(inner);
+        t = inner;
+        fixes.push(
+          layer === 0
+            ? "Unwrapped stringified JSON (document was stored as a JSON string)"
+            : "Unwrapped another JSON string layer",
+        );
+      } catch {
+        break;
+      }
+    } catch {
+      break;
+    }
+  }
+  return { text: t, fixes };
+}
+
 function fixCommonMistakes(input: string): FixResult {
   const fixes: string[] = [];
   let text = input;
+
+  const unwrap = unwrapStringifiedJsonLayers(text);
+  if (unwrap.fixes.length) {
+    fixes.push(...unwrap.fixes);
+    text = unwrap.text;
+  }
 
   const singleQuoteBefore = text;
   text = text.replace(
@@ -162,6 +208,16 @@ function fixCommonMistakes(input: string): FixResult {
   text = text.replace(/\\(?!["\\/bfnrtu])/g, "\\\\");
   if (text !== escapeBefore) {
     fixes.push("Fixed invalid escape sequences");
+  }
+
+  const jsLiteralBefore = text;
+  text = text
+    .replace(/\bNaN\b/g, "null")
+    .replace(/\bundefined\b/g, "null")
+    .replace(/-Infinity\b/g, "null")
+    .replace(/\bInfinity\b/g, "null");
+  if (text !== jsLiteralBefore) {
+    fixes.push("Replaced JavaScript-only literals (NaN, undefined, Infinity) with JSON null");
   }
 
   return { text, fixes };
@@ -1135,7 +1191,7 @@ function TreeContextMenu({
     position: "fixed",
     left: ctx.x,
     top: ctx.y,
-    zIndex: 9999,
+    zIndex: 45,
   };
 
   return (
@@ -1144,6 +1200,7 @@ function TreeContextMenu({
         <div key={i}>
           {item.separator && i > 0 && <div className="h-px bg-border my-1" />}
           <button
+            type="button"
             className="w-full text-left px-3 py-1.5 text-sm flex items-center gap-2 hover:bg-muted/60 text-foreground transition-colors"
             onClick={() => {
               onAction(item.action, ctx);
@@ -1281,14 +1338,53 @@ export default function JsonToolkitPage() {
   const [schemaValid, setSchemaValid] = useState(false);
 
   const handleSchemaValidate = useCallback(() => {
+    let data: unknown;
     try {
-      const data = JSON.parse(input);
-      const schema = JSON.parse(schemaText);
+      data = JSON.parse(input);
+    } catch (e) {
+      setSchemaErrors([
+        {
+          path: "/",
+          message: `The JSON in the main editor is invalid: ${(e as Error).message}. Fix or use Auto-fix there first — schema validation uses that document.`,
+        },
+      ]);
+      setSchemaValid(false);
+      setShowErrorPanel(true);
+      const err = parseJsonError(input);
+      if (err) setError(err);
+      return;
+    }
+
+    const schemaRaw = schemaText.trim();
+    if (!schemaRaw) {
+      setSchemaErrors([
+        {
+          path: "/",
+          message:
+            "Paste your JSON Schema in the field below. The large editor above is already the JSON instance to validate — you do not paste it again here.",
+        },
+      ]);
+      setSchemaValid(false);
+      return;
+    }
+
+    let schema: unknown;
+    try {
+      schema = JSON.parse(schemaRaw);
+    } catch (e) {
+      setSchemaErrors([
+        { path: "/", message: `Invalid JSON Schema (could not parse): ${(e as Error).message}` },
+      ]);
+      setSchemaValid(false);
+      return;
+    }
+
+    try {
       const errs = validateJsonSchema(data, schema);
       setSchemaErrors(errs);
       setSchemaValid(errs.length === 0);
     } catch (e) {
-      setSchemaErrors([{ path: "/", message: `Parse error: ${(e as Error).message}` }]);
+      setSchemaErrors([{ path: "/", message: (e as Error).message }]);
       setSchemaValid(false);
     }
   }, [input, schemaText]);
@@ -1452,12 +1548,13 @@ export default function JsonToolkitPage() {
     clearError();
     const result = fixCommonMistakes(input);
     setInputWithHistory(result.text);
-    setFixResult(result);
     try {
       const parsed = JSON.parse(result.text);
       setOutput(JSON.stringify(parsed, null, 2));
+      setFixResult({ ...result, success: true });
       trackToolSuccess(TOOL_SLUG, "auto_fix", { fixes: result.fixes.length });
     } catch {
+      setFixResult({ ...result, success: false });
       const err = parseJsonError(result.text);
       if (err) {
         setError(err);
@@ -1482,6 +1579,8 @@ export default function JsonToolkitPage() {
     setFixResult(null);
     setDiffLeft("");
     setDiffRight("");
+    setSchemaErrors(null);
+    setSchemaValid(false);
   }, [clearError, setInputWithHistory]);
 
   const handleSortKeys = useCallback(() => {
@@ -1938,6 +2037,7 @@ export default function JsonToolkitPage() {
             <ClipboardPaste size={14} />
             <span className="hidden sm:inline">Auto-format on paste</span>
             <button
+              type="button"
               role="switch"
               aria-checked={autoFormat}
               onClick={() => setAutoFormat(!autoFormat)}
@@ -1956,6 +2056,7 @@ export default function JsonToolkitPage() {
         <nav className="flex gap-1 overflow-x-auto" role="tablist">
           {tabs.map((tab) => (
             <button
+              type="button"
               key={tab.id}
               role="tab"
               aria-selected={activeTab === tab.id}
@@ -2084,6 +2185,7 @@ export default function JsonToolkitPage() {
             {searchMatches.length > 0 ? `${(currentMatchIndex % searchMatches.length) + 1} of ${searchMatches.length}` : "No matches"}
           </span>
           <button
+            type="button"
             onClick={() => setCurrentMatchIndex((i) => (i - 1 + searchMatches.length) % Math.max(searchMatches.length, 1))}
             className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
             aria-label="Previous match"
@@ -2091,6 +2193,7 @@ export default function JsonToolkitPage() {
             <ChevronLeft size={14} />
           </button>
           <button
+            type="button"
             onClick={() => setCurrentMatchIndex((i) => (i + 1) % Math.max(searchMatches.length, 1))}
             className="p-1 rounded hover:bg-muted text-muted-foreground hover:text-foreground"
             aria-label="Next match"
@@ -2111,6 +2214,7 @@ export default function JsonToolkitPage() {
           <ToolButton onClick={handleSearchReplaceAll} icon={<Replace size={13} />} label="All" />
           <div className="w-px h-5 bg-border mx-0.5" />
           <button
+            type="button"
             onClick={() => setSearchCaseSensitive(!searchCaseSensitive)}
             className={`px-2 py-1 text-xs rounded border transition-colors ${searchCaseSensitive ? "border-accent text-accent bg-accent-light" : "border-border text-muted-foreground hover:text-foreground"}`}
             aria-label="Toggle case sensitive"
@@ -2119,6 +2223,7 @@ export default function JsonToolkitPage() {
             Aa
           </button>
           <button
+            type="button"
             onClick={() => setSearchRegex(!searchRegex)}
             className={`px-2 py-1 text-xs rounded border transition-colors font-mono ${searchRegex ? "border-accent text-accent bg-accent-light" : "border-border text-muted-foreground hover:text-foreground"}`}
             aria-label="Toggle regex"
@@ -2126,7 +2231,7 @@ export default function JsonToolkitPage() {
           >
             .*
           </button>
-          <button aria-label="Close search" onClick={() => setShowSearch(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
+          <button type="button" aria-label="Close search" onClick={() => setShowSearch(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
         </div>
       )}
 
@@ -2137,8 +2242,19 @@ export default function JsonToolkitPage() {
             <ShieldCheck size={14} className="text-muted-foreground" />
             <span className="text-xs font-medium">JSON Schema Validation</span>
             <ToolButton onClick={handleSchemaValidate} icon={<Check size={14} />} label="Validate" />
-            <button aria-label="Close schema panel" onClick={() => setShowSchemaPanel(false)} className="ml-auto text-muted-foreground hover:text-foreground"><X size={14} /></button>
+            <button
+              type="button"
+              aria-label="Close schema panel"
+              onClick={() => setShowSchemaPanel(false)}
+              className="ml-auto text-muted-foreground hover:text-foreground"
+            >
+              <X size={14} />
+            </button>
           </div>
+          <p className="text-xs text-muted-foreground leading-relaxed">
+            The <strong className="text-foreground">main editor above</strong> is the JSON instance. Paste only your{" "}
+            <strong className="text-foreground">JSON Schema</strong> here, then Validate — you do not re-paste the document.
+          </p>
           <textarea
             value={schemaText}
             onChange={(e) => setSchemaText(e.target.value)}
@@ -2217,20 +2333,43 @@ export default function JsonToolkitPage() {
       )}
 
       {/* Fix result banner */}
-      {fixResult && fixResult.fixes.length > 0 && (
-        <div className="bg-warning/10 border-b border-warning/30 px-4 py-2.5 flex items-start gap-2 shrink-0 animate-fade-in">
-          <AlertTriangle size={16} className="text-warning shrink-0 mt-0.5" />
-          <div className="text-sm">
-            <p className="font-medium text-warning">
-              Auto-fixed {fixResult.fixes.length} issue{fixResult.fixes.length > 1 ? "s" : ""}. Review changes before using.
-            </p>
-            <ul className="mt-1 text-muted-foreground space-y-0.5">
-              {fixResult.fixes.map((f, i) => (
-                <li key={i}>- {f}</li>
-              ))}
-            </ul>
+      {fixResult && (fixResult.fixes.length > 0 || fixResult.success) && (
+        <div
+          className={`border-b px-4 py-2.5 flex items-start gap-2 shrink-0 animate-fade-in ${
+            fixResult.success
+              ? "bg-success/10 border-success/30"
+              : "bg-warning/10 border-warning/30"
+          }`}
+        >
+          {fixResult.success ? (
+            <Check size={16} className="text-success shrink-0 mt-0.5" />
+          ) : (
+            <AlertTriangle size={16} className="text-warning shrink-0 mt-0.5" />
+          )}
+          <div className="text-sm flex-1 min-w-0">
+            {fixResult.success ? (
+              <p className="font-medium text-success">
+                JSON is valid now{fixResult.fixes.length > 0 ? " — fixes applied" : ""}.
+              </p>
+            ) : (
+              <p className="font-medium text-warning">
+                Auto-fix ran but JSON is still invalid — see error panel below.
+              </p>
+            )}
+            {fixResult.fixes.length > 0 && (
+              <ul className="mt-1 text-muted-foreground space-y-0.5 text-xs">
+                {fixResult.fixes.map((f, i) => (
+                  <li key={i}>- {f}</li>
+                ))}
+              </ul>
+            )}
           </div>
-          <button aria-label="Dismiss fix result" onClick={() => setFixResult(null)} className="ml-auto text-muted-foreground hover:text-foreground">
+          <button
+            type="button"
+            aria-label="Dismiss fix result"
+            onClick={() => setFixResult(null)}
+            className="text-muted-foreground hover:text-foreground shrink-0"
+          >
             <X size={14} />
           </button>
         </div>
@@ -2918,6 +3057,7 @@ export default function JsonToolkitPage() {
         )}
         {error && (
           <button
+            type="button"
             onClick={() => setShowErrorPanel(!showErrorPanel)}
             className="ml-auto flex items-center gap-1 text-destructive hover:underline"
           >
@@ -2933,20 +3073,36 @@ export default function JsonToolkitPage() {
           <div className="flex items-start justify-between gap-3">
             <div className="flex items-start gap-2">
               <AlertTriangle size={16} className="text-destructive shrink-0 mt-0.5" />
-              <div className="text-sm">
+              <div className="text-sm flex-1 min-w-0">
                 <p className="font-medium text-destructive">
-                  Parse Error -- Line {error.line}, Column {error.column}
+                  Parse Error — Line {error.line}, Column {error.column}
                 </p>
-                <p className="text-muted-foreground mt-0.5 font-mono text-xs">{error.message}</p>
+                <p className="text-muted-foreground mt-0.5 font-mono text-xs break-words">{error.message}</p>
                 {errorLine > 0 && errorLine <= inputLines.length && (
                   <pre className="mt-2 bg-muted rounded-lg px-3 py-2 text-xs overflow-x-auto font-mono">
                     <span className="text-muted-foreground select-none">{errorLine} | </span>
                     <span className="text-destructive">{inputLines[errorLine - 1]}</span>
                   </pre>
                 )}
+                <div className="mt-3 flex flex-wrap items-center gap-2">
+                  <span className="text-xs text-muted-foreground">Try automatic repairs (quotes, trailing commas, stringified JSON, …):</span>
+                  <button
+                    type="button"
+                    onClick={handleFix}
+                    className="inline-flex items-center gap-1.5 rounded-lg border border-warning/40 bg-warning/15 px-3 py-1.5 text-xs font-semibold text-amber-950 dark:text-amber-50 hover:bg-warning/25 transition-colors"
+                  >
+                    <Wrench size={14} />
+                    Auto-fix JSON
+                  </button>
+                </div>
               </div>
             </div>
-            <button aria-label="Dismiss error" onClick={() => setShowErrorPanel(false)} className="text-muted-foreground hover:text-foreground">
+            <button
+              type="button"
+              aria-label="Dismiss error"
+              onClick={() => setShowErrorPanel(false)}
+              className="text-muted-foreground hover:text-foreground shrink-0"
+            >
               <X size={14} />
             </button>
           </div>
@@ -2985,6 +3141,7 @@ function ToolButton({
 
   return (
     <button
+      type="button"
       onClick={onClick}
       className={`flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium rounded-lg transition-colors ${variantClasses[variant]}`}
     >

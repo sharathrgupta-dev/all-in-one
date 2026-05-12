@@ -654,6 +654,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
             <div className="flex items-center gap-1 px-3 border-l border-border bg-muted/30">
               {ALL_FLAGS.map((f) => (
                 <button
+                  type="button"
                   key={f}
                   onClick={() => toggleFlag(f)}
                   title={`${FLAG_LABELS[f].title} — ${FLAG_LABELS[f].desc}`}
@@ -736,6 +737,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
               <div className="flex border-b border-border bg-muted/30">
                 {(["matches", "substitution", "code"] as const).map((tab) => (
                   <button
+                    type="button"
                     key={tab}
                     onClick={() => setActiveSection(tab)}
                     className={`flex items-center gap-1.5 px-4 py-2.5 text-xs font-semibold capitalize transition-colors border-b-2 ${
@@ -827,6 +829,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
                     <div className="flex items-center justify-between px-3 py-1.5 border-b border-border bg-muted/40">
                       <span className="text-xs font-medium text-muted-foreground">Result</span>
                       <button
+                        type="button"
                         onClick={() => copy(result.substituted, "subst")}
                         className="flex items-center gap-1.5 px-2 py-1 text-xs rounded-md bg-accent/10 text-accent hover:bg-accent/20 transition-colors"
                       >
@@ -845,6 +848,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
                   <div className="flex gap-2">
                     {(["js", "python", "php"] as const).map((lang) => (
                       <button
+                        type="button"
                         key={lang}
                         onClick={() => setCodeLang(lang)}
                         className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors ${
@@ -855,6 +859,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
                       </button>
                     ))}
                     <button
+                      type="button"
                       onClick={() => copy(code, "code")}
                       className="ml-auto flex items-center gap-1.5 px-3 py-1.5 text-xs rounded-lg bg-accent/10 text-accent hover:bg-accent/20 transition-colors"
                     >
@@ -875,6 +880,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
 
             {/* Pattern Library */}
             <button
+              type="button"
               onClick={() => setShowLib((v) => !v)}
               className="w-full flex items-center justify-between px-3 py-2 rounded-xl border border-border bg-card text-sm font-semibold hover:bg-muted/50 transition-colors"
             >
@@ -887,6 +893,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
                 {PATTERN_LIBRARY.map((group, gi) => (
                   <div key={gi}>
                     <button
+                      type="button"
                       onClick={() => setOpenLibGroup(openLibGroup === gi ? null : gi)}
                       className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold hover:bg-muted/50 transition-colors text-left"
                     >
@@ -899,6 +906,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
                       <div className="pb-1 divide-y divide-border/50">
                         {group.patterns.map((p, pi) => (
                           <button
+                            type="button"
                             key={pi}
                             onClick={() => loadPattern(p)}
                             className="w-full text-left px-3 py-2 hover:bg-muted/60 transition-colors group"
@@ -918,6 +926,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
             )}
 
             <button
+              type="button"
               onClick={() => setShowRef((v) => !v)}
               className="w-full flex items-center justify-between px-3 py-2 rounded-xl border border-border bg-card text-sm font-semibold hover:bg-muted/50 transition-colors"
             >
@@ -930,6 +939,7 @@ export default function RegexTesterTool({ tool }: { tool: Tool }) {
                 {REFERENCE.map((section, si) => (
                   <div key={si}>
                     <button
+                      type="button"
                       onClick={() => setOpenRefGroup(openRefGroup === si ? null : si)}
                       className="w-full flex items-center justify-between px-3 py-2.5 text-xs font-semibold hover:bg-muted/50 transition-colors text-left"
                     >

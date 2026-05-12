@@ -97,6 +97,7 @@ export default function Header() {
         {/* Right actions */}
         <div className="flex items-center gap-1.5 ml-auto">
           <button
+            type="button"
             onClick={() => window.dispatchEvent(new Event("devbench:open-palette"))}
             className="hidden sm:inline-flex items-center gap-1.5 h-8 px-3 rounded-lg border border-border text-muted-foreground text-sm transition-colors hover:bg-muted hover:text-foreground"
           >
@@ -117,6 +118,7 @@ export default function Header() {
 
           {/* Mobile hamburger */}
           <button
+            type="button"
             onClick={() => setMenuOpen(!menuOpen)}
             className="inline-flex h-8 w-8 items-center justify-center rounded-lg border border-border text-muted-foreground transition-colors hover:bg-muted hover:text-foreground lg:hidden"
             aria-label={menuOpen ? "Close menu" : "Open menu"}
