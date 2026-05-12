@@ -5,13 +5,14 @@
 ## 2026-05-12
 
 ### Added
+- add JSON comment stripping and enhanced error correction in JsonToolkit (`7d787e5`)
 - enhance JSON handling and validation in JsonToolkit (`eb3be38`)
 - enhance app metadata for improved PWA support (`b2a253b`)
 - add JSON-LD structured data for improved SEO across multiple layouts (`1f18621`)
 - enhance analytics tracking across various tools (`9940c46`)
 
 ### Changed
-- - Updated JSON toolkit with new features for sharing and managing JSON workspace presets. - Refactored tool search and command palette to streamline workspace and tool access. - Added WebSocket Tester and Jupyter Notebook to PDF tools for enhanced functionality. - Enhanced IpynbToPdfTool with HTML output rendering capabilities. - Updated height calculation in GraphCalculator and JsonToolkit pages. - Enhanced IpynbToPdfTool with detailed CLI instructions for PDF conversion. (`83775fa`)
+- - Updated JSON toolkit with new features for sharing and managing JSON workspace presets. - Refactored tool search and command palette to streamline workspace and tool access. - Added WebSocket Tester and Jupyter Notebook to PDF tools for enhanced functionality. - Enhanced IpynbToPdfTool with HTML output rendering capabilities. - Updated height calculation in GraphCalculator and JsonToolkit pages. - Enhanced IpynbToPdfTool with detailed CLI instructions for PDF conversion. (`51fecc7`)
 - standardize text color usage across components (`2cfe5cd`)
 
 ## 2026-05-11

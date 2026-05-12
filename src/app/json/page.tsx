@@ -184,6 +184,65 @@ function unwrapStringifiedJsonLayers(raw: string): { text: string; fixes: string
   return { text: t, fixes };
 }
 
+/** Removes line and block comments (// and slash-star pairs) outside JSON strings. */
+function stripJsonComments(raw: string): { text: string; fixed: boolean } {
+  let out = "";
+  let i = 0;
+  let fixed = false;
+  let inString = false;
+  let escape = false;
+  const len = raw.length;
+
+  while (i < len) {
+    const ch = raw[i];
+
+    if (inString) {
+      out += ch;
+      if (escape) {
+        escape = false;
+      } else if (ch === "\\") {
+        escape = true;
+      } else if (ch === '"') {
+        inString = false;
+      }
+      i++;
+      continue;
+    }
+
+    if (ch === '"') {
+      inString = true;
+      out += ch;
+      i++;
+      continue;
+    }
+
+    if (ch === "/" && i + 1 < len && raw[i + 1] === "*") {
+      fixed = true;
+      i += 2;
+      while (i + 1 < len && !(raw[i] === "*" && raw[i + 1] === "/")) {
+        i++;
+      }
+      i = i + 2 <= len ? i + 2 : len;
+      out += "\n";
+      continue;
+    }
+
+    if (ch === "/" && i + 1 < len && raw[i + 1] === "/") {
+      fixed = true;
+      i += 2;
+      while (i < len && raw[i] !== "\n" && raw[i] !== "\r") {
+        i++;
+      }
+      continue;
+    }
+
+    out += ch;
+    i++;
+  }
+
+  return { text: out, fixed };
+}
+
 function fixCommonMistakes(input: string): FixResult {
   const fixes: string[] = [];
   let text = input;
@@ -192,6 +251,30 @@ function fixCommonMistakes(input: string): FixResult {
   if (unwrap.fixes.length) {
     fixes.push(...unwrap.fixes);
     text = unwrap.text;
+  }
+
+  const mistakenKeySlash = text;
+  text = text.replace(/"\/\/([a-zA-Z_$][\w$]*)"/g, '"$1"');
+  if (text !== mistakenKeySlash) {
+    fixes.push('Fixed keys that accidentally started with "//" inside quotes');
+  }
+
+  const slashNumberValue = text;
+  text = text.replace(/:\s*\/\/(\d+)/g, ": $1");
+  if (text !== slashNumberValue) {
+    fixes.push("Replaced mistaken //number value with a number");
+  }
+
+  const missingOpenQuoteKey = text;
+  text = text.replace(/([\[,]\s*)([a-zA-Z_$][\w$]*)"(\s*:)/g, '$1"$2"$3');
+  if (text !== missingOpenQuoteKey) {
+    fixes.push('Added missing " before a key (e.g. ,user": → ,"user":)');
+  }
+
+  const stripped = stripJsonComments(text);
+  if (stripped.fixed) {
+    fixes.push("Removed // or /* */ comments (JSON does not allow them)");
+    text = stripped.text;
   }
 
   const singleQuoteBefore = text;
@@ -3254,6 +3337,17 @@ export default function JsonToolkitPage() {
               {stats.valid ? "Valid JSON" : "Invalid JSON"}
             </span>
             <span>{stats.size}</span>
+            {!stats.valid && input.trim() && (
+              <button
+                type="button"
+                onClick={handleFix}
+                className="inline-flex items-center gap-1 rounded-md border border-warning/50 bg-warning/15 px-2 py-0.5 text-[11px] font-semibold text-amber-950 dark:text-amber-50 hover:bg-warning/25 transition-colors"
+                title="Quotes, comments, trailing commas, stringified JSON, …"
+              >
+                <Wrench size={12} aria-hidden />
+                Fix JSON
+              </button>
+            )}
             {stats.valid && (
               <>
                 <span>{stats.keys.toLocaleString()} keys</span>
