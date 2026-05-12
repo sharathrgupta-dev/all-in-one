@@ -4,6 +4,7 @@ import { useState, useCallback, useEffect } from "react";
 import { Copy, Check, Download, Upload, Sparkles } from "lucide-react";
 import ToolPageHero from "@/components/tools/ToolPageHero";
 import type { Tool } from "@/lib/tools-registry";
+import { trackToolDownload, trackToolCopy } from "@/lib/analytics-events";
 
 interface OptimizeResult {
   output: string;
@@ -159,6 +160,7 @@ export default function SvgOptimizerTool({ tool }: { tool: Tool }) {
     navigator.clipboard.writeText(result.output).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      trackToolCopy("svg-optimizer", "output");
     });
   }, [result]);
 
@@ -171,6 +173,7 @@ export default function SvgOptimizerTool({ tool }: { tool: Tool }) {
     a.download = "optimized.svg";
     a.click();
     URL.revokeObjectURL(url);
+    trackToolDownload("svg-optimizer", "svg");
   }
 
   function handleFileUpload(e: React.ChangeEvent<HTMLInputElement>) {

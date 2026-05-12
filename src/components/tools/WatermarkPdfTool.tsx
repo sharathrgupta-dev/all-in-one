@@ -66,7 +66,7 @@ export default function WatermarkPdfTool({ tool }: { tool: Tool }) {
 
       const out = await doc.save();
       const name = file.name.replace(/\.pdf$/i, "") || "document";
-      downloadUint8(out, `${name}-watermarked.pdf`);
+      downloadUint8(out, `${name}-watermarked.pdf`, "application/pdf", "watermark-pdf");
     } catch {
       setError("Watermark failed.");
     } finally {

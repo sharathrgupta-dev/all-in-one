@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Trash2, Upload } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
+import { trackToolDownload } from "@/lib/analytics-events";
 import ToolPageHero from "@/components/tools/ToolPageHero";
 
 type ImgFmt = "image/png" | "image/jpeg" | "image/webp";
@@ -138,6 +139,7 @@ export default function ImageResizerTool({ tool }: { tool: Tool }) {
     a.href = previewUrl;
     a.download = `${lastName}-resized.${ext}`;
     a.click();
+    trackToolDownload("image-resizer", ext);
   };
 
   const clear = () => {

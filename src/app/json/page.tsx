@@ -53,6 +53,13 @@ import {
   Columns2,
 } from "lucide-react";
 import Header from "@/components/Header";
+import {
+  trackToolSuccess,
+  trackToolError,
+  trackToolCopy,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "json";
 
 // ── Types ────────────────────────────────────────────────────────────────
 
@@ -1413,11 +1420,13 @@ export default function JsonToolkitPage() {
     try {
       const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed, null, 2));
+      trackToolSuccess(TOOL_SLUG, "format");
     } catch {
       const err = parseJsonError(input);
       if (err) {
         setError(err);
         setShowErrorPanel(true);
+        trackToolError(TOOL_SLUG, "format", err.message);
       }
     }
   }, [input, clearError]);
@@ -1428,11 +1437,13 @@ export default function JsonToolkitPage() {
     try {
       const parsed = JSON.parse(input);
       setOutput(JSON.stringify(parsed));
+      trackToolSuccess(TOOL_SLUG, "minify");
     } catch {
       const err = parseJsonError(input);
       if (err) {
         setError(err);
         setShowErrorPanel(true);
+        trackToolError(TOOL_SLUG, "minify", err.message);
       }
     }
   }, [input, clearError]);
@@ -1445,11 +1456,13 @@ export default function JsonToolkitPage() {
     try {
       const parsed = JSON.parse(result.text);
       setOutput(JSON.stringify(parsed, null, 2));
+      trackToolSuccess(TOOL_SLUG, "auto_fix", { fixes: result.fixes.length });
     } catch {
       const err = parseJsonError(result.text);
       if (err) {
         setError(err);
         setShowErrorPanel(true);
+        trackToolError(TOOL_SLUG, "auto_fix", err.message);
       }
     }
   }, [input, clearError, setInputWithHistory]);
@@ -1459,6 +1472,7 @@ export default function JsonToolkitPage() {
     await navigator.clipboard.writeText(textToCopy);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);
+    trackToolCopy(TOOL_SLUG, activeTab);
   }, [output, input, activeTab]);
 
   const handleClear = useCallback(() => {

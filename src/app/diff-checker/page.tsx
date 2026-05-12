@@ -20,6 +20,9 @@ import {
 } from "lucide-react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { trackToolSuccess } from "@/lib/analytics-events";
+
+const TOOL_SLUG = "diff-checker";
 
 // ─── Types ──────────────────────────────────────────────────────────────
 
@@ -380,6 +383,8 @@ export default function DiffCheckerPage() {
   const handleFindDiff = useCallback(() => {
     const lines = computeLineDiff(original, modified, options);
     setDiffResult(lines);
+    const changes = lines.filter((l) => l.type !== "unchanged").length;
+    trackToolSuccess(TOOL_SLUG, "compare", { changes });
   }, [original, modified, options]);
 
   const handleSwap = useCallback(() => {

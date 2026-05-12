@@ -64,7 +64,7 @@ export default function MergePdfTool({ tool }: { tool: Tool }) {
         copied.forEach((p) => merged.addPage(p));
       }
       const out = await merged.save();
-      downloadUint8(out, "merged.pdf");
+      downloadUint8(out, "merged.pdf", "application/pdf", "merge-pdf");
     } catch {
       setError("Merge failed — one file may be encrypted or corrupted.");
     } finally {

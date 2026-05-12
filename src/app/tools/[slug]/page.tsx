@@ -16,6 +16,12 @@ import { getToolBySlug, CATEGORIES } from "@/lib/tools-registry";
 import { TOOL_PAGE_CONTENT } from "@/lib/tool-page-content";
 import Header from "@/components/Header";
 import * as engines from "@/lib/tool-engines";
+import {
+  trackToolSuccess,
+  trackToolError,
+  trackToolCopy,
+  trackToolShareLink,
+} from "@/lib/analytics-events";
 import CustomToolOutlet from "@/components/tools/CustomToolOutlet";
 import ToolConnectivityBadge from "@/components/ToolConnectivityBadge";
 import {
@@ -60,12 +66,13 @@ const CUSTOM_TOOL_SLUGS = new Set([
   "ipynb-to-pdf",
 ]);
 
-function CopyBtn({ text }: { text: string }) {
+function CopyBtn({ text, toolSlug }: { text: string; toolSlug?: string }) {
   const [copied, setCopied] = useState(false);
   const copy = () => {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
+      if (toolSlug) trackToolCopy(toolSlug, "output");
     });
   };
   return (
@@ -155,6 +162,7 @@ export default function ToolPage() {
     void navigator.clipboard.writeText(url).then(() => {
       setShareCopied(true);
       setTimeout(() => setShareCopied(false), 2000);
+      trackToolShareLink(slug);
     });
   }, [slug, state.input, state.input2]);
 
@@ -172,17 +180,18 @@ export default function ToolPage() {
 
     try {
       const result = await runTool(slug, state);
-      setState((s) => ({
-        ...s,
-        output: typeof result === "string" ? result : result.output || "",
-        error: typeof result === "string" ? "" : result.error || "",
-      }));
+      const output = typeof result === "string" ? result : result.output || "";
+      const error = typeof result === "string" ? "" : result.error || "";
+      setState((s) => ({ ...s, output, error }));
+      if (error) {
+        trackToolError(slug, "process", error);
+      } else if (output) {
+        trackToolSuccess(slug, "process");
+      }
     } catch (e) {
-      setState((s) => ({
-        ...s,
-        output: "",
-        error: e instanceof Error ? e.message : "An error occurred",
-      }));
+      const message = e instanceof Error ? e.message : "An error occurred";
+      setState((s) => ({ ...s, output: "", error: message }));
+      trackToolError(slug, "process", message);
     }
   }, [slug, state.input, state.input2, state.options]);
 
@@ -335,7 +344,7 @@ export default function ToolPage() {
                   {tool.outputLabel || "Output"}
                 </label>
                 <div className="flex items-center gap-1">
-                  <CopyBtn text={state.output} />
+                  <CopyBtn text={state.output} toolSlug={slug} />
                   {state.output && (
                     <button
                       onClick={() => {
@@ -373,7 +382,7 @@ export default function ToolPage() {
           <div className="mt-4">
             <div className="flex items-center justify-between mb-2">
               <label className="text-sm font-medium">Diff Result</label>
-              <CopyBtn text={state.output} />
+              <CopyBtn text={state.output} toolSlug={slug} />
             </div>
             <pre className="p-4 rounded-xl border border-border bg-card font-mono text-sm overflow-auto max-h-[400px] scrollbar-thin whitespace-pre-wrap">
               {state.output.split("\n").map((line, i) => (

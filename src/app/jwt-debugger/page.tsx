@@ -19,6 +19,13 @@ import {
   Sparkles,
 } from "lucide-react";
 import Header from "@/components/Header";
+import {
+  trackToolSuccess,
+  trackToolError,
+  trackToolCopy,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "jwt-debugger";
 
 // ─── base64url helpers ──────────────────────────────────────────────────
 
@@ -185,7 +192,8 @@ function CopyBtn({ text, label, className = "" }: { text: string; label?: string
     navigator.clipboard.writeText(text);
     setCopied(true);
     setTimeout(() => setCopied(false), 1500);
-  }, [text]);
+    trackToolCopy(TOOL_SLUG, label);
+  }, [text, label]);
   return (
     <button
       onClick={handleCopy}
@@ -408,6 +416,7 @@ export default function JWTDebuggerPage() {
         if (!cancelled) {
           setVerifyResult(result);
           setIsVerifying(false);
+          trackToolSuccess(TOOL_SLUG, "verify", { valid: result, alg });
         }
       })
       .catch(() => {
@@ -446,11 +455,14 @@ export default function JWTDebuggerPage() {
         if (!cancelled) {
           setEncodedToken(`${headerB64}.${payloadB64}.${signature}`);
           setEncodeError("");
+          trackToolSuccess(TOOL_SLUG, "encode", { alg: encAlg });
         }
       } catch (e) {
         if (!cancelled) {
-          setEncodeError(e instanceof Error ? e.message : "Failed to encode JWT");
+          const msg = e instanceof Error ? e.message : "Failed to encode JWT";
+          setEncodeError(msg);
           setEncodedToken("");
+          trackToolError(TOOL_SLUG, "encode", msg);
         }
       }
     }

@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState } from "react";
 import { Printer } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
 import ToolPageHero from "@/components/tools/ToolPageHero";
+import { trackToolSuccess } from "@/lib/analytics-events";
 
 const SAMPLE = `<!DOCTYPE html>
 <html>
@@ -36,6 +37,7 @@ export default function HtmlToPdfTool({ tool }: { tool: Tool }) {
     if (!win) return;
     win.focus();
     win.print();
+    trackToolSuccess("html-to-pdf", "print");
   }, []);
 
   return (

@@ -65,7 +65,7 @@ export default function PdfPageNumbersTool({ tool }: { tool: Tool }) {
 
       const out = await doc.save();
       const name = file.name.replace(/\.pdf$/i, "") || "document";
-      downloadUint8(out, `${name}-page-numbers.pdf`);
+      downloadUint8(out, `${name}-page-numbers.pdf`, "application/pdf", "pdf-page-numbers");
     } catch {
       setError("Could not add page numbers.");
     } finally {

@@ -72,7 +72,7 @@ export default function PdfToJpgTool({ tool }: { tool: Tool }) {
       }
 
       const zipped = await zip.generateAsync({ type: "blob" });
-      downloadBlob(zipped, `${base}.zip`);
+      downloadBlob(zipped, `${base}.zip`, "pdf-to-jpg");
     } catch (e) {
       setError(
         e instanceof Error ? e.message : "Export failed (try a smaller PDF)."

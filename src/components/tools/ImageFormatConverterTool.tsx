@@ -4,6 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import { Upload, Download, RefreshCw, ImageIcon } from "lucide-react";
 import ToolPageHero from "@/components/tools/ToolPageHero";
 import type { Tool } from "@/lib/tools-registry";
+import { trackToolDownload } from "@/lib/analytics-events";
 
 type OutputFormat = "image/png" | "image/jpeg" | "image/webp";
 
@@ -147,6 +148,7 @@ export default function ImageFormatConverterTool({ tool }: { tool: Tool }) {
     a.href = outUrl;
     a.download = `${base}.${FORMAT_EXTS[outFormat]}`;
     a.click();
+    trackToolDownload("image-format-converter", FORMAT_EXTS[outFormat]);
   }
 
   const savings = outSize && srcSize ? ((1 - outSize / srcSize) * 100).toFixed(1) : null;

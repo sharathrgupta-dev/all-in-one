@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Download, Trash2, Upload } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
+import { trackToolDownload } from "@/lib/analytics-events";
 import ToolPageHero from "@/components/tools/ToolPageHero";
 
 type ImgFmt = "image/jpeg" | "image/webp";
@@ -96,6 +97,7 @@ export default function ImageCompressorTool({ tool }: { tool: Tool }) {
     a.href = previewUrl;
     a.download = `${lastName}-compressed.${ext}`;
     a.click();
+    trackToolDownload("image-compressor", ext);
   };
 
   const clear = () => {

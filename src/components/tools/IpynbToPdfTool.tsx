@@ -14,6 +14,13 @@ import {
 } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
 import ToolPageHero from "@/components/tools/ToolPageHero";
+import {
+  trackToolSuccess,
+  trackToolError,
+  trackToolCopy,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "ipynb-to-pdf";
 
 // ─── Notebook types ────────────────────────────────────────────────────
 
@@ -589,8 +596,11 @@ export default function IpynbToPdfTool({ tool }: { tool: Tool }) {
       setFile(f);
       setNotebook(nb);
       setDocTitle(f.name.replace(/\.ipynb$/i, ""));
+      trackToolSuccess(TOOL_SLUG, "parse", { cells: nb.cells.length });
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Could not parse notebook.");
+      const msg = e instanceof Error ? e.message : "Could not parse notebook.";
+      setError(msg);
+      trackToolError(TOOL_SLUG, "parse", msg);
     }
   }, []);
 
@@ -615,6 +625,7 @@ export default function IpynbToPdfTool({ tool }: { tool: Tool }) {
     if (!win) return;
     win.focus();
     win.print();
+    trackToolSuccess(TOOL_SLUG, "generate_pdf");
   }, []);
 
   const copyHtml = useCallback(() => {
@@ -622,6 +633,7 @@ export default function IpynbToPdfTool({ tool }: { tool: Tool }) {
     navigator.clipboard.writeText(html).then(() => {
       setCopied(true);
       setTimeout(() => setCopied(false), 1500);
+      trackToolCopy(TOOL_SLUG, "html");
     });
   }, [html]);
 

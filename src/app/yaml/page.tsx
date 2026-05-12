@@ -7,6 +7,12 @@ import {
   AlertCircle, CheckCircle2, ArrowRightLeft, Wand2, AlertTriangle,
 } from "lucide-react";
 import Header from "@/components/Header";
+import {
+  trackToolSuccess,
+  trackToolCopy,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "yaml";
 
 // ── YAML helpers ─────────────────────────────────────────────────────────────
 
@@ -209,11 +215,16 @@ function YamlTreeNode({ label, value, depth = 0 }: { label: string; value: unkno
 
 // ── CopyBtn ───────────────────────────────────────────────────────────────────
 
-function CopyBtn({ text }: { text: string }) {
+function CopyBtn({ text, label }: { text: string; label?: string }) {
   const [copied, setCopied] = useState(false);
   return (
     <button
-      onClick={() => { navigator.clipboard.writeText(text); setCopied(true); setTimeout(() => setCopied(false), 1500); }}
+      onClick={() => {
+        navigator.clipboard.writeText(text);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1500);
+        trackToolCopy(TOOL_SLUG, label);
+      }}
       className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs bg-muted hover:bg-muted/80 text-muted-foreground transition-colors"
     >
       {copied ? <Check className="w-3.5 h-3.5 text-green-500" /> : <Copy className="w-3.5 h-3.5" />}
@@ -314,6 +325,8 @@ export default function YamlPage() {
     a.href = URL.createObjectURL(blob);
     a.download = filename;
     a.click();
+    const ext = filename.split(".").pop() ?? "txt";
+    trackToolSuccess(TOOL_SLUG, "download", { format: ext });
   }, []);
 
   const runAutoFix = useCallback(() => {

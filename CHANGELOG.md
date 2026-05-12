@@ -2,6 +2,11 @@
 
 > Auto-generated from git log. Run `npm run changelog` to refresh.
 
+## 2026-05-12
+
+### Added
+- enhance analytics tracking across various tools (`f75e207`)
+
 ## 2026-05-11
 
 ### Added
@@ -13,7 +18,7 @@
 - update height calculation in GraphCalculator and JsonToolkit pages; enhance IpynbToPdfTool with detailed CLI instructions for PDF conversion (`f05afc4`)
 
 ### Changed
-- simplify layout structure in GraphCalculator and JsonToolkit pages; enhance IpynbToPdfTool with iframe srcDoc handling (`d60fdce`)
+- simplify layout structure in GraphCalculator and JsonToolkit pages; enhance IpynbToPdfTool with iframe srcDoc handling (`b170b12`)
 - enhance IpynbToPdfTool with improved markdown parsing and HTML rendering (`a8cfbdb`)
 
 ## 2026-05-10

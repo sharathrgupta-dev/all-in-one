@@ -59,7 +59,7 @@ export default function RotatePdfTool({ tool }: { tool: Tool }) {
       }
       const out = await doc.save();
       const name = file.name.replace(/\.pdf$/i, "") || "document";
-      downloadUint8(out, `${name}-rotated.pdf`);
+      downloadUint8(out, `${name}-rotated.pdf`, "application/pdf", "rotate-pdf");
     } catch {
       setError("Rotation failed.");
     } finally {

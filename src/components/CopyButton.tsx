@@ -2,17 +2,24 @@
 
 import { useState, useCallback } from "react";
 import { Clipboard, Check } from "lucide-react";
+import { trackToolCopy } from "@/lib/analytics-events";
 
 interface CopyButtonProps {
   text: string;
   className?: string;
   disabled?: boolean;
+  /** Tool slug for analytics. Optional — when omitted, no event is fired. */
+  toolSlug?: string;
+  /** Optional label distinguishing this copy from others on the same tool. */
+  copyLabel?: string;
 }
 
 export default function CopyButton({
   text,
   className = "",
   disabled = false,
+  toolSlug,
+  copyLabel,
 }: CopyButtonProps) {
   const [copied, setCopied] = useState(false);
 
@@ -33,7 +40,8 @@ export default function CopyButton({
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
-  }, [text]);
+    if (toolSlug) trackToolCopy(toolSlug, copyLabel);
+  }, [text, toolSlug, copyLabel]);
 
   return (
     <button

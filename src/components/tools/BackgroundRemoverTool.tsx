@@ -2,6 +2,7 @@
 
 import { useCallback, useRef, useState } from "react";
 import type { Tool } from "@/lib/tools-registry";
+import { trackToolDownload } from "@/lib/analytics-events";
 import ToolPageHero from "@/components/tools/ToolPageHero";
 import { Upload, Download, RotateCcw, ImageIcon, Loader2, CheckCircle2, AlertCircle, SlidersHorizontal } from "lucide-react";
 
@@ -149,6 +150,7 @@ export default function BackgroundRemoverTool({ tool }: { tool: Tool }) {
     a.href = phase.resultUrl;
     a.download = "background-removed.png";
     a.click();
+    trackToolDownload("background-remover", "png");
   }, [phase]);
 
   return (

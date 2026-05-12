@@ -4,6 +4,12 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Send, Plug, Unplug, Trash2, Download, ArrowDownToLine, ArrowUpFromLine, AlertCircle, CheckCircle2 } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
 import ToolPageHero from "@/components/tools/ToolPageHero";
+import {
+  trackToolSuccess,
+  trackToolError,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "websocket-tester";
 
 type Direction = "out" | "in" | "info" | "error";
 type ConnState = "idle" | "connecting" | "open" | "closing" | "closed";
@@ -96,6 +102,7 @@ export default function WebSocketTesterTool({ tool }: { tool: Tool }) {
         setConn("open");
         appendLog("info", `✓ Connected. Protocol: ${ws.protocol || "(none)"}`);
         try { localStorage.setItem(STORAGE_KEY, trimmed); } catch { /* ignore */ }
+        trackToolSuccess(TOOL_SLUG, "connect");
       };
       ws.onmessage = async (ev) => {
         let text: string;
@@ -124,6 +131,7 @@ export default function WebSocketTesterTool({ tool }: { tool: Tool }) {
       };
       ws.onerror = () => {
         appendLog("error", "WebSocket error event (browser hides details for security).");
+        trackToolError(TOOL_SLUG, "connect", "websocket error");
       };
       ws.onclose = (ev) => {
         setConn("closed");
@@ -152,8 +160,11 @@ export default function WebSocketTesterTool({ tool }: { tool: Tool }) {
     try {
       wsRef.current.send(message);
       appendLog("out", message, new Blob([message]).size);
+      trackToolSuccess(TOOL_SLUG, "send_message");
     } catch (e) {
-      appendLog("error", e instanceof Error ? e.message : "send failed");
+      const msg = e instanceof Error ? e.message : "send failed";
+      appendLog("error", msg);
+      trackToolError(TOOL_SLUG, "send_message", msg);
     }
   }, [message, appendLog]);
 

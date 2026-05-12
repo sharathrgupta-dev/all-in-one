@@ -10,6 +10,12 @@ import {
   beautifyCode,
   type BeautifierLang,
 } from "@/lib/code-beautifiers";
+import {
+  trackToolSuccess,
+  trackToolError,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "code-beautify";
 
 export default function FormatWorkspace() {
   const [lang, setLang] = useState<BeautifierLang>("javascript");
@@ -25,13 +31,17 @@ export default function FormatWorkspace() {
       const r = await beautifyCode(lang, input);
       if (r.ok) {
         setOutput(r.output);
+        trackToolSuccess(TOOL_SLUG, "beautify", { lang });
       } else {
         setOutput("");
         setError(r.error);
+        trackToolError(TOOL_SLUG, "beautify", r.error);
       }
     } catch (e) {
+      const msg = e instanceof Error ? e.message : String(e);
       setOutput("");
-      setError(e instanceof Error ? e.message : String(e));
+      setError(msg);
+      trackToolError(TOOL_SLUG, "beautify", msg);
     } finally {
       setLoading(false);
     }
@@ -108,7 +118,7 @@ export default function FormatWorkspace() {
           )}
           Beautify
         </button>
-        <CopyButton text={output} className="shrink-0" disabled={loading} />
+        <CopyButton text={output} className="shrink-0" disabled={loading} toolSlug={TOOL_SLUG} copyLabel="output" />
       </div>
 
       <div className="grid gap-4 lg:grid-cols-2">

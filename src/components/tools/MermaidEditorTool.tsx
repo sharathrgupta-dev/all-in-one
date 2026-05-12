@@ -4,6 +4,14 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Download, Copy, Check, RefreshCw, FileCode } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
 import ToolPageHero from "@/components/tools/ToolPageHero";
+import {
+  trackToolSuccess,
+  trackToolError,
+  trackToolDownload,
+  trackToolCopy,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "mermaid-editor";
 
 const EXAMPLES: { label: string; code: string }[] = [
   {
@@ -117,11 +125,13 @@ export default function MermaidEditorTool({ tool }: { tool: Tool }) {
       if (myToken !== renderToken.current) return;
       setSvg(rendered);
       setError("");
+      trackToolSuccess(TOOL_SLUG, "render");
     } catch (e: unknown) {
       if (myToken !== renderToken.current) return;
       const message = e instanceof Error ? e.message : String(e);
       setError(message.replace(/^Error:\s*/, ""));
       setSvg("");
+      trackToolError(TOOL_SLUG, "render", message);
     }
   }, []);
 
@@ -148,6 +158,7 @@ export default function MermaidEditorTool({ tool }: { tool: Tool }) {
     a.download = "diagram.svg";
     a.click();
     URL.revokeObjectURL(url);
+    trackToolDownload(TOOL_SLUG, "svg");
   };
 
   const downloadPng = async () => {
@@ -183,6 +194,7 @@ export default function MermaidEditorTool({ tool }: { tool: Tool }) {
         a.download = "diagram.png";
         a.click();
         URL.revokeObjectURL(dl);
+        trackToolDownload(TOOL_SLUG, "png");
       }, "image/png");
     };
     img.onerror = () => URL.revokeObjectURL(url);
@@ -195,6 +207,7 @@ export default function MermaidEditorTool({ tool }: { tool: Tool }) {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(what);
       setTimeout(() => setCopied(null), 1500);
+      trackToolCopy(TOOL_SLUG, what);
     });
   };
 

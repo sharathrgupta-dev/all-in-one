@@ -28,6 +28,12 @@ import {
 import { io, type Socket as IoSocket } from "socket.io-client";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import {
+  trackToolSuccess,
+  trackToolError,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "api-tester";
 
 // ─── types ────────────────────────────────────────────────────────────
 
@@ -513,12 +519,16 @@ export default function ApiTesterPage() {
 
       if (data.error) {
         setResError(data.error);
+        trackToolError(TOOL_SLUG, "send_rest", data.error);
       } else {
         setResponse(data);
         setHistory((h) => [{ method, url: finalUrl, status: data.status, time: data.time }, ...h.slice(0, 19)]);
+        trackToolSuccess(TOOL_SLUG, "send_rest", { method, status: data.status });
       }
     } catch (e) {
-      setResError(e instanceof Error ? e.message : "Request failed");
+      const msg = e instanceof Error ? e.message : "Request failed";
+      setResError(msg);
+      trackToolError(TOOL_SLUG, "send_rest", msg);
     } finally {
       setLoading(false);
     }

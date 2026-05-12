@@ -57,7 +57,7 @@ export default function SplitPdfTool({ tool }: { tool: Tool }) {
       }
 
       const zipped = await zip.generateAsync({ type: "blob" });
-      downloadBlob(zipped, `${base}-split.zip`);
+      downloadBlob(zipped, `${base}-split.zip`, "split-pdf");
     } catch {
       setError("Split failed — file may be encrypted.");
     } finally {

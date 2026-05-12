@@ -58,7 +58,7 @@ export default function OrganizePdfTool({ tool }: { tool: Tool }) {
       copied.forEach((p) => out.addPage(p));
       const bytes = await out.save();
       const name = file.name.replace(/\.pdf$/i, "") || "document";
-      downloadUint8(bytes, `${name}-organized.pdf`);
+      downloadUint8(bytes, `${name}-organized.pdf`, "application/pdf", "organize-pdf");
     } catch {
       setError("Could not reorganize this PDF.");
     } finally {

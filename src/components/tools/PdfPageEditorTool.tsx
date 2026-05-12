@@ -5,18 +5,9 @@ import { PDFDocument } from "pdf-lib";
 import { Download, FileUp, Trash2 } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
 import ToolPageHero from "@/components/tools/ToolPageHero";
+import { downloadUint8 } from "@/lib/pdf-download";
 
-function downloadUint8(bytes: Uint8Array, filename: string) {
-  const copy = new Uint8Array(bytes.byteLength);
-  copy.set(bytes);
-  const blob = new Blob([copy], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
+const TOOL_SLUG = "pdf-page-editor";
 
 export default function PdfPageEditorTool({ tool }: { tool: Tool }) {
   const [pdfBytes, setPdfBytes] = useState<ArrayBuffer | null>(null);
@@ -87,7 +78,7 @@ export default function PdfPageEditorTool({ tool }: { tool: Tool }) {
       }
       for (const i of toRemove) doc.removePage(i);
       const out = await doc.save();
-      downloadUint8(out, `${baseName}-removed-pages.pdf`);
+      downloadUint8(out, `${baseName}-removed-pages.pdf`, "application/pdf", TOOL_SLUG);
     } catch {
       setError("Failed to build PDF. Try another file.");
     } finally {
@@ -112,7 +103,7 @@ export default function PdfPageEditorTool({ tool }: { tool: Tool }) {
       const copied = await out.copyPages(src, indices);
       copied.forEach((p) => out.addPage(p));
       const bytes = await out.save();
-      downloadUint8(bytes, `${baseName}-extract.pdf`);
+      downloadUint8(bytes, `${baseName}-extract.pdf`, "application/pdf", TOOL_SLUG);
     } catch {
       setError("Failed to extract pages. Try another file.");
     } finally {

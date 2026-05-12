@@ -39,7 +39,7 @@ export default function CompressPdfTool({ tool }: { tool: Tool }) {
       const saved = await doc.save({ useObjectStreams: true });
       setAfterBytes(saved.byteLength);
       const name = file.name.replace(/\.pdf$/i, "") || "document";
-      downloadUint8(saved, `${name}-optimized.pdf`);
+      downloadUint8(saved, `${name}-optimized.pdf`, "application/pdf", "compress-pdf");
     } catch {
       setError("Optimization failed — PDF may be encrypted.");
     } finally {

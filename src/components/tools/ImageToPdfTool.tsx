@@ -13,22 +13,12 @@ import {
 } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
 import ToolPageHero from "@/components/tools/ToolPageHero";
+import { downloadUint8 } from "@/lib/pdf-download";
 
+const TOOL_SLUG = "image-to-pdf";
 const A4_W = 595.28;
 const A4_H = 841.89;
 const MARGIN = 36;
-
-function downloadUint8(bytes: Uint8Array, filename: string) {
-  const copy = new Uint8Array(bytes.byteLength);
-  copy.set(bytes);
-  const blob = new Blob([copy], { type: "application/pdf" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 type Row = { id: string; file: File; preview: string };
 
@@ -175,7 +165,7 @@ export default function ImageToPdfTool({ tool }: { tool: Tool }) {
       }
 
       const out = await pdf.save();
-      downloadUint8(out, "images.pdf");
+      downloadUint8(out, "images.pdf", "application/pdf", TOOL_SLUG);
     } catch {
       setError(
         "Could not build PDF — try PNG/JPEG, or smaller images (very large files may fail in-browser)."

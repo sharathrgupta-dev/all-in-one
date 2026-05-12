@@ -100,7 +100,7 @@ export default function TextToPdfTool({ tool }: { tool: Tool }) {
       }
 
       const bytes = await doc.save();
-      downloadUint8(bytes, "document-from-text.pdf");
+      downloadUint8(bytes, "document-from-text.pdf", "application/pdf", "text-to-pdf");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Could not build PDF.");
     } finally {

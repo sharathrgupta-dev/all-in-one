@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import QRCode from "qrcode";
 import { Download } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
+import { trackToolDownload } from "@/lib/analytics-events";
 import ToolPageHero from "@/components/tools/ToolPageHero";
 
 export default function QrCodeTool({ tool }: { tool: Tool }) {
@@ -48,6 +49,7 @@ export default function QrCodeTool({ tool }: { tool: Tool }) {
     a.href = dataUrl;
     a.download = "qrcode.png";
     a.click();
+    trackToolDownload("qr-code", "png");
   };
 
   return (

@@ -4,6 +4,12 @@ import { useEffect, useMemo, useState } from "react";
 import { Plus, X, Copy, Check, Link2, ArrowLeftRight } from "lucide-react";
 import type { Tool } from "@/lib/tools-registry";
 import ToolPageHero from "@/components/tools/ToolPageHero";
+import {
+  trackToolCopy,
+  trackToolShareLink,
+} from "@/lib/analytics-events";
+
+const TOOL_SLUG = "timezone-converter";
 
 const COMMON_ZONES = [
   "America/Los_Angeles",
@@ -159,6 +165,7 @@ export default function TimezoneConverterTool({ tool }: { tool: Tool }) {
     navigator.clipboard.writeText(text).then(() => {
       setCopied(zone);
       setTimeout(() => setCopied(null), 1500);
+      trackToolCopy(TOOL_SLUG, "moment");
     });
   };
 
@@ -173,6 +180,7 @@ export default function TimezoneConverterTool({ tool }: { tool: Tool }) {
     navigator.clipboard.writeText(url).then(() => {
       setCopied("__share");
       setTimeout(() => setCopied(null), 1500);
+      trackToolShareLink(TOOL_SLUG);
     });
   };
 
