@@ -5,7 +5,8 @@
 ## 2026-05-12
 
 ### Added
-- improve zoom functionality and event handling in GraphCalculator (`c4abcd3`)
+- enhance user experience in GraphCalculator and JsonToolkit (`8952589`)
+- improve zoom functionality and event handling in GraphCalculator (`b286e49`)
 - add JSON comment stripping and enhanced error correction in JsonToolkit (`2f31cde`)
 - enhance JSON handling and validation in JsonToolkit (`eb3be38`)
 - enhance app metadata for improved PWA support (`b2a253b`)
