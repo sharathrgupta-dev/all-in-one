@@ -692,6 +692,8 @@ export default function GraphCalculatorPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const panStart = useRef<{ x: number; y: number; view: ViewPort } | null>(null);
+  const viewRef = useRef(view);
+  viewRef.current = view;
   const nextId = useRef(2);
 
   const compiled = useMemo(() => {
@@ -769,23 +771,52 @@ export default function GraphCalculatorPage() {
     setCursor(null);
   }, []);
 
-  const handleWheel = useCallback((e: React.WheelEvent<HTMLCanvasElement>) => {
+  const applyWheelZoom = useCallback((e: WheelEvent) => {
     e.preventDefault();
     const factor = e.deltaY > 0 ? 1.15 : 1 / 1.15;
     const canvas = canvasRef.current;
     if (!canvas) return;
+    const v = viewRef.current;
     const rect = canvas.getBoundingClientRect();
     const px = (e.clientX - rect.left) / rect.width;
     const py = (e.clientY - rect.top) / rect.height;
-    const cx = view.xMin + px * (view.xMax - view.xMin);
-    const cy = view.yMax - py * (view.yMax - view.yMin);
+    const cx = v.xMin + px * (v.xMax - v.xMin);
+    const cy = v.yMax - py * (v.yMax - v.yMin);
     setView({
-      xMin: cx - (cx - view.xMin) * factor,
-      xMax: cx + (view.xMax - cx) * factor,
-      yMin: cy - (cy - view.yMin) * factor,
-      yMax: cy + (view.yMax - cy) * factor,
+      xMin: cx - (cx - v.xMin) * factor,
+      xMax: cx + (v.xMax - cx) * factor,
+      yMin: cy - (cy - v.yMin) * factor,
+      yMax: cy + (v.yMax - cy) * factor,
     });
-  }, [view]);
+  }, []);
+
+  /** Native listener with { passive: false } so zoom works; React's onWheel is often passive. */
+  useEffect(() => {
+    if (mode !== "graph") return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    canvas.addEventListener("wheel", applyWheelZoom, { passive: false });
+    return () => canvas.removeEventListener("wheel", applyWheelZoom);
+  }, [mode, applyWheelZoom]);
+
+  /** End pan if pointer is released outside the canvas (avoids stuck drag / blocked UI). */
+  useEffect(() => {
+    function endPan() {
+      panStart.current = null;
+    }
+    window.addEventListener("mouseup", endPan);
+    window.addEventListener("touchend", endPan);
+    window.addEventListener("pointerup", endPan);
+    window.addEventListener("pointercancel", endPan);
+    window.addEventListener("blur", endPan);
+    return () => {
+      window.removeEventListener("mouseup", endPan);
+      window.removeEventListener("touchend", endPan);
+      window.removeEventListener("pointerup", endPan);
+      window.removeEventListener("pointercancel", endPan);
+      window.removeEventListener("blur", endPan);
+    };
+  }, []);
 
   const zoom = useCallback((factor: number) => {
     const cx = (view.xMin + view.xMax) / 2;
@@ -875,9 +906,9 @@ export default function GraphCalculatorPage() {
   }, [compiledFns, expressions, view]);
 
   return (
-    <div className="flex h-screen flex-col bg-background">
+    <div className="flex h-screen min-h-0 flex-col overflow-hidden bg-background">
       <Header />
-      <header className="border-b border-border bg-card shrink-0">
+      <header className="relative z-10 shrink-0 border-b border-border bg-card">
         <div className="px-4 py-3 flex flex-wrap items-center justify-between gap-2">
           <div className="flex items-center gap-3 min-w-0">
             <div className="flex items-center gap-2 shrink-0">
@@ -923,7 +954,7 @@ export default function GraphCalculatorPage() {
       </header>
 
       {mode === "graph" && (
-      <div className="flex flex-1 min-h-0">
+      <div className="relative z-0 flex min-h-0 flex-1 overflow-hidden">
         {/* Sidebar — expression list */}
         {sidebarOpen && (
           <div className="w-80 border-r border-border bg-card flex flex-col shrink-0 overflow-hidden">
@@ -1029,12 +1060,11 @@ export default function GraphCalculatorPage() {
           <div className="flex-1 min-h-0 relative">
             <canvas
               ref={canvasRef}
-              className="w-full h-full cursor-crosshair"
+              className="h-full w-full cursor-crosshair"
               onMouseMove={handleCanvasMouseMove}
               onMouseDown={handleCanvasMouseDown}
               onMouseUp={handleCanvasMouseUp}
               onMouseLeave={handleCanvasMouseLeave}
-              onWheel={handleWheel}
             />
             {/* Cursor readout */}
             {cursor && (
@@ -1078,7 +1108,7 @@ export default function GraphCalculatorPage() {
       )}
 
       {mode === "scientific" && (
-        <div className="flex-1 overflow-auto p-6 max-w-2xl mx-auto w-full space-y-6">
+        <div className="relative z-0 min-h-0 flex-1 overflow-auto p-6 max-w-2xl mx-auto w-full space-y-6">
           <p className="text-sm text-muted-foreground">
             Same syntax as Graph mode. Use{" "}
             <code className="bg-muted px-1.5 py-0.5 rounded text-xs font-mono">x</code> as a variable, or constants only (e.g.{" "}
@@ -1130,7 +1160,7 @@ export default function GraphCalculatorPage() {
       )}
 
       {mode === "matrix" && (
-        <div className="flex-1 overflow-auto p-6 max-w-5xl mx-auto w-full space-y-6">
+        <div className="relative z-0 min-h-0 flex-1 overflow-auto p-6 max-w-5xl mx-auto w-full space-y-6">
           <p className="text-sm text-muted-foreground">
             Square matrices from {MATRIX_DIM_MIN}×{MATRIX_DIM_MIN} up to{" "}
             {MATRIX_DIM_MAX}×{MATRIX_DIM_MAX}. Determinant and inverse use partial pivoting.
