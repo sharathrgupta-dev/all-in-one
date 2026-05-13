@@ -10,7 +10,8 @@
 - integrate Playwright for end-to-end testing and update dependencies (`a583068`)
 
 ### Changed
-- Update CSP in next.config.ts and enhance package dependencies (`3c8d8a2`)
+- Enhance playground functionality with Go support and improved user experience (`56db7f8`)
+- Update CSP in next.config.ts and enhance package dependencies (`177a14c`)
 - Merge branch 'main' of https://github.com/SaiBhargavRallapalli/all-in-one (`6434b40`)
 - Update CHANGELOG with recent CI enhancements and dependency updates (`8c89eae`)
 - Update CHANGELOG with recent CI enhancements and dependency updates (`c475574`)
@@ -20,7 +21,16 @@
 - Enhance README with additional badges (`4bfb0fe`)
 
 ### Chore
-- bump next from 16.2.4 to 16.2.6 (`78a4f07`)
+- bump @types/jszip from 3.4.0 to 3.4.1 (`fe0d9cf`)
+- bump next from 16.2.4 to 16.2.6 (`bcc50bc`)
+- bump react from 19.2.4 to 19.2.6 (`39bb6b1`)
+- bump @codemirror/view from 6.41.1 to 6.42.1 (`bc5ffaf`)
+- bump react-dom from 19.2.4 to 19.2.6 (`731c8f1`)
+- bump sql-formatter from 15.7.3 to 15.7.4 (`67ab491`)
+- bump semver from 7.7.4 to 7.8.0 (`ba36bb4`)
+- bump @types/diff from 7.0.2 to 8.0.0 (`3d0003f`)
+- bump tailwindcss from 4.2.4 to 4.3.0 (`d57001c`)
+- bump @tailwindcss/postcss from 4.2.4 to 4.3.0 (`378c5bd`)
 
 ### Docs
 - update contributing guidelines and project documentation (`30dcd98`)
@@ -39,17 +49,6 @@
 ### Changed
 - - Updated JSON toolkit with new features for sharing and managing JSON workspace presets. - Refactored tool search and command palette to streamline workspace and tool access. - Added WebSocket Tester and Jupyter Notebook to PDF tools for enhanced functionality. - Enhanced IpynbToPdfTool with HTML output rendering capabilities. - Updated height calculation in GraphCalculator and JsonToolkit pages. - Enhanced IpynbToPdfTool with detailed CLI instructions for PDF conversion. (`51fecc7`)
 - standardize text color usage across components (`2cfe5cd`)
-
-### Chore
-- bump @codemirror/view from 6.41.1 to 6.42.1 (`df3ba6c`)
-- bump sql-formatter from 15.7.3 to 15.7.4 (`b31da4f`)
-- bump @types/diff from 7.0.2 to 8.0.0 (`d9d6e42`)
-- bump react from 19.2.4 to 19.2.6 (`7556559`)
-- bump semver from 7.7.4 to 7.8.0 (`4b3516d`)
-- bump react-dom from 19.2.4 to 19.2.6 (`f0a572b`)
-- bump tailwindcss from 4.2.4 to 4.3.0 (`cbf2e5d`)
-- bump @tailwindcss/postcss from 4.2.4 to 4.3.0 (`fae8ca8`)
-- bump @types/jszip from 3.4.0 to 3.4.1 (`4e78bd1`)
 
 ## 2026-05-11
 

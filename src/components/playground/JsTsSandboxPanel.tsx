@@ -2,11 +2,13 @@
 
 import { useEffect, useMemo, useRef, useState, useCallback } from "react";
 import Editor, { loader } from "@monaco-editor/react";
-import { Play, Trash2, Loader2 } from "lucide-react";
+import { Play, Trash2, Loader2, Keyboard } from "lucide-react";
 import { PLAYGROUND_MONACO_VS_CDN } from "@/lib/playground/constants";
 import { getSandboxJsSrcdoc } from "@/lib/playground/sandbox-js-srcdoc";
 import { isSandboxChildMessage } from "@/lib/playground/sandbox-js-messages";
 import { transpileTsToJs } from "@/lib/playground/transpile-ts";
+import { buildJsSandboxPreamble } from "@/lib/playground/js-sandbox-preamble";
+import PlaygroundEditorFrame from "@/components/playground/PlaygroundEditorFrame";
 
 let monacoCdnConfigured = false;
 function ensureMonacoCdn(): void {
@@ -15,29 +17,39 @@ function ensureMonacoCdn(): void {
   loader.config({ paths: { vs: PLAYGROUND_MONACO_VS_CDN } });
 }
 
-const DEFAULT_JS = `console.log("Hello from the sandbox");
+export type WebPlayMode = "javascript" | "typescript" | "nodejs";
 
-for (let i = 0; i < 3; i++) {
-  console.info("tick", i);
-}
+const DEFAULT_JS = `const name = readStdinLine();
+console.log("Hello, " + (name || "guest"));
 `;
 
-const DEFAULT_TS = `type Point = { x: number; y: number };
-
-const p: Point = { x: 2, y: 3 };
-console.log("length^2 =", p.x * p.x + p.y * p.y);
+const DEFAULT_TS = `type Name = string | null;
+const name: Name = readStdinLine();
+console.log("Hello, " + (name ?? "guest"));
 `;
 
-export type JsTsMode = "javascript" | "typescript";
+const DEFAULT_NODE = `var readline = require("readline");
+var rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false,
+});
 
-export default function JsTsSandboxPanel({
-  mode,
-  dark,
-}: {
-  mode: JsTsMode;
-  dark: boolean;
-}) {
-  const [code, setCode] = useState(mode === "typescript" ? DEFAULT_TS : DEFAULT_JS);
+rl.on("line", function (line) {
+  console.log("Hello, " + line);
+});
+`;
+
+const STDIN_HINT_JS =
+  "Stdin tab: one line per readStdinLine() call. Node tab also supports require(\"readline\") like OneCompiler.";
+
+const STDIN_PLACEHOLDER = "Ada\nBob\n";
+
+export default function JsTsSandboxPanel({ mode, dark }: { mode: WebPlayMode; dark: boolean }) {
+  const initialCode =
+    mode === "typescript" ? DEFAULT_TS : mode === "nodejs" ? DEFAULT_NODE : DEFAULT_JS;
+  const [code, setCode] = useState(initialCode);
+  const [stdin, setStdin] = useState("Ada\nBob\n");
   const [output, setOutput] = useState<string[]>([]);
   const [running, setRunning] = useState(false);
   const [iframeReady, setIframeReady] = useState(false);
@@ -51,6 +63,8 @@ export default function JsTsSandboxPanel({
   } | null>(null);
 
   const srcdoc = useMemo(() => getSandboxJsSrcdoc(), []);
+  const monacoLanguage = mode === "typescript" ? "typescript" : "javascript";
+  const nodeShim = mode === "nodejs";
 
   useEffect(() => {
     ensureMonacoCdn();
@@ -86,7 +100,7 @@ export default function JsTsSandboxPanel({
       if (d.type === "DONE") {
         pending.sawDone = true;
         if (!pending.sawError && pending.lines.length === 0) {
-          pending.lines.push("(finished — no console output)");
+          pending.lines.push("(finished - no console output)");
           setOutput([...pending.lines]);
         }
         setRunning(false);
@@ -99,7 +113,7 @@ export default function JsTsSandboxPanel({
 
   const run = useCallback(async () => {
     if (running) return;
-    let js = code.trimEnd();
+    let jsBody = code.trimEnd();
 
     if (mode === "typescript") {
       setRunning(true);
@@ -110,7 +124,7 @@ export default function JsTsSandboxPanel({
         setRunning(false);
         return;
       }
-      js = tr.js;
+      jsBody = tr.js;
     } else {
       setRunning(true);
     }
@@ -120,66 +134,105 @@ export default function JsTsSandboxPanel({
       setRunning(false);
       return;
     }
+    const preamble = buildJsSandboxPreamble(stdin, nodeShim);
+    const finalCode = preamble + "\n" + jsBody;
     const id = ++runIdRef.current;
     const lines: string[] = [];
     pendingRunRef.current = { id, lines, sawDone: false, sawError: false };
     setOutput([]);
-    iframeRef.current.contentWindow.postMessage({ type: "RUN", id, code: js }, "*");
-  }, [code, iframeReady, mode, running]);
+    iframeRef.current.contentWindow.postMessage({ type: "RUN", id, code: finalCode }, "*");
+  }, [code, iframeReady, mode, nodeShim, running, stdin]);
+
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      if (!(e.ctrlKey || e.metaKey) || e.key !== "Enter") return;
+      if (running) return;
+      e.preventDefault();
+      void run();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [run, running]);
 
   const theme = dark ? "vs-dark" : "vs";
 
+  const title =
+    mode === "nodejs"
+      ? "Node.js-style (browser sandbox)"
+      : mode === "typescript"
+        ? "TypeScript"
+        : "JavaScript";
+
   return (
-    <div className="flex flex-col gap-3 lg:flex-row lg:gap-4 min-h-0 flex-1">
-      <div className="flex min-h-[280px] flex-1 flex-col gap-2 lg:min-h-[420px]">
-        <div className="flex flex-wrap items-center gap-2">
-          <button
-            type="button"
-            onClick={() => void run()}
-            disabled={running || !iframeReady}
-            className="inline-flex items-center gap-2 rounded-lg border border-border bg-muted/40 px-3 py-1.5 text-sm font-medium text-foreground transition-colors hover:bg-muted disabled:opacity-50"
-          >
-            {running ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Play className="h-4 w-4" aria-hidden />}
-            Run
-          </button>
-          <button
-            type="button"
-            onClick={() => setOutput([])}
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
-          >
-            <Trash2 className="h-4 w-4" aria-hidden />
-            Clear output
-          </button>
-          <span className="text-xs text-muted-foreground">
-            {iframeReady ? "Sandbox ready (opaque origin, no same-origin)." : "Loading sandbox…"}
-          </span>
-        </div>
-        <div className="min-h-[240px] flex-1 overflow-hidden rounded-lg border border-border">
+    <>
+      <PlaygroundEditorFrame
+        toolbar={
+          <>
+            <button
+              type="button"
+              onClick={() => void run()}
+              disabled={running || !iframeReady}
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-accent px-4 py-2 text-sm font-semibold text-accent-foreground shadow-sm transition-opacity hover:opacity-90 disabled:opacity-50"
+            >
+              {running ? <Loader2 className="h-4 w-4 animate-spin" aria-hidden /> : <Play className="h-4 w-4" aria-hidden />}
+              Run
+            </button>
+            <button
+              type="button"
+              onClick={() => setOutput([])}
+              className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm text-muted-foreground transition-colors hover:bg-muted hover:text-foreground"
+            >
+              <Trash2 className="h-4 w-4" aria-hidden />
+              Clear output
+            </button>
+            <span className="inline-flex items-center gap-1 rounded-md border border-dashed border-border px-2 py-1 text-[11px] text-muted-foreground">
+              <Keyboard className="h-3.5 w-3.5 shrink-0" aria-hidden />
+              Ctrl+Enter
+            </span>
+            <span className="text-xs text-muted-foreground">
+              {title}
+              {mode === "nodejs" ? " — readline shim only; npm packages are not installed." : ""}
+              {iframeReady ? "" : " - loading sandbox…"}
+            </span>
+          </>
+        }
+        stdin={stdin}
+        onStdinChange={setStdin}
+        stdinPlaceholder={STDIN_PLACEHOLDER}
+        stdinHint={STDIN_HINT_JS}
+        stdinDisabled={false}
+        editor={
           <Editor
-            height="380"
-            language={mode}
+            height="100%"
+            language={monacoLanguage}
             theme={theme}
             value={code}
             onChange={(v) => setCode(v ?? "")}
+            loading={
+              <div className="flex h-full items-center justify-center text-sm text-muted-foreground">
+                Loading editor…
+              </div>
+            }
             options={{
               minimap: { enabled: false },
-              fontSize: 13,
+              fontSize: 14,
+              lineNumbers: "on",
               scrollBeyondLastLine: false,
               automaticLayout: true,
               tabSize: 2,
+              padding: { top: 12 },
             }}
           />
-        </div>
-      </div>
-      <div className="flex min-h-[200px] flex-1 flex-col gap-2 lg:max-w-md">
-        <h3 className="text-sm font-medium text-foreground">Output</h3>
-        <pre
-          className="max-h-[420px] flex-1 overflow-auto rounded-lg border border-border bg-muted/30 p-3 font-mono text-xs leading-relaxed text-foreground whitespace-pre-wrap break-words"
-          aria-live="polite"
-        >
-          {output.length ? output.join("\n") : "Run your snippet to see console output here."}
-        </pre>
-      </div>
+        }
+        output={
+          <pre
+            className="p-3 font-mono text-[13px] leading-relaxed text-foreground whitespace-pre-wrap break-words"
+            aria-live="polite"
+          >
+            {output.length ? output.join("\n") : "Output tab: Run or Ctrl+Enter. Stdin tab: program input."}
+          </pre>
+        }
+      />
       <iframe
         ref={iframeRef}
         title="JavaScript sandbox"
@@ -187,6 +240,6 @@ export default function JsTsSandboxPanel({
         className="pointer-events-none fixed h-0 w-0 opacity-0"
         srcDoc={srcdoc}
       />
-    </div>
+    </>
   );
 }
