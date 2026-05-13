@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { Search, LayoutGrid } from "lucide-react";
 import { CATEGORIES, type Tool } from "@/lib/tools-registry";
 import { filterWorkspaces, workspaceHrefForToolSlug, type WorkspaceShortcut } from "@/lib/devbench-workspaces";
+import { useExternalNavOrigin } from "@/hooks/use-external-nav-origin";
+import { resolveToolHref } from "@/lib/site-config";
 
 function toolHref(slug: string) {
   return workspaceHrefForToolSlug(slug) ?? `/tools/${slug}`;
@@ -21,6 +23,7 @@ export default function CommandPalette({ tools }: { tools: Tool[] }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
   const router = useRouter();
+  const navOrigin = useExternalNavOrigin();
 
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
@@ -84,14 +87,17 @@ export default function CommandPalette({ tools }: { tools: Tool[] }) {
 
   const goToRow = useCallback(
     (row: PaletteRow) => {
-      if (row.kind === "workspace") {
-        router.push(row.workspace.href);
+      const raw =
+        row.kind === "workspace" ? row.workspace.href : toolHref(row.tool.slug);
+      const href = resolveToolHref(raw, navOrigin);
+      if (href.startsWith("http")) {
+        window.location.assign(href);
       } else {
-        router.push(toolHref(row.tool.slug));
+        router.push(href);
       }
       setOpen(false);
     },
-    [router],
+    [navOrigin, router],
   );
 
   function handleKeyDown(e: React.KeyboardEvent) {

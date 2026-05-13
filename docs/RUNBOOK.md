@@ -72,6 +72,18 @@ Tests live in `e2e/`; config in `playwright.config.ts`. Extend smoke coverage wh
    - Open `/`, `/json`, `/graph-calculator`, `/pdf` — smoke navigation and one primary action each.
    - Confirm GTM/ads load only if expected (ad blockers may hide them).
 
+## Playground subdomain (`playground.devbench.co.in`)
+
+The **same** Vercel project serves this host. Edge middleware (`src/middleware.ts`) rewrites `/` to the `/playground` route and **308-redirects** any other path to `https://www.devbench.co.in{path}` so tools and workspaces stay on `www`.
+
+**Setup**
+
+1. Vercel → your DevBench project → **Settings → Domains** → add `playground.devbench.co.in`.
+2. At your DNS provider: **CNAME** `playground` → the target Vercel shows (often `cname.vercel-dns.com`).
+3. After SSL is active, open `https://playground.devbench.co.in/` — it should match the in-app `/playground` workspace.
+
+**When to use a separate Vercel project instead:** only if you need a different release cadence, env vars, analytics property, or compliance boundary. Otherwise one project + subdomain keeps shipping and CSP simpler.
+
 ## Rollback
 
 1. Vercel dashboard → **Deployments** → select last known good → **Promote to Production**.
@@ -102,3 +114,4 @@ When editing `next.config.ts` CSP or headers:
 - API proxy: `src/app/api/proxy/route.ts`
 - Threat model: `docs/DEVBENCH-THREAT-MODEL.md`
 - Data-flow matrix: `docs/SECURITY-DATA-FLOW-MATRIX.md`
+- Playground subdomain: `src/middleware.ts`, `src/lib/site-config.ts` (`PLAYGROUND_HOST`)

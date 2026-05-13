@@ -10,7 +10,8 @@
 - integrate Playwright for end-to-end testing and update dependencies (`a583068`)
 
 ### Changed
-- Merge branch 'main' of https://github.com/SaiBhargavRallapalli/all-in-one (`b676782`)
+- Update CSP in next.config.ts and enhance package dependencies (`3c8d8a2`)
+- Merge branch 'main' of https://github.com/SaiBhargavRallapalli/all-in-one (`6434b40`)
 - Update CHANGELOG with recent CI enhancements and dependency updates (`8c89eae`)
 - Update CHANGELOG with recent CI enhancements and dependency updates (`c475574`)
 - Update CI workflow to continue on lint errors (`6710977`)

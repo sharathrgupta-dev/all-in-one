@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Sun, Moon, Menu, X } from "lucide-react";
 import DevBenchMark from "@/components/DevBenchMark";
+import { useExternalNavOrigin } from "@/hooks/use-external-nav-origin";
+import { resolveToolHref } from "@/lib/site-config";
 
 const NAV_LINKS = [
   { href: "/json",             label: "JSON"      },
@@ -19,6 +21,7 @@ const NAV_LINKS = [
   { href: "/astronomy",        label: "Sun/Moon"  },
   { href: "/cron-editor",      label: "Cron"      },
   { href: "/graph-calculator", label: "Math"      },
+  { href: "/playground",       label: "Playground"},
   { href: "/blog",             label: "Blog"      },
   { href: "/contact",          label: "Contact"   },
 ];
@@ -26,6 +29,7 @@ const NAV_LINKS = [
 export default function Header() {
   const [dark, setDark]         = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const navOrigin = useExternalNavOrigin();
 
   useEffect(() => {
     // Inline script in layout already applied classes — sync icon state from DOM.
@@ -74,7 +78,7 @@ export default function Header() {
 
         {/* Logo */}
         <Link
-          href="/"
+          href={resolveToolHref("/", navOrigin)}
           className="flex shrink-0 items-center gap-2 text-foreground hover:text-accent transition-colors mr-3"
         >
           <DevBenchMark className="h-6 w-6 shrink-0 text-accent" />
@@ -86,7 +90,7 @@ export default function Header() {
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              href={resolveToolHref(link.href, navOrigin)}
               className="rounded-md px-2.5 py-1.5 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground whitespace-nowrap"
             >
               {link.label}
@@ -136,7 +140,7 @@ export default function Header() {
           {NAV_LINKS.map((link) => (
             <Link
               key={link.href}
-              href={link.href}
+              href={resolveToolHref(link.href, navOrigin)}
               onClick={() => setMenuOpen(false)}
               className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground text-center"
             >

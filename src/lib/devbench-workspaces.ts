@@ -77,6 +77,14 @@ export const DEVBENCH_WORKSPACES: readonly WorkspaceShortcut[] = [
     description: "Build and explain crontab expressions",
     keywords: ["scheduler", "crontab"],
   },
+  {
+    id: "playground",
+    href: "/playground",
+    label: "Code playground",
+    shortLabel: "Play",
+    description: "Sandboxed JS/TS, Python (Pyodide), and .ipynb code cells — also at playground.devbench.co.in",
+    keywords: ["monaco", "typescript", "python", "jupyter", "pyodide", "snippet", "repl", "wasm", "playground.devbench"],
+  },
 ] as const;
 
 /** Map legacy tool slugs that live on a workspace URL (palette + deep links). */

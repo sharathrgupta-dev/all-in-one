@@ -8,11 +8,12 @@ import type { NextConfig } from "next";
 //   - frame-ancestors 'none' blocks clickjacking site-wide.
 const CSP = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://www.googletagmanager.com https://*.googletagmanager.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.google https://*.gstatic.com https://*.doubleclick.net https://va.vercel-scripts.com https://*.vercel-insights.com https://fundingchoicesmessages.google.com",
-  "style-src 'self' 'unsafe-inline' https://*.gstatic.com",
+  "script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://cdn.jsdelivr.net https://www.googletagmanager.com https://*.googletagmanager.com https://pagead2.googlesyndication.com https://*.googlesyndication.com https://*.google.com https://*.google https://*.gstatic.com https://*.doubleclick.net https://va.vercel-scripts.com https://*.vercel-insights.com https://fundingchoicesmessages.google.com",
+  "style-src 'self' 'unsafe-inline' https://*.gstatic.com https://cdn.jsdelivr.net",
   "img-src 'self' data: blob: https:",
-  "font-src 'self' data: https://*.gstatic.com",
-  "connect-src 'self' https://*.google.com https://*.google https://*.googletagmanager.com https://*.doubleclick.net https://*.googlesyndication.com https://va.vercel-scripts.com https://*.vercel-insights.com https://fundingchoicesmessages.google.com https://api.producthunt.com",
+  "font-src 'self' data: https://*.gstatic.com https://cdn.jsdelivr.net",
+  "connect-src 'self' https://cdn.jsdelivr.net https://pypi.org https://files.pythonhosted.org https://*.google.com https://*.google https://*.googletagmanager.com https://*.doubleclick.net https://*.googlesyndication.com https://va.vercel-scripts.com https://*.vercel-insights.com https://fundingchoicesmessages.google.com https://api.producthunt.com",
+  "worker-src 'self' blob: https://cdn.jsdelivr.net",
   "frame-src 'self' https://www.googletagmanager.com https://*.doubleclick.net https://*.google.com https://*.google https://googleads.g.doubleclick.net https://fundingchoicesmessages.google.com",
   "frame-ancestors 'none'",
   "base-uri 'self'",
