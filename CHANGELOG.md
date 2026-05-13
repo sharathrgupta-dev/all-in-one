@@ -5,10 +5,23 @@
 ## 2026-05-13
 
 ### Added
+- Add CI workflow for Python and Node.js projects (`370b8cc`)
+- Add CI workflow for Node.js checks (`4a1c438`)
 - integrate Playwright for end-to-end testing and update dependencies (`a583068`)
 
+### Changed
+- Update CHANGELOG with recent CI enhancements and dependency updates (`6fba47d`)
+- Update CHANGELOG with recent CI enhancements and dependency updates (`c475574`)
+- Update CI workflow to continue on lint errors (`6710977`)
+- Refactor CI workflow to consolidate jobs (`b8cb2eb`)
+- Delete ci.yml (`ee0512f`)
+- Enhance README with additional badges (`4bfb0fe`)
+
+### Chore
+- bump next from 16.2.4 to 16.2.6 (`78a4f07`)
+
 ### Docs
-- update contributing guidelines and project documentation (`90f1d4e`)
+- update contributing guidelines and project documentation (`30dcd98`)
 
 ## 2026-05-12
 
@@ -33,7 +46,6 @@
 - bump semver from 7.7.4 to 7.8.0 (`4b3516d`)
 - bump react-dom from 19.2.4 to 19.2.6 (`f0a572b`)
 - bump tailwindcss from 4.2.4 to 4.3.0 (`cbf2e5d`)
-- bump next from 16.2.4 to 16.2.6 (`41aa6f9`)
 - bump @tailwindcss/postcss from 4.2.4 to 4.3.0 (`fae8ca8`)
 - bump @types/jszip from 3.4.0 to 3.4.1 (`4e78bd1`)
 
