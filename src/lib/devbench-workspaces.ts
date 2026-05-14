@@ -78,6 +78,22 @@ export const DEVBENCH_WORKSPACES: readonly WorkspaceShortcut[] = [
     keywords: ["scheduler", "crontab"],
   },
   {
+    id: "lambda-sandbox",
+    href: "/lambda-sandbox",
+    label: "AWS Lambda sandbox",
+    shortLabel: "Lambda",
+    description: "Run Node.js handlers against API Gateway, SQS, S3, EventBridge events — sandboxed",
+    keywords: ["aws", "serverless", "function", "invoke", "api gateway", "sqs", "s3", "eventbridge"],
+  },
+  {
+    id: "webhook-simulator",
+    href: "/webhook-simulator",
+    label: "Webhook payload simulator",
+    shortLabel: "Webhook",
+    description: "Generate, send and verify signed GitHub/Stripe/Slack/Shopify webhook payloads",
+    keywords: ["webhook", "hmac", "signature", "github", "stripe", "slack", "shopify", "x-hub-signature"],
+  },
+  {
     id: "playground",
     href: "/playground",
     label: "Code playground",
@@ -93,6 +109,8 @@ export const TOOL_SLUG_TO_WORKSPACE: Readonly<Record<string, string>> = {
   "yaml-to-json": "/yaml",
   "json-to-yaml": "/yaml",
   "yaml-formatter": "/yaml",
+  "lambda-sandbox": "/lambda-sandbox",
+  "webhook-simulator": "/webhook-simulator",
   "code-playground": "/playground",
 };
 

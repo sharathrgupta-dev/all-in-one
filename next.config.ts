@@ -5,6 +5,8 @@ import type { NextConfig } from "next";
 //   - 'unsafe-inline' on script-src is required for GTM's bootstrap snippet and
 //     our inline JSON-LD <script>. Mitigated by the explicit allowlist below.
 //   - 'wasm-unsafe-eval' lets @imgly/background-removal load its ONNX runtime.
+//   - worker-src 'self' blob: is needed by the Lambda sandbox, which builds its
+//     Web Worker source at runtime via URL.createObjectURL(new Blob([...])).
 //   - frame-ancestors 'none' blocks clickjacking site-wide.
 const CSP = [
   "default-src 'self'",
